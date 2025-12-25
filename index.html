@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Tarun — AI Developer Portfolio</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Share+Tech+Mono&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
@@ -14,6 +15,8 @@
 -------------------- */
 :root {
   --blue: #1f5cff;
+  --blue-dim: rgba(31, 92, 255, 0.3);
+  --winner: #00d4ff; /* Bright Cyan for winner */
   --bg: #fdfdfd;
   --text: #1a1a1a;
   --mono: 'JetBrains Mono', monospace;
@@ -21,9 +24,7 @@
   --tech: 'Share Tech Mono', monospace;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -33,6 +34,7 @@ body {
   font-family: var(--serif);
   line-height: 1.6;
   font-size: 18px;
+  overflow-x: hidden;
 }
 
 .container {
@@ -44,295 +46,447 @@ body {
 /* --------------------
    ANIMATIONS
 -------------------- */
-@keyframes flow { to { stroke-dashoffset: -20; } }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-@keyframes scan {
-  0% { transform: translateY(-100%); opacity: 0; }
-  10%, 90% { opacity: 0.4; }
-  100% { transform: translateY(100%); opacity: 0; }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotateX(5deg); }
-  50% { transform: translateY(-10px) rotateX(0deg); }
-}
-@keyframes stripeMove { to { background-position: 40px 0; } }
-@keyframes meshPulse {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(1.15); }
-}
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+@keyframes stripeMove { to{background-position:40px 0}}
 
 /* --------------------
-   DIAGRAMS
+   DIAGRAMS & HERO
 -------------------- */
 .diagram-container {
   position: relative;
-  border: 1px solid rgba(31, 92, 255, 0.3);
+  border: 1px solid rgba(31,92,255,.3);
   padding: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f4ff;
-  background-image: radial-gradient(rgba(31, 92, 255, 0.15) 0.8px, transparent 0.8px);
-  background-size: 12px 12px;
-  min-height: 380px;
-  overflow: hidden;
-  perspective: 1000px;
-}
-
-.diagram-container::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(to bottom, transparent, var(--blue), transparent);
-  height: 20%; width: 100%; opacity: 0;
-  pointer-events: none;
-  animation: scan 4s linear infinite;
-  z-index: 2;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background-color:#f0f4ff;
+  background-image:radial-gradient(rgba(31,92,255,.15) .8px, transparent .8px);
+  background-size:12px 12px;
+  min-height:380px;
+  overflow:hidden;
+  perspective:1000px;
 }
 
 .fig-label-inside {
+  font-family:var(--tech);
+  font-size:10px;
+  color:var(--blue);
+  text-transform:uppercase;
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  position:absolute;
+  left:10px; top:20px;
+  letter-spacing:2px;
+  opacity:.6;
+}
+
+/* Hero Specific Layout */
+.nn-hero {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  position: relative;
+}
+
+.digit-panel {
+  position: relative;
+  border: 1px solid rgba(31,92,255,.3);
+  background: radial-gradient(rgba(31,92,255,.15) .8px, transparent .8px);
+  background-size: 10px 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+canvas {
+  background: white;
+  border: 1px dashed rgba(31,92,255,.3);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.digit-label {
   font-family: var(--tech);
   font-size: 10px;
   color: var(--blue);
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Small Clear Button */
+.btn-small-clear {
+  background: white;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  font-family: var(--tech);
+  font-size: 10px;
+  padding: 4px 12px;
+  cursor: pointer;
   text-transform: uppercase;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  position: absolute;
-  left: 10px; top: 20px;
-  letter-spacing: 2px;
-  opacity: 0.6;
-}
-
-.diagram-svg {
+  letter-spacing: 1px;
   width: 100%;
-  max-width: 340px;
-  stroke: var(--blue);
-  stroke-width: 1;
-  fill: none;
-  animation: float 6s ease-in-out infinite;
+  margin-top: 5px;
+}
+.btn-small-clear:hover {
+  background: var(--blue);
+  color: white;
 }
 
-/* Mesh Specifics (FIG 003) */
-.mesh-path {
-  stroke-width: 0.8;
-  opacity: 0.7;
-  animation: meshPulse 4s ease-in-out infinite;
-}
-
-.grid-cell {
-  stroke: var(--blue);
-  stroke-width: 0.5;
-}
-
-.grid-cell.active {
-  fill: rgba(31, 92, 255, 0.2);
-  animation: blink 3s infinite;
+#nnSvg {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
 }
 
 /* --------------------
-   UI ELEMENTS
+   NEURAL NETWORK THEME
 -------------------- */
-.separator {
-  color: var(--blue);
-  font-family: var(--tech);
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-align: center;
-  margin: 50px 0;
+.neuron {
+  fill: white;
+  stroke: var(--blue);
+  stroke-width: 1.5px;
+  opacity: 0.4;
+  transition: fill 0.1s;
+}
+
+.neuron.active {
+  fill: var(--blue);
+  opacity: 0.8;
+}
+
+.neuron.winner {
+  fill: var(--winner);
+  stroke: var(--blue);
+  stroke-width: 2.5px;
+  r: 7;
+  filter: drop-shadow(0 0 3px var(--winner));
+}
+
+.edge {
+  stroke: var(--blue-dim);
+  stroke-width: 0.8px;
   opacity: 0.2;
+  transition: all 0.3s;
 }
 
-.main-title {
-  font-family: var(--tech);
-  font-weight: 400;
-  font-size: 52px;
-  line-height: 0.9;
-  text-transform: uppercase;
-  margin: 0;
-  letter-spacing: -1px;
+.edge.active {
+  stroke: var(--blue);
+  opacity: 0.5;
 }
 
-.toc-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 60px;
+.nn-node {
+  fill: white;
+  stroke: var(--blue); 
+  stroke-width: 1.5px;
+  opacity: 0.5; 
+  transition: fill 0.1s;
 }
 
-.toc-item { margin-bottom: 40px; }
+.nn-node.active {
+  fill: var(--blue); 
+  opacity: 0.9;
+}
 
-.toc-title {
-  font-family: var(--tech);
-  font-size: 15px;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-bottom: 15px;
+.nn-edge {
+  stroke: var(--blue-dim); 
+  stroke-width: 0.8px;
+  opacity: 0.2;
+  transition: all 0.3s;
+}
+
+.nn-edge.active {
+  stroke: var(--blue);
+  opacity: 0.7;
+}
+
+/* Expand Button */
+.btn-expand {
+  position: absolute;
+  bottom: -30px;
+  right: 0;
+  background: white;
+  border: 1px solid var(--blue);
   color: var(--blue);
-  border-bottom: 1px solid rgba(31, 92, 255, 0.2);
-  padding-bottom: 5px;
+  font-family: var(--tech);
+  font-size: 10px;
+  padding: 4px 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+  z-index: 10;
 }
 
-.toc-list { list-style: none; padding: 0; margin: 0; }
+.btn-expand:hover {
+  background: var(--blue);
+  color: white;
+}
 
-.toc-list li {
+/* --------------------
+   ADVANCED MODAL
+-------------------- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.98);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  padding: 2rem;
+  overflow-y: auto;
+  backdrop-filter: blur(5px);
+}
+
+.modal-overlay.active {
   display: flex;
-  align-items: baseline;
-  margin-bottom: 10px;
-  font-size: 15px;
 }
 
-.toc-list li::after {
-  content: ""; flex: 1;
-  border-bottom: 1px dotted #ccc;
-  margin: 0 10px; order: 2;
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
-.label { order: 1; }
-.value { order: 3; font-family: var(--tech); font-size: 10px; color: var(--blue); text-transform: uppercase; }
+.modal-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+  height: 100%;
+}
 
-.exp-box {
+/* Modal Sidebar */
+.modal-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+#modalCanvas {
+  width: 100%;
+  height: 280px; /* Visual Height */
+  border: 2px dashed var(--blue);
+}
+
+.pixel-grid-28 {
+  display: grid;
+  grid-template-columns: repeat(28, 1fr);
+  width: 140px;
+  height: 140px;
   border: 1px solid #ddd;
-  padding: 35px;
-  margin-top: 20px;
   background: white;
 }
 
-.progress-bar {
-  width: 100%; height: 16px; background: #f0f0f0;
-  margin: 50px 0; position: relative; border: 1px solid #ddd;
-  overflow: hidden;
+.pixel-28 {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
 }
 
-.progress-fill {
-  width: 75%; height: 100%;
-  background: repeating-linear-gradient(45deg, var(--blue), var(--blue) 10px, #3b6eff 10px, #3b6eff 20px);
-  background-size: 40px 100%;
-  animation: stripeMove 2s linear infinite;
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-@media (max-width: 850px) { .toc-grid { grid-template-columns: 1fr; } }
+.tech-btn {
+  background: transparent;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  padding: 8px 12px;
+  font-family: var(--tech);
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tech-btn:hover {
+  background: var(--blue);
+  color: white;
+}
+
+.tech-btn.primary {
+  background: var(--blue);
+  color: white;
+}
+
+/* Modal Main Visuals */
+.modal-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100%;
+}
+
+.network-viz-large {
+  flex: 1;
+  border: 1px solid #eee;
+  background: #fafafa;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Softmax Bars */
+.softmax-container {
+  display: flex;
+  gap: 8px;
+  height: 120px;
+  align-items: flex-end;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+.sbar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+}
+
+.sbar {
+  width: 80%;
+  background: var(--blue);
+  transition: height 0.3s ease;
+  min-height: 2px;
+  opacity: 0.7;
+}
+
+.sbar.winner-bar {
+  background: var(--winner);
+  opacity: 1;
+  box-shadow: 0 0 8px rgba(0,212,255,0.4);
+}
+
+.sbar-label {
+  margin-top: 6px;
+  font-family: var(--tech);
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Responsive Modal */
+@media (max-width: 900px) {
+  .modal-grid { grid-template-columns: 1fr; }
+  .modal-sidebar { flex-direction: row; flex-wrap: wrap; }
+}
+
+/* --------------------
+   REST OF SITE
+-------------------- */
+.hero-text p { font-size:21px; margin-top:0; }
+@media (max-width:900px){ .hero-grid { grid-template-columns:1fr; } .diagram-container, .canvas-wrap { min-height:260px; } }
+
 </style>
 </head>
-
 <body>
 
 <div class="container">
   <!-- TOP BAR -->
-  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-    <h1 class="main-title">TARUN:<br/>MAKING<br/>SOFTWARE</h1>
-    <div style="text-align: right; font-family: var(--tech); font-size: 12px; color: #666; border-top: 1px solid #ddd; padding-top: 10px;">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+    <h1 style="font-family:var(--tech);font-size:52px;line-height:.9;margin:0;">TARUN:<br/>MAKING<br/>SOFTWARE</h1>
+    <div style="text-align:right;font-family:var(--tech);font-size:12px;color:#666;border-top:1px solid #ddd;padding-top:10px;">
       A REFERENCE MANUAL FOR PEOPLE WHO DESIGN AND BUILD AI.<br/>
       WRITTEN AND DEVELOPED BY TARUN.
     </div>
   </div>
 
-  <div class="separator">--------------------------------------------------------------------------------------------------------------------------------</div>
-
-  <!-- HERO SECTION -->
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 40px;">
-    <div>
-      <p style="font-size: 21px; margin-top: 30px;">
-        Have you ever wondered how an AI agent actually "thinks"? It’s not magic, but layers of 
-        transformer blocks and attention mechanisms.
-      </p>
-      <p>
-        I design the pipelines that make these systems reliable. From automated root-cause 
-        analysis to secure data masking, I build the technical infrastructure that allows 
-        LLMs to operate in production environments at scale.
-      </p>
-      
-      <div style="margin-top: 40px; border-left: 3px solid var(--blue); padding-left: 25px; margin-bottom: 40px;">
-        <div style="font-family: var(--tech); font-size: 10px; color: var(--blue); margin-bottom: 12px;">[ CURRENT SYSTEM STATUS ]</div>
-        <div style="font-family: var(--tech); font-size: 14px; line-height: 1.8;">
-          ROLE: AI / BACKEND ENGINEER<br/>
-          STACK: PYTHON, FASTAPI, LLMS<br/>
-          STATUS: BUILDING & LEARNING
-        </div>
-      </div>
-    </div>
-
-    <!-- FIG 003 - LATENT SPACE (GAUSSIAN MESH) -->
-    <div class="diagram-container">
-      <div class="fig-label-inside">FIG. 003 — LATENT SPACE</div>
-      <svg class="diagram-svg" viewBox="0 0 200 200">
-        <!-- Grid Base -->
-        <g transform="translate(100, 160) scale(1, 0.5) rotate(45)">
-          <rect class="grid-cell" x="-60" y="-60" width="40" height="40" />
-          <rect class="grid-cell active" x="-20" y="-60" width="40" height="40" />
-          <rect class="grid-cell" x="20" y="-60" width="40" height="40" />
-          <rect class="grid-cell active" x="-60" y="-20" width="40" height="40" />
-          <rect class="grid-cell active" x="-20" y="-20" width="40" height="40" />
-          <rect class="grid-cell active" x="20" y="-20" width="40" height="40" />
-          <rect class="grid-cell" x="-60" y="20" width="40" height="40" />
-          <rect class="grid-cell active" x="-20" y="20" width="40" height="40" />
-          <rect class="grid-cell" x="20" y="20" width="40" height="40" />
-        </g>
-        <!-- Gaussian Mesh -->
-        <g transform="translate(100, 150)">
-          <path class="mesh-path" d="M -80,0 Q 0,-150 80,0" />
-          <path class="mesh-path" d="M -60,10 Q 0,-120 60,10" />
-          <path class="mesh-path" d="M -40,20 Q 0,-90 40,20" />
-          <path class="mesh-path" style="animation-delay: 0.5s" d="M 0,-150 L 0,0" stroke-dasharray="2,2" />
-        </g>
-      </svg>
-      <div style="position: absolute; bottom: 30px; right: 30px; font-family: var(--tech); font-size: 9px; color: var(--blue);">Probability Distribution</div>
-    </div>
+  <div style="margin:28px 0;color:var(--blue);font-family:var(--tech);opacity:.2;">
+    --------------------------------------------------------------------------------------------------------------------------------
   </div>
 
-  <div class="separator">--------------------------------------------------------------------------------------------------------------------------------</div>
+  
+<!-- HERO SECTION -->
+<div style="display:grid;grid-template-columns:1.2fr 1fr;gap:60px;margin-top:40px;align-items:center;">
 
-  <!-- TABLE OF CONTENTS (PROJECTS & BLOGS) -->
+  <!-- LEFT: DRAWING + NETWORK -->
+  <div class="nn-hero">
+
+    <!-- DRAWN DIGIT (Main View) -->
+    <div class="digit-panel">
+      <canvas id="digitCanvas" width="120" height="120"></canvas>
+      <div class="digit-label">INPUT (28×28)</div>
+      <!-- NEW CLEAR BUTTON -->
+      <button id="btnClearSmall" class="btn-small-clear">[ CLEAR ]</button>
+    </div>
+
+    <!-- NETWORK SVG -->
+    <svg id="nnSvg" viewBox="0 0 520 220">
+      <!-- layers generated by JS -->
+    </svg>
+
+    <!-- EXPAND BUTTON -->
+    <button class="btn-expand" id="btnExpand">[ + EXPAND DIAGRAM ]</button>
+
+  </div>
+
+  <!-- RIGHT: TEXT -->
+  <div>
+    <p style="font-size:21px;margin-top:0;">
+      This is a simplified view of how a neural network classifies handwritten digits.
+    </p>
+    <p>
+      A drawn input is decomposed into pixel activations, propagated through dense layers,
+      and resolved into a probability distribution across output classes.
+    </p>
+
+    <div style="margin-top:30px;border-left:3px solid var(--blue);padding-left:25px;">
+      <div style="font-family:var(--tech);font-size:10px;color:var(--blue);margin-bottom:12px;">
+        [ LIVE MODEL TRACE ]
+      </div>
+      <div style="font-family:var(--tech);font-size:14px;line-height:1.8;">
+        ARCH: 784 → 64 → 32 → 10<br/>
+        MODE: FORWARD PASS VISUALIZATION
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div style="margin:28px 0;color:var(--blue);font-family:var(--tech);opacity:.2;">
+    --------------------------------------------------------------------------------------------------------------------------------
+  </div>
+  
+  <!-- REST OF CONTENT -->
   <section>
     <div style="font-family: var(--tech); font-size: 11px; border-bottom: 2px solid #000; padding-bottom: 8px; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 40px;">
       <span>Table of Contents [v4.0]</span>
       <span>Sections: 4 • Entries: 12</span>
     </div>
-    
-    <div class="toc-grid">
-      <div class="toc-item">
-        <div class="toc-title">1. INTELLIGENT AGENTS</div>
-        <ul class="toc-list">
-          <li><span class="label">InfraOps AI Agent</span><span class="value">ACTIVE</span></li>
-          <li><span class="label">Root-cause analysis</span><span class="value">SPEC V2.1</span></li>
-          <li><span class="label">Remediation flows</span><span class="value">INTERNAL</span></li>
-        </ul>
-      </div>
-      
-      <div class="toc-item">
-        <div class="toc-title">2. DATA & SECURITY</div>
-        <ul class="toc-list">
-          <li><span class="label">AI Insight Generator</span><span class="value">4.2K NODES</span></li>
-          <li><span class="label">Excel-to-SQL engine</span><span class="value">LIVE</span></li>
-          <li><span class="label">PII Data Masking</span><span class="value">SECURE</span></li>
-        </ul>
-      </div>
 
-      <div class="toc-item">
-        <div class="toc-title">3. BLOGS & NOTES</div>
-        <ul class="toc-list">
-          <li><span class="label">Designing Reliable Agents</span><span class="value">2024</span></li>
-          <li><span class="label">FastAPI + MCP Auth</span><span class="value">2024</span></li>
-          <li><span class="label">LLM Observability</span><span class="value">2023</span></li>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:60px;">
+      <div>
+        <div style="font-family:var(--tech);font-size:15px;color:var(--blue);text-transform:uppercase;border-bottom:1px solid rgba(31,92,255,.2);padding-bottom:6px;margin-bottom:15px;">1. INTELLIGENT AGENTS</div>
+        <ul style="list-style:none;padding:0;margin:0;font-size:15px;">
+          <li style="display:flex;align-items:baseline;margin-bottom:10px;">InfraOps AI Agent<div style="flex:1;border-bottom:1px dotted #ccc;margin:0 10px;"></div><div style="font-family:var(--tech);font-size:10px;color:var(--blue);text-transform:uppercase;">ACTIVE</div></li>
+          <li style="display:flex;align-items:baseline;margin-bottom:10px;">Root-cause analysis<div style="flex:1;border-bottom:1px dotted #ccc;margin:0 10px;"></div><div style="font-family:var(--tech);font-size:10px;color:var(--blue);text-transform:uppercase;">SPEC V2.1</div></li>
         </ul>
       </div>
-
-      <div class="toc-item">
-        <div class="toc-title">4. KNOWLEDGE BASE</div>
-        <ul class="toc-list">
-          <li><span class="label">System Architecture</span><span class="value">DOCS</span></li>
-          <li><span class="label">Vector Database Specs</span><span class="value">WIP</span></li>
-          <li><span class="label">API Documentation</span><span class="value">v1.4</span></li>
+      <div>
+        <div style="font-family:var(--tech);font-size:15px;color:var(--blue);text-transform:uppercase;border-bottom:1px solid rgba(31,92,255,.2);padding-bottom:6px;margin-bottom:15px;">2. DATA & SECURITY</div>
+        <ul style="list-style:none;padding:0;margin:0;font-size:15px;">
+          <li style="display:flex;align-items:baseline;margin-bottom:10px;">AI Insight Generator<div style="flex:1;border-bottom:1px dotted #ccc;margin:0 10px;"></div><div style="font-family:var(--tech);font-size:10px;color:var(--blue);text-transform:uppercase;">4.2K NODES</div></li>
         </ul>
       </div>
     </div>
   </section>
 
-  <div class="separator">--------------------------------------------------------------------------------------------------------------------------------</div>
+  <div style="margin:28px 0;color:var(--blue);font-family:var(--tech);opacity:.2;">
+    --------------------------------------------------------------------------------------------------------------------------------
+  </div>
 
-  <!-- EXPERIENCE & INFRA DIAGRAM -->
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: flex-start;">
-    <div class="diagram-container">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:flex-start;">
+    <div class="diagram-container" style="min-height:260px;">
       <div class="fig-label-inside">FIG. 002 — INFRASTRUCTURE</div>
-      <svg class="diagram-svg" viewBox="0 0 200 200">
+      <svg class="diagram-svg" viewBox="0 0 200 200" style="width:100%;max-width:340px;">
         <path d="M60,60 L140,40 L140,140 L60,160 Z" />
         <line x1="60" y1="85" x2="140" y2="65" />
         <line x1="60" y1="110" x2="140" y2="90" />
@@ -340,25 +494,25 @@ body {
         <circle class="light" style="fill:var(--blue); animation: blink 1s step-end infinite;" cx="75" cy="72" r="2" />
         <circle class="light" style="fill:var(--blue); animation: blink 1.5s step-end infinite; animation-delay: 0.5s;" cx="75" cy="97" r="2" />
       </svg>
-      <div style="position: absolute; bottom: 50px; left: 80px; font-family: var(--tech); font-size: 9px; color: var(--blue); border: 0.5px solid var(--blue); padding: 2px 5px; background: white;">Worker Nodes</div>
+      <div style="position:absolute;bottom:50px;left:80px;font-family:var(--tech);font-size:9px;color:var(--blue);border:0.5px solid var(--blue);padding:2px 5px;background:white;">Worker Nodes</div>
     </div>
 
     <div>
-      <div style="font-family: var(--tech); font-size: 11px; margin-bottom: 20px; text-transform: uppercase; color: #999;">Career Path [ Logs ]</div>
-      <div class="exp-box">
-        <div style="display: grid; grid-template-columns: 50px 1fr; gap: 25px; margin-bottom: 35px;">
-          <div style="font-family: var(--tech); font-size: 12px; color: var(--blue); font-weight: bold;">IN:</div>
+      <div style="font-family:var(--tech);font-size:11px;margin-bottom:20px;text-transform:uppercase;color:#999;">Career Path [ Logs ]</div>
+      <div style="border:1px solid #ddd;padding:35px;background:white;">
+        <div style="display:grid;grid-template-columns:50px 1fr;gap:25px;margin-bottom:35px;">
+          <div style="font-family:var(--tech);font-size:12px;color:var(--blue);font-weight:bold;">IN:</div>
           <div>
-            <h4 style="margin: 0 0 8px 0; font-family: var(--tech); font-size: 17px; text-transform: uppercase;">Product Engineer — AI Systems</h4>
-            <div style="font-family: var(--tech); font-size: 10px; color: #888; margin-bottom: 12px; letter-spacing: 1px;">2023 — PRESENT</div>
+            <h4 style="margin:0 0 8px 0;font-family:var(--tech);font-size:17px;text-transform:uppercase;">Product Engineer — AI Systems</h4>
+            <div style="font-family:var(--tech);font-size:10px;color:#888;margin-bottom:12px;letter-spacing:1px;">2023 — PRESENT</div>
             <p>Building LLM-based agents and observability tools for production environments.</p>
           </div>
         </div>
-        <div style="display: grid; grid-template-columns: 50px 1fr; gap: 25px;">
-          <div style="font-family: var(--tech); font-size: 12px; color: var(--blue); font-weight: bold;">OUT:</div>
+        <div style="display:grid;grid-template-columns:50px 1fr;gap:25px;">
+          <div style="font-family:var(--tech);font-size:12px;color:var(--blue);font-weight:bold;">OUT:</div>
           <div>
-            <h4 style="margin: 0 0 8px 0; font-family: var(--tech); font-size: 17px; text-transform: uppercase;">Backend Developer</h4>
-            <div style="font-family: var(--tech); font-size: 10px; color: #888; margin-bottom: 12px; letter-spacing: 1px;">2021 — 2023</div>
+            <h4 style="margin:0 0 8px 0;font-family:var(--tech);font-size:17px;text-transform:uppercase;">Backend Developer</h4>
+            <div style="font-family:var(--tech);font-size:10px;color:#888;margin-bottom:12px;letter-spacing:1px;">2021 — 2023</div>
             <p>Designed scalable APIs and data pipelines for high-traffic applications.</p>
           </div>
         </div>
@@ -366,17 +520,572 @@ body {
     </div>
   </div>
 
-  <div class="progress-bar">
-    <div class="progress-fill"></div>
-    <div style="position: absolute; right: 10px; top: -20px; font-family: var(--tech); font-size: 10px;">PROGRESS: [||||||||||||||| ] 75%</div>
+  <div style="margin:28px 0;color:var(--blue);font-family:var(--tech);opacity:.2;">
+    --------------------------------------------------------------------------------------------------------------------------------
   </div>
 
-  <footer style="margin-top: 80px; padding: 40px 0; border-top: 1px solid #ddd; text-align: center; font-family: var(--tech); font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #666;">
-    | MAKING SOFTWARE |<br/>
-    A REFERENCE MANUAL FOR PEOPLE WHO DESIGN AND BUILD AI.<br/>
-    © 2025 TARUN • [ SECTION 1990 ]
+  <div style="width:100%;height:16px;position:relative;background:#f0f0f0;border:1px solid #ddd;margin:50px 0;overflow:hidden;">
+    <div style="width:75%;height:100%;background:repeating-linear-gradient(45deg,var(--blue),var(--blue) 10px,#3b6eff 10px,#3b6eff 20px);background-size:40px 100%;animation:stripeMove 2s linear infinite;"></div>
+  </div>
+
+  <footer style="margin-top:80px;padding:40px 0;border-top:1px solid #ddd;text-align:center;font-family:var(--tech);font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#666;">
+    | MAKING SOFTWARE |<br/>A REFERENCE MANUAL FOR PEOPLE WHO DESIGN AND BUILD AI.<br/>© 2025 TARUN • [ SECTION 1990 ]
   </footer>
 </div>
 
+<!-- =========================
+     ADVANCED MODAL
+========================= -->
+<div class="modal-overlay" id="advancedModal">
+  <div class="modal-header">
+    <div>
+      <h2 style="margin:0;font-family:var(--tech);font-size:24px;">NEURAL NETWORK ARCHITECTURE</h2>
+      <div style="font-family:var(--mono);font-size:12px;color:#666;">SYS.01 // MNIST-CLASSIFIER-V1</div>
+    </div>
+    <button class="btn" id="btnCloseModal" style="padding:10px 20px;">[ CLOSE PANEL ]</button>
+  </div>
+
+  <div class="modal-grid">
+    <!-- LEFT: CONTROLS & PREVIEW -->
+    <div class="modal-sidebar">
+      
+      <!-- DRAWING CANVAS -->
+      <div>
+        <div style="font-family:var(--tech);font-size:10px;color:var(--blue);margin-bottom:5px;">INPUT CANVAS (DRAW HERE)</div>
+        <!-- Internal resolution reduced to 140x140 for performance -->
+        <canvas id="modalCanvas" width="140" height="140"></canvas>
+      </div>
+
+      <!-- RAW PIXEL GRID -->
+      <div style="display:flex; gap:10px; align-items:center;">
+         <div style="font-family:var(--tech);font-size:10px;color:var(--blue);">28×28 GRID</div>
+         <div class="pixel-grid-28" id="pixelGrid28"></div>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="control-group">
+        <div style="font-family:var(--tech);font-size:10px;color:var(--blue);">OPERATIONS</div>
+        <button class="tech-btn primary" id="btnRunAdv">RUN INFERENCE <span>▶</span></button>
+        <button class="tech-btn" id="btnStepAdv">STEP LAYER <span>→</span></button>
+        <button class="tech-btn" id="btnClearAdv">CLEAR INPUT <span>×</span></button>
+      </div>
+
+      <div class="control-group">
+        <div style="font-family:var(--tech);font-size:10px;color:var(--blue);">CONFIGURATION</div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;align-items:center;">
+          <span>Sparse Mode</span>
+          <input type="checkbox" id="checkSparse">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: VISUALIZATION -->
+    <div class="modal-main">
+      
+      <!-- PROBABILITY BARS -->
+      <div class="softmax-container" id="softmaxViz">
+        <!-- Generated by JS -->
+      </div>
+
+      <!-- NETWORK SVG -->
+      <div class="network-viz-large" id="networkContainerLarge">
+        <svg id="nnSvgLarge" viewBox="0 0 800 400" style="width:100%;height:100%;"></svg>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- =========================
+         SCRIPT (LAG FIXED)
+========================= -->
+<script>
+/* =========================
+   STATE & CONFIG
+========================= */
+const CONFIG = {
+  gridSize: 28,
+  hiddenLayers: [64, 32],
+  outputSize: 10
+};
+
+const state = {
+  inputGrid: new Float32Array(CONFIG.gridSize * CONFIG.gridSize),
+  prediction: null,
+  probabilities: new Array(10).fill(0),
+  isSparse: false,
+  animationTimers: [],
+  // Cache DOM elements
+  largeNodes: [],
+  largeEdges: [],
+  smallNodes: [],
+  smallEdges: []
+};
+
+// DOM Elements
+const modal = document.getElementById("advancedModal");
+const btnExpand = document.getElementById("btnExpand");
+const btnClose = document.getElementById("btnCloseModal");
+const pixelGrid28 = document.getElementById("pixelGrid28");
+
+/* =========================
+   CANVAS HANDLER
+========================= */
+function setupCanvas(canvasId, size) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  
+  ctx.fillStyle = "white";
+  ctx.fillRect(0,0,size,size);
+  ctx.lineWidth = size > 150 ? 15 : 8; 
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.strokeStyle = "#1f5cff";
+
+  let drawing = false;
+
+  const getPos = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  };
+
+  const start = (e) => {
+    e.preventDefault();
+    drawing = true;
+    const {x, y} = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  };
+
+  const move = (e) => {
+    e.preventDefault();
+    if (!drawing) return;
+    const {x, y} = getPos(e);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  };
+
+  const end = (e) => {
+    if(e) e.preventDefault();
+    if(drawing) {
+      drawing = false;
+      processInput(ctx, size);
+    }
+  };
+
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  canvas.addEventListener('mouseup', end);
+  canvas.addEventListener('mouseleave', end);
+  canvas.addEventListener('touchstart', start);
+  canvas.addEventListener('touchmove', move);
+  canvas.addEventListener('touchend', end);
+
+  return { canvas, ctx };
+}
+
+const mainCanvas = setupCanvas("digitCanvas", 120);
+const modalCanvas = setupCanvas("modalCanvas", 140); 
+
+/* =========================
+   PROCESSING
+========================= */
+
+function processInput(ctx, size) {
+  const blockSize = size / CONFIG.gridSize;
+  const imgData = ctx.getImageData(0, 0, size, size).data;
+  
+  state.inputGrid.fill(0);
+
+  for(let y=0; y<CONFIG.gridSize; y++) {
+    for(let x=0; x<CONFIG.gridSize; x++) {
+      const cx = Math.floor(x*blockSize + blockSize/2);
+      const cy = Math.floor(y*blockSize + blockSize/2);
+      const idx = (cy*size + cx)*4;
+      const val = 1 - (imgData[idx]/255); 
+      if(val > 0.1) state.inputGrid[y*CONFIG.gridSize + x] = val;
+    }
+  }
+
+  centerGrid(state.inputGrid);
+
+  updatePixelGridUI();
+  runRecognition();
+}
+
+function centerGrid(grid) {
+  let minR=28, maxR=-1, minC=28, maxC=-1;
+  for(let r=0; r<28; r++){
+    for(let c=0; c<28; c++){
+      if(grid[r*28+c] > 0.2) {
+        if(r<minR) minR=r;
+        if(r>maxR) maxR=r;
+        if(c<minC) minC=c;
+        if(c>maxC) maxC=c;
+      }
+    }
+  }
+  if(maxR === -1) return; 
+
+  const h = maxR - minR + 1;
+  const w = maxC - minC + 1;
+  const content = new Float32Array(28*28);
+  
+  for(let r=0; r<h; r++) {
+    for(let c=0; c<w; c++) {
+      const val = grid[(minR+r)*28 + (minC+c)];
+      content[(r+ (28-h)/2)*28 + (c+ (28-w)/2)] = val;
+    }
+  }
+  
+  grid.fill(0);
+  for(let i=0; i<28*28; i++) {
+    if(content[i] > 0) grid[i] = content[i];
+  }
+}
+
+/* =========================
+   RECOGNITION
+========================= */
+
+const digitDefs = {
+  0: [
+    [2,4,2,24], [2,4,26,4], [26,4,26,24], [26,24,2,24], 
+    [4,6,4,22], [24,6,24,22], [6,4,22,4], [6,24,22,24]
+  ],
+  1: [
+    [12,4,12,24], [10,4,14,4], [12,24,16,24]
+  ],
+  2: [
+    [4,4,24,4], [24,4,24,14], [24,14,4,24], [4,24,24,24], [10,14,22,14]
+  ],
+  3: [
+    [4,4,24,4], [24,4,24,24], [4,24,24,24], [4,14,24,14], [6,10,22,18]
+  ],
+  4: [
+    [4,4,4,14], [4,14,24,14], [24,4,24,24], [22,4,26,4]
+  ],
+  5: [
+    [24,4,4,4], [4,4,4,14], [4,14,24,14], [24,14,24,24], [24,24,4,24]
+  ],
+  6: [
+    [20,4,6,4], [6,4,4,14], [4,14,4,24], [4,24,24,24], [24,24,24,14], [24,14,6,14]
+  ],
+  7: [
+    [4,4,24,4], [24,4,4,24], [10,14,24,14]
+  ],
+  8: [
+    [6,4,22,4], [22,4,22,24], [22,24,6,24], [6,24,6,4], [6,14,22,14]
+  ],
+  9: [
+    [6,24,22,24], [22,24,24,14], [24,14,24,4], [24,4,6,4], [6,4,6,14]
+  ]
+};
+
+function getTemplate(digit) {
+  const grid = new Float32Array(28*28);
+  const lines = digitDefs[digit];
+  lines.forEach(line => {
+    const [x1,y1,x2,y2] = line;
+    const steps = Math.max(Math.abs(x2-x1), Math.abs(y2-y1));
+    for(let i=0; i<=steps; i++) {
+      const t = steps === 0 ? 0 : i/steps;
+      const x = Math.floor(x1 + (x2-x1)*t);
+      const y = Math.floor(y1 + (y2-y1)*t);
+      for(let dy=-1.5; dy<=1.5; dy++){
+        for(let dx=-1.5; dx<=1.5; dx++){
+          const ny = Math.floor(y+dy);
+          const nx = Math.floor(x+dx);
+          if(ny>=0 && ny<28 && nx>=0 && nx<28) grid[ny*28+nx] = 1;
+        }
+      }
+    }
+  });
+  return grid;
+}
+
+const templates = {};
+for(let i=0; i<10; i++) templates[i] = getTemplate(i);
+
+function runRecognition() {
+  clearAnimations();
+
+  const diffs = [];
+  for(let d=0; d<10; d++) {
+    let diff = 0;
+    const tpl = templates[d];
+    for(let i=0; i<28*28; i++) {
+      const user = state.inputGrid[i];
+      const temp = tpl[i];
+      if(user > 0 && temp === 0) diff += 1.5;
+      else if(user === 0 && temp > 0) diff += 0.5;
+    }
+    diffs.push(diff);
+  }
+
+  const probs = diffs.map(d => {
+    const sigma = 60; 
+    return Math.exp(-(d*d)/(2*sigma*sigma));
+  });
+  
+  const sumProbs = probs.reduce((a,b)=>a+b,0) || 1;
+  state.probabilities = probs.map(p => p/sumProbs);
+  
+  const maxIdx = state.probabilities.indexOf(Math.max(...state.probabilities));
+  state.prediction = state.probabilities[maxIdx] > 0.2 ? maxIdx : null;
+
+  updateSmallVisuals();
+  updateLargeVisuals(); 
+  
+  animateSmallNetwork();
+  if(modal.classList.contains('active')) {
+    animateLargeNetwork();
+  }
+}
+
+function clearAnimations() {
+  state.animationTimers.forEach(t => clearTimeout(t));
+  state.animationTimers = [];
+}
+
+/* =========================
+   UI UPDATES
+========================= */
+
+function updatePixelGridUI() {
+  pixelGrid28.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  for(let i=0; i<28*28; i++) {
+    const val = state.inputGrid[i];
+    const d = document.createElement('div');
+    d.className = 'pixel-28';
+    d.style.backgroundColor = val > 0.2 ? '#000' : '#fff';
+    frag.appendChild(d);
+  }
+  pixelGrid28.appendChild(frag);
+}
+
+function updateSmallVisuals() {
+  state.smallNodes.forEach(n => n.classList.remove('active'));
+  state.smallEdges.forEach(e => e.classList.remove('active'));
+}
+
+function updateLargeVisuals() {
+  const container = document.getElementById('softmaxViz');
+  container.innerHTML = '';
+  state.probabilities.forEach((p, i) => {
+    const col = document.createElement('div');
+    col.className = 'sbar-col';
+    const bar = document.createElement('div');
+    bar.className = 'sbar';
+    bar.style.height = Math.max(5, p*100) + '%';
+    if(i === state.prediction) bar.classList.add('winner-bar');
+    const lbl = document.createElement('div');
+    lbl.className = 'sbar-label';
+    lbl.innerText = i;
+    if(i === state.prediction) lbl.style.color = 'var(--winner)';
+    col.appendChild(bar);
+    col.appendChild(lbl);
+    container.appendChild(col);
+  });
+}
+
+function animateSmallNetwork() {
+  const nodes = state.smallNodes;
+  const edges = state.smallEdges;
+  
+  const startH1 = 28; const startH2 = 38; const startOut = 46;
+
+  if(state.prediction === null) return;
+
+  // 1. Input
+  for(let i=0; i<28; i++) {
+    if(state.inputGrid[i] > 0.3 && nodes[i]) nodes[i].classList.add('active');
+  }
+
+  // 2. Hidden 1 (150ms)
+  const t1 = setTimeout(() => {
+    for(let i=startH1; i<startH2; i++) nodes[i].classList.add('active');
+    edges.forEach(e => e.classList.add('active')); 
+  }, 150);
+  state.animationTimers.push(t1);
+
+  // 3. Hidden 2 (300ms)
+  const t2 = setTimeout(() => {
+    for(let i=startH2; i<startOut; i++) nodes[i].classList.add('active');
+  }, 300);
+  state.animationTimers.push(t2);
+
+  // 4. Output (450ms)
+  const t3 = setTimeout(() => {
+    const winner = startOut + state.prediction;
+    if(nodes[winner]) nodes[winner].classList.add('active');
+  }, 450);
+  state.animationTimers.push(t3);
+}
+
+function animateLargeNetwork() {
+  const nodes = state.largeNodes;
+  const edges = state.largeEdges;
+  
+  // Structure: [28, 48, 24, 10] -> Reduced for performance
+  const startH1 = 28; const startH2 = 76; const startOut = 100;
+
+  if(state.prediction === null) return;
+
+  // 1. Input
+  for(let i=0; i<28; i++) {
+    if(state.inputGrid[i] > 0.3) nodes[i].classList.add('active');
+  }
+
+  // 2. H1 (200ms)
+  const t1 = setTimeout(() => {
+    for(let i=startH1; i<startH2; i++) nodes[i].classList.add('active');
+    // OPTIMIZATION: Only light up random 20% of edges to reduce DOM paint load
+    for(let e of edges) {
+       if(Math.random() > 0.8) e.classList.add('active');
+    }
+  }, 200);
+  state.animationTimers.push(t1);
+
+  // 3. H2 (400ms)
+  const t2 = setTimeout(() => {
+    for(let i=startH2; i<startOut; i++) nodes[i].classList.add('active');
+  }, 400);
+  state.animationTimers.push(t2);
+
+  // 4. Out (600ms)
+  const t3 = setTimeout(() => {
+    const winner = startOut + state.prediction;
+    if(nodes[winner]) {
+      nodes[winner].classList.add('active', 'winner');
+    }
+  }, 600);
+  state.animationTimers.push(t3);
+}
+
+/* =========================
+   SVG BUILDER (OPTIMIZED)
+========================= */
+function buildNetwork(svgEl, isLarge) {
+  svgEl.innerHTML = '';
+  const width = isLarge ? 800 : 520;
+  const height = isLarge ? 400 : 220;
+  
+  // PERFORMANCE FIX: Reduced Hidden Layers in Large View
+  // Old: [28, 64, 32, 10] -> ~4000 edges (Laggy)
+  // New: [28, 48, 24, 10] -> ~1800 edges (Smooth)
+  const structure = isLarge ? [28, 48, 24, 10] : [28, 10, 8, 10];
+  
+  const layerGap = width / (structure.length + 1);
+
+  structure.forEach((count, li) => {
+    const yGap = height / (count + 1);
+    for(let i=0; i<count; i++) {
+      const cx = (li+1) * layerGap;
+      const cy = (i+1) * yGap;
+      
+      const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      c.setAttribute("cx", cx);
+      c.setAttribute("cy", cy);
+      c.setAttribute("r", isLarge ? 5 : 3);
+      c.classList.add(isLarge ? "neuron" : "nn-node");
+      svgEl.appendChild(c);
+
+      if (li > 0) {
+        const prevCount = structure[li-1];
+        const prevYGap = height / (prevCount + 1);
+        for(let j=0; j<prevCount; j++) {
+           if(!isLarge && Math.random() > 0.3) continue; 
+           const pcx = li * layerGap;
+           const pcy = (j+1) * prevYGap;
+           
+           const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+           l.setAttribute("x1", pcx); l.setAttribute("y1", pcy);
+           l.setAttribute("x2", cx); l.setAttribute("y2", cy);
+           l.classList.add(isLarge ? "edge" : "nn-edge");
+           svgEl.insertBefore(l, svgEl.firstChild);
+        }
+      }
+    }
+  });
+
+  // Cache Elements
+  if(isLarge) {
+    state.largeNodes = Array.from(document.querySelectorAll('#nnSvgLarge .neuron'));
+    state.largeEdges = Array.from(document.querySelectorAll('#nnSvgLarge .edge'));
+  } else {
+    state.smallNodes = Array.from(document.querySelectorAll('#nnSvg .nn-node'));
+    state.smallEdges = Array.from(document.querySelectorAll('#nnSvg .nn-edge'));
+  }
+}
+
+buildNetwork(document.getElementById("nnSvg"), false);
+buildNetwork(document.getElementById("nnSvgLarge"), true);
+
+/* =========================
+   INTERACTIONS
+========================= */
+// NEW: Clear Button Small
+document.getElementById('btnClearSmall').onclick = () => {
+  mainCanvas.ctx.fillStyle = "white";
+  mainCanvas.ctx.fillRect(0,0,120,120);
+  // Also clear modal state to sync
+  state.inputGrid.fill(0);
+  state.probabilities.fill(0);
+  state.prediction = null;
+  processInput(mainCanvas.ctx, 120);
+  updateSmallVisuals();
+  state.smallNodes.forEach(n => n.classList.remove('active'));
+  state.smallEdges.forEach(e => e.classList.remove('active'));
+};
+
+btnExpand.onclick = () => {
+  modal.classList.add('active');
+  updateLargeVisuals();
+  if(state.prediction !== null) animateLargeNetwork();
+};
+
+btnClose.onclick = () => modal.classList.remove('active');
+
+document.getElementById('btnRunAdv').onclick = () => {
+  clearAnimations();
+  runRecognition();
+};
+
+document.getElementById('btnClearAdv').onclick = () => {
+  modalCanvas.ctx.fillStyle = "white";
+  modalCanvas.ctx.fillRect(0,0,140,140);
+  mainCanvas.ctx.fillStyle = "white";
+  mainCanvas.ctx.fillRect(0,0,120,120);
+  
+  clearAnimations();
+  state.inputGrid.fill(0);
+  state.probabilities.fill(0);
+  state.prediction = null;
+  
+  processInput(modalCanvas.ctx, 140);
+  updateLargeVisuals();
+  
+  state.largeNodes.forEach(n => n.classList.remove('active', 'winner'));
+  state.largeEdges.forEach(e => e.classList.remove('active'));
+};
+
+document.getElementById('checkSparse').onchange = (e) => {
+  state.isSparse = e.target.checked;
+  buildNetwork(document.getElementById("nnSvgLarge"), true);
+};
+
+</script>
 </body>
 </html>
