@@ -6,7 +6,7 @@
 <title>Tarun — AI Developer Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=DotGothic16&family=Silkscreen:wght@400;700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Share+Tech+Mono&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
 
 <style>
 /* --------------------
@@ -18,8 +18,7 @@
   --text: #1a1a1a;
   --mono: 'JetBrains Mono', monospace;
   --serif: 'EB Garamond', serif;
-  --pixel: 'DotGothic16', sans-serif;
-  --label: 'Silkscreen', sans-serif;
+  --tech: 'Share Tech Mono', monospace;
 }
 
 * {
@@ -47,27 +46,14 @@ body {
 -------------------- */
 .separator {
   color: var(--blue);
-  font-family: var(--pixel);
+  font-family: var(--tech);
   font-size: 11px;
   letter-spacing: 2px;
   text-align: center;
   margin: 50px 0;
-  opacity: 0.3;
+  opacity: 0.2;
   white-space: nowrap;
   overflow: hidden;
-}
-
-.fig-label {
-  font-family: var(--pixel);
-  font-size: 10px;
-  color: var(--blue);
-  text-transform: uppercase;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  position: absolute;
-  left: -22px;
-  top: 0;
-  letter-spacing: 2px;
 }
 
 /* --------------------
@@ -81,18 +67,18 @@ body {
 }
 
 .main-title {
-  font-family: var(--pixel);
+  font-family: var(--tech);
   font-weight: 400;
   font-size: 52px;
   line-height: 0.9;
   text-transform: uppercase;
   margin: 0;
-  letter-spacing: -2px;
-  color: var(--blue);
+  letter-spacing: -1px;
+  color: var(--text);
 }
 
 .subtitle {
-  font-family: var(--mono);
+  font-family: var(--tech);
   font-size: 12px;
   margin-top: 20px;
   text-align: right;
@@ -102,57 +88,72 @@ body {
 }
 
 .intro-text {
-  font-size: 20px;
+  font-size: 21px;
   margin-top: 30px;
 }
 
 /* --------------------
-   DIAGRAMS
+   DIAGRAMS (NEW STYLE)
 -------------------- */
-.diagram-wrapper {
-  position: relative;
-  margin-left: 30px; /* Space for vertical label */
-}
-
 .diagram-container {
   position: relative;
-  border: 1px solid var(--blue);
+  border: 1px solid rgba(31, 92, 255, 0.3);
   padding: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: white;
-  min-height: 350px;
+  background-color: #f0f4ff;
+  background-image: radial-gradient(rgba(31, 92, 255, 0.15) 0.5px, transparent 0.5px);
+  background-size: 6px 6px;
+  min-height: 380px;
+  overflow: hidden;
+}
+
+.fig-label-inside {
+  font-family: var(--tech);
+  font-size: 10px;
+  color: var(--blue);
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  position: absolute;
+  left: 10px;
+  top: 20px;
+  letter-spacing: 2px;
+  opacity: 0.6;
 }
 
 .diagram-svg {
   width: 100%;
-  max-width: 320px;
+  max-width: 340px;
   stroke: var(--blue);
-  stroke-width: 1;
+  stroke-width: 1.2;
   fill: none;
+  filter: drop-shadow(0 4px 6px rgba(31, 92, 255, 0.1));
 }
 
-.diagram-label {
+.diagram-annotation {
   position: absolute;
-  font-family: var(--label);
+  font-family: var(--tech);
   font-size: 9px;
   color: var(--blue);
   text-transform: uppercase;
-  opacity: 0.8;
+  background: white;
+  padding: 2px 5px;
+  border: 0.5px solid var(--blue);
 }
 
 /* --------------------
-   TABLE OF CONTENTS (PROJECTS)
+   TABLE OF CONTENTS
 -------------------- */
 .toc-section {
   margin-top: 60px;
 }
 
 .toc-header {
-  font-family: var(--label);
+  font-family: var(--tech);
   font-size: 11px;
-  border-bottom: 1.5px solid #000;
+  border-bottom: 2px solid #000;
   padding-bottom: 8px;
   display: flex;
   justify-content: space-between;
@@ -171,8 +172,8 @@ body {
 }
 
 .toc-title {
-  font-family: var(--pixel);
-  font-size: 15px;
+  font-family: var(--tech);
+  font-size: 14px;
   font-weight: bold;
   text-transform: uppercase;
   margin-bottom: 12px;
@@ -201,45 +202,46 @@ body {
 }
 
 .toc-list li .label { order: 1; }
-.toc-list li .value { order: 3; font-family: var(--label); font-size: 8px; color: var(--blue); }
+.toc-list li .value { order: 3; font-family: var(--tech); font-size: 9px; color: var(--blue); }
 
 /* --------------------
    EXPERIENCE
 -------------------- */
 .exp-box {
-  border: 1px solid #ccc;
-  padding: 30px;
+  border: 1px solid #ddd;
+  padding: 35px;
   margin-top: 20px;
   background: white;
+  box-shadow: 4px 4px 0px rgba(31, 92, 255, 0.05);
 }
 
 .exp-row {
   display: grid;
-  grid-template-columns: 60px 1fr;
-  gap: 20px;
-  margin-bottom: 30px;
+  grid-template-columns: 50px 1fr;
+  gap: 25px;
+  margin-bottom: 35px;
 }
 
-.exp-row:last-child { margin-bottom: 0; }
-
 .exp-type {
-  font-family: var(--label);
-  font-size: 11px;
-  color: #999;
+  font-family: var(--tech);
+  font-size: 12px;
+  color: var(--blue);
+  font-weight: bold;
 }
 
 .exp-content h4 {
   margin: 0 0 8px 0;
-  font-family: var(--pixel);
-  font-size: 16px;
+  font-family: var(--tech);
+  font-size: 17px;
   text-transform: uppercase;
 }
 
 .exp-meta {
-  font-family: var(--label);
-  font-size: 9px;
-  color: var(--blue);
-  margin-bottom: 10px;
+  font-family: var(--tech);
+  font-size: 10px;
+  color: #888;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
 }
 
 /* --------------------
@@ -247,19 +249,19 @@ body {
 -------------------- */
 footer {
   margin-top: 80px;
-  padding-top: 40px;
+  padding: 40px 0;
   border-top: 1px solid #ddd;
   text-align: center;
-  font-family: var(--label);
-  font-size: 9px;
+  font-family: var(--tech);
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #888;
+  color: #666;
 }
 
 .progress-bar {
   width: 100%;
-  height: 14px;
+  height: 16px;
   background: #f0f0f0;
   margin: 50px 0;
   position: relative;
@@ -270,11 +272,11 @@ footer {
   width: 75%;
   height: 100%;
   background: repeating-linear-gradient(
-    45deg,
+    90deg,
     var(--blue),
-    var(--blue) 3px,
-    transparent 3px,
-    transparent 6px
+    var(--blue) 4px,
+    #3b6eff 4px,
+    #3b6eff 8px
   );
 }
 
@@ -293,12 +295,12 @@ footer {
   <div style="display: flex; justify-content: space-between; align-items: flex-start;">
     <h1 class="main-title">TARUN:<br/>MAKING<br/>SOFTWARE</h1>
     <div class="subtitle">
-      A reference manual for people who design and build AI.<br/>
-      Written and developed by Tarun.
+      A REFERENCE MANUAL FOR PEOPLE WHO DESIGN AND BUILD AI.<br/>
+      WRITTEN AND DEVELOPED BY TARUN.
     </div>
   </div>
 
-  <div class="separator">********************************************************************************************************************************</div>
+  <div class="separator">--------------------------------------------------------------------------------------------------------------------------------</div>
 
   <!-- HERO SECTION -->
   <div class="header-grid">
@@ -313,9 +315,9 @@ footer {
         LLMs to operate in production environments at scale.
       </p>
       
-      <div style="margin-top: 40px; border: 1px solid var(--blue); padding: 25px; background: #f9f9ff;">
-        <div style="font-family: var(--label); font-size: 9px; color: var(--blue); margin-bottom: 12px;">[ CURRENT SYSTEM STATUS ]</div>
-        <div style="font-family: var(--pixel); font-size: 14px; line-height: 1.8;">
+      <div style="margin-top: 40px; border-left: 3px solid var(--blue); padding-left: 25px; margin-bottom: 40px;">
+        <div style="font-family: var(--tech); font-size: 10px; color: var(--blue); margin-bottom: 12px;">[ CURRENT SYSTEM STATUS ]</div>
+        <div style="font-family: var(--tech); font-size: 14px; line-height: 1.8;">
           ROLE: AI / BACKEND ENGINEER<br/>
           STACK: PYTHON, FASTAPI, LLMS<br/>
           STATUS: BUILDING & LEARNING
@@ -323,36 +325,36 @@ footer {
       </div>
     </div>
 
-    <div class="diagram-wrapper">
-      <div class="fig-label">FIG. 001 — NEURAL CORE</div>
-      <div class="diagram-container">
-        <svg class="diagram-svg" viewBox="0 0 200 200">
-          <circle cx="50" cy="70" r="8" />
-          <circle cx="50" cy="110" r="8" />
-          <circle cx="50" cy="150" r="8" />
-          <circle cx="110" cy="50" r="8" />
-          <circle cx="110" cy="90" r="8" />
-          <circle cx="110" cy="130" r="8" />
-          <circle cx="110" cy="170" r="8" />
-          <circle cx="170" cy="110" r="8" />
-          <line x1="58" y1="70" x2="102" y2="50" />
-          <line x1="58" y1="70" x2="102" y2="90" />
-          <line x1="58" y1="110" x2="102" y2="90" />
-          <line x1="58" y1="110" x2="102" y2="130" />
-          <line x1="58" y1="150" x2="102" y2="130" />
-          <line x1="58" y1="150" x2="102" y2="170" />
-          <line x1="118" y1="50" x2="162" y2="110" />
-          <line x1="118" y1="90" x2="162" y2="110" />
-          <line x1="118" y1="130" x2="162" y2="110" />
-          <line x1="118" y1="170" x2="162" y2="110" />
-        </svg>
-        <div class="diagram-label" style="top: 20px; right: 20px;">INPUT LAYER</div>
-        <div class="diagram-label" style="bottom: 20px; left: 60%;">WEIGHTS & BIASES</div>
-      </div>
+    <div class="diagram-container">
+      <div class="fig-label-inside">FIG. 001 — NEURAL CORE</div>
+      <svg class="diagram-svg" viewBox="0 0 240 200">
+        <!-- Isometric Neural Network Layers -->
+        <g transform="skewY(-15)">
+            <!-- Layer 1 -->
+            <rect x="40" y="40" width="40" height="100" stroke-dasharray="2,2" />
+            <circle cx="60" cy="60" r="4" fill="var(--blue)" />
+            <circle cx="60" cy="90" r="4" fill="var(--blue)" />
+            <circle cx="60" cy="120" r="4" fill="var(--blue)" />
+            
+            <!-- Layer 2 -->
+            <rect x="110" y="30" width="40" height="120" stroke-dasharray="2,2" />
+            <circle cx="130" cy="50" r="4" />
+            <circle cx="130" cy="80" r="4" />
+            <circle cx="130" cy="110" r="4" />
+            <circle cx="130" cy="140" r="4" />
+
+            <!-- Connections -->
+            <line x1="64" y1="60" x2="126" y2="50" opacity="0.3" />
+            <line x1="64" y1="90" x2="126" y2="80" opacity="0.3" />
+            <line x1="64" y1="120" x2="126" y2="110" opacity="0.3" />
+        </g>
+      </svg>
+      <div class="diagram-annotation" style="top: 30px; right: 30px;">Input Tensors</div>
+      <div class="diagram-annotation" style="bottom: 30px; left: 80px;">Hidden States</div>
     </div>
   </div>
 
-  <div class="separator">********************************************************************************************************************************</div>
+  <div class="separator">--------------------------------------------------------------------------------------------------------------------------------</div>
 
   <!-- PROJECTS (TABLE OF CONTENTS) -->
   <section class="toc-section">
@@ -391,37 +393,34 @@ footer {
     </div>
   </section>
 
-  <div class="separator">********************************************************************************************************************************</div>
+  <div class="separator">--------------------------------------------------------------------------------------------------------------------------------</div>
 
   <!-- EXPERIENCE -->
   <div class="header-grid" style="align-items: flex-start;">
-    <div class="diagram-wrapper">
-      <div class="fig-label">FIG. 002 — INFRASTRUCTURE</div>
-      <div class="diagram-container">
-        <svg class="diagram-svg" viewBox="0 0 200 200">
-          <rect x="60" y="40" width="80" height="120" />
-          <line x1="60" y1="70" x2="140" y2="70" />
-          <line x1="60" y1="100" x2="140" y2="100" />
-          <line x1="60" y1="130" x2="140" y2="130" />
-          <circle cx="75" cy="55" r="3" />
-          <circle cx="75" cy="85" r="3" />
-          <circle cx="75" cy="115" r="3" />
-          <circle cx="75" cy="145" r="3" />
-        </svg>
-        <div class="diagram-label" style="top: 45px; right: 15px;">LOAD BALANCER</div>
-        <div class="diagram-label" style="bottom: 45px; right: 15px;">DB CLUSTER</div>
-      </div>
+    <div class="diagram-container">
+      <div class="fig-label-inside">FIG. 002 — INFRASTRUCTURE</div>
+      <svg class="diagram-svg" viewBox="0 0 200 200">
+        <!-- Isometric Server Rack -->
+        <path d="M60,60 L140,40 L140,140 L60,160 Z" />
+        <line x1="60" y1="85" x2="140" y2="65" />
+        <line x1="60" y1="110" x2="140" y2="90" />
+        <line x1="60" y1="135" x2="140" y2="115" />
+        <circle cx="75" cy="72" r="2" fill="var(--blue)" />
+        <circle cx="75" cy="97" r="2" fill="var(--blue)" />
+      </svg>
+      <div class="diagram-annotation" style="top: 50px; right: 20px;">Orchestrator</div>
+      <div class="diagram-annotation" style="bottom: 50px; left: 80px;">Worker Nodes</div>
     </div>
 
     <div>
-      <div style="font-family: var(--label); font-size: 11px; margin-bottom: 20px; text-transform: uppercase; color: #999;">Common Questions</div>
+      <div style="font-family: var(--tech); font-size: 11px; margin-bottom: 20px; text-transform: uppercase; color: #999;">Career Path [ Logs ]</div>
       
       <div class="exp-box">
         <div class="exp-row">
           <div class="exp-type">IN:</div>
           <div class="exp-content">
             <h4>Product Engineer — AI Systems</h4>
-            <div class="exp-meta">2023 — PRESENT [ ACTIVE ]</div>
+            <div class="exp-meta">2023 — PRESENT [ SYSTEM ACTIVE ]</div>
             <p>Building LLM-based agents, APIs, and observability tools for production environments. Focused on stability and enterprise scalability.</p>
           </div>
         </div>
@@ -430,7 +429,7 @@ footer {
           <div class="exp-type">OUT:</div>
           <div class="exp-content">
             <h4>Backend Developer</h4>
-            <div class="exp-meta">2021 — 2023 [ COMPLETED ]</div>
+            <div class="exp-meta">2021 — 2023 [ PROCESS COMPLETE ]</div>
             <p>Designed scalable APIs, auth systems, and data pipelines for high-traffic applications.</p>
           </div>
         </div>
@@ -440,13 +439,13 @@ footer {
 
   <div class="progress-bar">
     <div class="progress-fill"></div>
-    <div style="position: absolute; right: 0; top: -20px; font-family: var(--label); font-size: 9px;">CURRENT PROGRESS: [||||||||||||||| ] 75%</div>
+    <div style="position: absolute; right: 10px; top: -20px; font-family: var(--tech); font-size: 10px;">PROGRESS: [||||||||||||||| ] 75%</div>
   </div>
 
   <footer>
     | MAKING SOFTWARE |<br/>
     A REFERENCE MANUAL FOR PEOPLE WHO DESIGN AND BUILD AI.<br/>
-    © 2025 TARUN • [ § 1990 ]
+    © 2025 TARUN • [ SECTION 1990 ]
   </footer>
 </div>
 
