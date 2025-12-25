@@ -21,11 +21,6 @@
   --tech: 'Share Tech Mono', monospace;
 }
 
-@keyframes gridPulse {
-  0%, 100% { opacity: 0.15; }
-  50% { opacity: 0.1; }
-}
-
 * {
   box-sizing: border-box;
 }
@@ -49,29 +44,21 @@ body {
 /* --------------------
    ANIMATIONS
 -------------------- */
-@keyframes flow {
-  to { stroke-dashoffset: -20; }
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.2; }
-}
-
+@keyframes flow { to { stroke-dashoffset: -20; } }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 @keyframes scan {
   0% { transform: translateY(-100%); opacity: 0; }
   10%, 90% { opacity: 0.4; }
   100% { transform: translateY(100%); opacity: 0; }
 }
-
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%, 100% { transform: translateY(0px) rotateX(5deg); }
+  50% { transform: translateY(-10px) rotateX(0deg); }
 }
-
-@keyframes stripeMove {
-  0% { background-position: 0 0; }
-  100% { background-position: 40px 0; }
+@keyframes stripeMove { to { background-position: 40px 0; } }
+@keyframes meshPulse {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.15); }
 }
 
 /* --------------------
@@ -85,10 +72,11 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #f0f4ff;
-  background-image: radial-gradient(rgba(31, 92, 255, 0.15) 0.5px, transparent 0.5px);
+  background-image: radial-gradient(rgba(31, 92, 255, 0.15) 0.8px, transparent 0.8px);
   background-size: 12px 12px;
   min-height: 380px;
   overflow: hidden;
+  perspective: 1000px;
 }
 
 .diagram-container::before {
@@ -96,11 +84,10 @@ body {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background: linear-gradient(to bottom, transparent, var(--blue), transparent);
-  height: 20%;
-  width: 100%;
-  opacity: 0;
+  height: 20%; width: 100%; opacity: 0;
   pointer-events: none;
   animation: scan 4s linear infinite;
+  z-index: 2;
 }
 
 .fig-label-inside {
@@ -111,8 +98,7 @@ body {
   writing-mode: vertical-rl;
   text-orientation: mixed;
   position: absolute;
-  left: 10px;
-  top: 20px;
+  left: 10px; top: 20px;
   letter-spacing: 2px;
   opacity: 0.6;
 }
@@ -121,37 +107,26 @@ body {
   width: 100%;
   max-width: 340px;
   stroke: var(--blue);
-  stroke-width: 1.2;
+  stroke-width: 1;
   fill: none;
   animation: float 6s ease-in-out infinite;
 }
 
-/* Neural Core Specifics */
-.connection {
-  stroke-dasharray: 4;
-  animation: flow 1s linear infinite;
+/* Mesh Specifics (FIG 003) */
+.mesh-path {
+  stroke-width: 0.8;
+  opacity: 0.7;
+  animation: meshPulse 4s ease-in-out infinite;
 }
 
-.node {
-  fill: white;
+.grid-cell {
   stroke: var(--blue);
-  transition: all 0.3s;
+  stroke-width: 0.5;
 }
 
-.node-active {
-  fill: var(--blue);
-  filter: drop-shadow(0 0 4px var(--blue));
-  animation: blink 2s ease-in-out infinite;
-}
-
-/* Infrastructure Specifics */
-.light {
-  fill: var(--blue);
-  animation: blink 1.5s step-end infinite;
-}
-
-.light-alt {
-  animation-delay: 0.7s;
+.grid-cell.active {
+  fill: rgba(31, 92, 255, 0.2);
+  animation: blink 3s infinite;
 }
 
 /* --------------------
@@ -165,7 +140,6 @@ body {
   text-align: center;
   margin: 50px 0;
   opacity: 0.2;
-  white-space: nowrap;
 }
 
 .main-title {
@@ -178,56 +152,64 @@ body {
   letter-spacing: -1px;
 }
 
-.header-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 60px;
-  margin-top: 40px;
-}
-
 .toc-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 60px;
 }
+
+.toc-item { margin-bottom: 40px; }
+
+.toc-title {
+  font-family: var(--tech);
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  color: var(--blue);
+  border-bottom: 1px solid rgba(31, 92, 255, 0.2);
+  padding-bottom: 5px;
+}
+
+.toc-list { list-style: none; padding: 0; margin: 0; }
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.toc-list li::after {
+  content: ""; flex: 1;
+  border-bottom: 1px dotted #ccc;
+  margin: 0 10px; order: 2;
+}
+
+.label { order: 1; }
+.value { order: 3; font-family: var(--tech); font-size: 10px; color: var(--blue); text-transform: uppercase; }
 
 .exp-box {
   border: 1px solid #ddd;
   padding: 35px;
   margin-top: 20px;
   background: white;
-  position: relative;
 }
 
 .progress-bar {
-  width: 100%;
-  height: 16px;
-  background: #f0f0f0;
-  margin: 50px 0;
-  position: relative;
-  border: 1px solid #ddd;
+  width: 100%; height: 16px; background: #f0f0f0;
+  margin: 50px 0; position: relative; border: 1px solid #ddd;
   overflow: hidden;
 }
 
 .progress-fill {
-  width: 75%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    45deg,
-    var(--blue),
-    var(--blue) 10px,
-    #3b6eff 10px,
-    #3b6eff 20px
-  );
+  width: 75%; height: 100%;
+  background: repeating-linear-gradient(45deg, var(--blue), var(--blue) 10px, #3b6eff 10px, #3b6eff 20px);
   background-size: 40px 100%;
   animation: stripeMove 2s linear infinite;
 }
 
-@media (max-width: 900px) {
-  .header-grid, .toc-grid {
-    grid-template-columns: 1fr;
-  }
-}
+@media (max-width: 850px) { .toc-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 
@@ -246,7 +228,7 @@ body {
   <div class="separator">--------------------------------------------------------------------------------------------------------------------------------</div>
 
   <!-- HERO SECTION -->
-  <div class="header-grid">
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 40px;">
     <div>
       <p style="font-size: 21px; margin-top: 30px;">
         Have you ever wondered how an AI agent actually "thinks"? It’s not magic, but layers of 
@@ -268,76 +250,86 @@ body {
       </div>
     </div>
 
+    <!-- FIG 003 - LATENT SPACE (GAUSSIAN MESH) -->
     <div class="diagram-container">
-      <div class="fig-label-inside">FIG. 001 — NEURAL CORE</div>
-      <svg class="diagram-svg" viewBox="0 0 240 200">
-        <g transform="skewY(-15)">
-            <!-- Connections with Flow -->
-            <line class="connection" x1="64" y1="60" x2="126" y2="50" opacity="0.4" />
-            <line class="connection" x1="64" y1="90" x2="126" y2="80" opacity="0.4" />
-            <line class="connection" x1="64" y1="120" x2="126" y2="110" opacity="0.4" />
-            
-            <!-- Nodes -->
-            <circle class="node node-active" cx="60" cy="60" r="4" />
-            <circle class="node node-active" cx="60" cy="90" r="4" />
-            <circle class="node node-active" cx="60" cy="120" r="4" />
-            
-            <circle class="node" cx="130" cy="50" r="4" />
-            <circle class="node node-active" cx="130" cy="80" r="4" />
-            <circle class="node" cx="130" cy="110" r="4" />
-            <circle class="node" cx="130" cy="140" r="4" />
+      <div class="fig-label-inside">FIG. 003 — LATENT SPACE</div>
+      <svg class="diagram-svg" viewBox="0 0 200 200">
+        <!-- Grid Base -->
+        <g transform="translate(100, 160) scale(1, 0.5) rotate(45)">
+          <rect class="grid-cell" x="-60" y="-60" width="40" height="40" />
+          <rect class="grid-cell active" x="-20" y="-60" width="40" height="40" />
+          <rect class="grid-cell" x="20" y="-60" width="40" height="40" />
+          <rect class="grid-cell active" x="-60" y="-20" width="40" height="40" />
+          <rect class="grid-cell active" x="-20" y="-20" width="40" height="40" />
+          <rect class="grid-cell active" x="20" y="-20" width="40" height="40" />
+          <rect class="grid-cell" x="-60" y="20" width="40" height="40" />
+          <rect class="grid-cell active" x="-20" y="20" width="40" height="40" />
+          <rect class="grid-cell" x="20" y="20" width="40" height="40" />
+        </g>
+        <!-- Gaussian Mesh -->
+        <g transform="translate(100, 150)">
+          <path class="mesh-path" d="M -80,0 Q 0,-150 80,0" />
+          <path class="mesh-path" d="M -60,10 Q 0,-120 60,10" />
+          <path class="mesh-path" d="M -40,20 Q 0,-90 40,20" />
+          <path class="mesh-path" style="animation-delay: 0.5s" d="M 0,-150 L 0,0" stroke-dasharray="2,2" />
         </g>
       </svg>
-      <div style="position: absolute; top: 30px; right: 30px; font-family: var(--tech); font-size: 9px; color: var(--blue); border: 0.5px solid var(--blue); padding: 2px 5px; background: white;">Input Tensors</div>
+      <div style="position: absolute; bottom: 30px; right: 30px; font-family: var(--tech); font-size: 9px; color: var(--blue);">Probability Distribution</div>
     </div>
   </div>
 
   <div class="separator">--------------------------------------------------------------------------------------------------------------------------------</div>
 
-  <!-- PROJECTS -->
+  <!-- TABLE OF CONTENTS (PROJECTS & BLOGS) -->
   <section>
     <div style="font-family: var(--tech); font-size: 11px; border-bottom: 2px solid #000; padding-bottom: 8px; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 40px;">
       <span>Table of Contents [v4.0]</span>
-      <span>Sections: 8 • Chapters: 36</span>
+      <span>Sections: 4 • Entries: 12</span>
     </div>
     
     <div class="toc-grid">
-      <div style="margin-bottom: 30px;">
-        <div style="font-family: var(--tech); font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 12px; color: var(--blue);">1. INTELLIGENT AGENTS</div>
-        <div style="font-size: 14px; font-family: var(--serif);">
-          <div style="display: flex; align-items: baseline; margin-bottom: 8px;">
-            <span>InfraOps AI Agent</span><span style="flex:1; border-bottom:1px dotted #bbb; margin:0 8px;"></span><span style="font-family:var(--tech); font-size:9px; color:var(--blue);">ACTIVE</span>
-          </div>
-          <div style="display: flex; align-items: baseline; margin-bottom: 8px;">
-            <span>Root-cause analysis</span><span style="flex:1; border-bottom:1px dotted #bbb; margin:0 8px;"></span><span style="font-family:var(--tech); font-size:9px; color:var(--blue);">V2.1</span>
-          </div>
-        </div>
+      <div class="toc-item">
+        <div class="toc-title">1. INTELLIGENT AGENTS</div>
+        <ul class="toc-list">
+          <li><span class="label">InfraOps AI Agent</span><span class="value">ACTIVE</span></li>
+          <li><span class="label">Root-cause analysis</span><span class="value">SPEC V2.1</span></li>
+          <li><span class="label">Remediation flows</span><span class="value">INTERNAL</span></li>
+        </ul>
       </div>
       
-      <div>
-        <div style="font-family: var(--tech); font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 12px; color: var(--blue);">2. DATA & ANALYTICS</div>
-        <div style="font-size: 14px; font-family: var(--serif);">
-          <div style="display: flex; align-items: baseline; margin-bottom: 8px;">
-            <span>AI Insight Generator</span><span style="flex:1; border-bottom:1px dotted #bbb; margin:0 8px;"></span><span style="font-family:var(--tech); font-size:9px; color:var(--blue);">LIVE</span>
-          </div>
-        </div>
+      <div class="toc-item">
+        <div class="toc-title">2. DATA & SECURITY</div>
+        <ul class="toc-list">
+          <li><span class="label">AI Insight Generator</span><span class="value">4.2K NODES</span></li>
+          <li><span class="label">Excel-to-SQL engine</span><span class="value">LIVE</span></li>
+          <li><span class="label">PII Data Masking</span><span class="value">SECURE</span></li>
+        </ul>
       </div>
 
-      <div>
-        <div style="font-family: var(--tech); font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 12px; color: var(--blue);">3. SECURITY & ETHICS</div>
-        <div style="font-size: 14px; font-family: var(--serif);">
-          <div style="display: flex; align-items: baseline; margin-bottom: 8px;">
-            <span>PII Data Masking</span><span style="flex:1; border-bottom:1px dotted #bbb; margin:0 8px;"></span><span style="font-family:var(--tech); font-size:9px; color:var(--blue);">SECURE</span>
-          </div>
-        </div>
+      <div class="toc-item">
+        <div class="toc-title">3. BLOGS & NOTES</div>
+        <ul class="toc-list">
+          <li><span class="label">Designing Reliable Agents</span><span class="value">2024</span></li>
+          <li><span class="label">FastAPI + MCP Auth</span><span class="value">2024</span></li>
+          <li><span class="label">LLM Observability</span><span class="value">2023</span></li>
+        </ul>
+      </div>
+
+      <div class="toc-item">
+        <div class="toc-title">4. KNOWLEDGE BASE</div>
+        <ul class="toc-list">
+          <li><span class="label">System Architecture</span><span class="value">DOCS</span></li>
+          <li><span class="label">Vector Database Specs</span><span class="value">WIP</span></li>
+          <li><span class="label">API Documentation</span><span class="value">v1.4</span></li>
+        </ul>
       </div>
     </div>
   </section>
 
   <div class="separator">--------------------------------------------------------------------------------------------------------------------------------</div>
 
-  <!-- EXPERIENCE -->
-  <div class="header-grid" style="align-items: flex-start;">
+  <!-- EXPERIENCE & INFRA DIAGRAM -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: flex-start;">
     <div class="diagram-container">
       <div class="fig-label-inside">FIG. 002 — INFRASTRUCTURE</div>
       <svg class="diagram-svg" viewBox="0 0 200 200">
@@ -345,33 +337,29 @@ body {
         <line x1="60" y1="85" x2="140" y2="65" />
         <line x1="60" y1="110" x2="140" y2="90" />
         <line x1="60" y1="135" x2="140" y2="115" />
-        <!-- Indicators -->
-        <circle class="light" cx="75" cy="72" r="2" />
-        <circle class="light light-alt" cx="75" cy="97" r="2" />
-        <circle class="light" cx="75" cy="122" r="2" />
+        <circle class="light" style="fill:var(--blue); animation: blink 1s step-end infinite;" cx="75" cy="72" r="2" />
+        <circle class="light" style="fill:var(--blue); animation: blink 1.5s step-end infinite; animation-delay: 0.5s;" cx="75" cy="97" r="2" />
       </svg>
       <div style="position: absolute; bottom: 50px; left: 80px; font-family: var(--tech); font-size: 9px; color: var(--blue); border: 0.5px solid var(--blue); padding: 2px 5px; background: white;">Worker Nodes</div>
     </div>
 
     <div>
       <div style="font-family: var(--tech); font-size: 11px; margin-bottom: 20px; text-transform: uppercase; color: #999;">Career Path [ Logs ]</div>
-      
       <div class="exp-box">
         <div style="display: grid; grid-template-columns: 50px 1fr; gap: 25px; margin-bottom: 35px;">
           <div style="font-family: var(--tech); font-size: 12px; color: var(--blue); font-weight: bold;">IN:</div>
           <div>
             <h4 style="margin: 0 0 8px 0; font-family: var(--tech); font-size: 17px; text-transform: uppercase;">Product Engineer — AI Systems</h4>
             <div style="font-family: var(--tech); font-size: 10px; color: #888; margin-bottom: 12px; letter-spacing: 1px;">2023 — PRESENT</div>
-            <p>Building LLM-based agents, APIs, and observability tools for production environments.</p>
+            <p>Building LLM-based agents and observability tools for production environments.</p>
           </div>
         </div>
-
         <div style="display: grid; grid-template-columns: 50px 1fr; gap: 25px;">
           <div style="font-family: var(--tech); font-size: 12px; color: var(--blue); font-weight: bold;">OUT:</div>
           <div>
             <h4 style="margin: 0 0 8px 0; font-family: var(--tech); font-size: 17px; text-transform: uppercase;">Backend Developer</h4>
             <div style="font-family: var(--tech); font-size: 10px; color: #888; margin-bottom: 12px; letter-spacing: 1px;">2021 — 2023</div>
-            <p>Designed scalable APIs, auth systems, and data pipelines for high-traffic applications.</p>
+            <p>Designed scalable APIs and data pipelines for high-traffic applications.</p>
           </div>
         </div>
       </div>
