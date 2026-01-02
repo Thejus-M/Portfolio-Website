@@ -1,1091 +1,1808 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Tarun — AI Developer Portfolio</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarun — AI Developer Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Share+Tech+Mono&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet">
+  <script src="model_weights.js"></script> <!-- Real MNIST Weights -->
+  <style>
+    :root {
+      /* GLOBAL VARIABLES */
+      --bg-body: #fdfdfd;
+      --bg-card: #ffffff;
+      --text-main: #1a1a1a;
+      --text-sub: #666666;
+      --text-code: #24292e;
+      --accent: #1f5cff;
+      --border: #e1e4e8;
+      --border-sub: #eaecef;
+      --border-nav: #e1e4e8;
+      --grid-line: rgba(31, 92, 255, 0.15);
+      /* FONTS */
+      --font-serif: 'EB Garamond', Georgia, serif;
+      --font-mono-sys: 'Share Tech Mono', monospace;
+      --font-mono-code: 'JetBrains Mono', monospace;
+      --font-pixel: 'Press Start 2P', cursive;
+      /* VIZ COLORS */
+      --winner: #00d4ff;
+    }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Share+Tech+Mono&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<style>
-/* --------------------
-   GLOBAL THEME
--------------------- */
-:root {
-  --blue: #1f5cff;
-  --blue-dim: rgba(31, 92, 255, 0.3);
-  --winner: #00d4ff; /* Bright Cyan for winner */
-  --bg: #fdfdfd;
-  --text: #1a1a1a;
-  --mono: 'JetBrains Mono', monospace;
-  --serif: 'EB Garamond', serif;
-  --tech: 'Share Tech Mono', monospace;
-}
+    body {
+      background: var(--bg-body);
+      color: var(--text-main);
+      font-family: var(--font-serif);
+      line-height: 1.6;
+      font-size: 18px;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
 
-* { box-sizing: border-box; }
+    /* --------------------
+           LAYOUT & HEADER
+        -------------------- */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px 0 40px;
+      background: var(--bg-card);
+      z-index: 500;
+      border-bottom: 1px solid var(--border);
+    }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: var(--serif);
-  line-height: 1.6;
-  font-size: 18px;
-  overflow-x: hidden;
-}
+    .header-brand {
+      width: 240px;
+      font-family: var(--font-pixel);
+      font-size: 16px;
+      color: var(--accent);
+      letter-spacing: 0;
+      text-transform: uppercase;
+      font-weight: 400;
+      line-height: 1;
+    }
 
-.container {
-  max-width: 1050px;
-  margin: 0 auto;
-  padding: 40px 40px;
-}
+    .header-status {
+      margin-left: auto;
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-/* --------------------
-   ANIMATIONS
--------------------- */
-@keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
-@keyframes stripeMove { to{background-position:40px 0}}
+    .page-wrapper {
+      padding-top: 60px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
 
-/* --------------------
-   DIAGRAMS & HERO
--------------------- */
-.diagram-container {
-  position: relative;
-  border: 1px solid rgba(31,92,255,.3);
-  padding: 30px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background-color:#f0f4ff;
-  background-image:radial-gradient(rgba(31,92,255,.15) .8px, transparent .8px);
-  background-size:12px 12px;
-  min-height:380px;
-  overflow:hidden;
-  perspective:1000px;
-}
+    /* --------------------
+           MAIN CONTENT
+        -------------------- */
+    .main-content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-.fig-label-inside {
-  font-family:var(--tech);
-  font-size:10px;
-  color:var(--blue);
-  text-transform:uppercase;
-  writing-mode:vertical-rl;
-  text-orientation:mixed;
-  position:absolute;
-  left:10px; top:20px;
-  letter-spacing:2px;
-  opacity:.6;
-}
+    .article-container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 40px 100px;
+    }
 
-/* Hero Specific Layout */
-.nn-hero {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  position: relative;
-}
+    .article-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
 
-.digit-panel {
-  position: relative;
-  border: 1px solid rgba(31,92,255,.3);
-  background: radial-gradient(rgba(31,92,255,.15) .8px, transparent .8px);
-  background-size: 10px 10px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+    .article-meta {
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 8px;
+      display: inline-block;
+    }
 
-canvas {
-  background: white;
-  border: 1px dashed rgba(31,92,255,.3);
-  cursor: crosshair;
-  touch-action: none;
-}
+    .article-title {
+      font-family: var(--font-mono-sys);
+      font-size: 3.5rem;
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--text-main);
+      margin-bottom: 24px;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+    }
 
-.digit-label {
-  font-family: var(--tech);
-  font-size: 10px;
-  color: var(--blue);
-  text-align: center;
-  letter-spacing: 1px;
-}
+    .divider {
+      width: 44px;
+      height: 1px;
+      background: #1a1a1a;
+      margin: 40px auto;
+    }
 
-/* Small Clear Button */
-.btn-small-clear {
-  background: white;
-  border: 1px solid var(--blue);
-  color: var(--blue);
-  font-family: var(--tech);
-  font-size: 10px;
-  padding: 4px 12px;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  width: 100%;
-  margin-top: 5px;
-}
-.btn-small-clear:hover {
-  background: var(--blue);
-  color: white;
-}
+    /* --------------------
+           SECTIONS & CARDS
+        -------------------- */
+    .content-section {
+      margin-bottom: 60px;
+    }
 
-#nnSvg {
-  width: 100%;
-  max-width: 360px;
-  height: auto;
-}
+    .content-section h2 {
+      font-family: var(--font-mono-sys);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
 
-/* --------------------
-   NEURAL NETWORK THEME
--------------------- */
-.neuron {
-  fill: white;
-  stroke: var(--blue);
-  stroke-width: 1.5px;
-  opacity: 0.4;
-  transition: fill 0.1s;
-}
+    .content-section p {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: var(--text-main);
+      margin-bottom: 24px;
+      max-width: 75ch;
+    }
 
-.neuron.active {
-  fill: var(--blue);
-  opacity: 0.8;
-}
+    /* Terminal Card (Used for Skills/Experience) */
+    .terminal-card {
+      border: 1px solid var(--border);
+      margin-bottom: 40px;
+      background: var(--bg-card);
+      border-radius: 2px;
+    }
 
-.neuron.winner {
-  fill: var(--winner);
-  stroke: var(--blue);
-  stroke-width: 2.5px;
-  r: 7;
-  filter: drop-shadow(0 0 3px var(--winner));
-}
+    .terminal-row {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      padding: 24px 30px;
+    }
 
-.edge {
-  stroke: var(--blue-dim);
-  stroke-width: 0.8px;
-  opacity: 0.2;
-  transition: all 0.3s;
-}
+    .terminal-row:last-child {
+      border-bottom: none;
+    }
 
-.edge.active {
-  stroke: var(--blue);
-  opacity: 0.5;
-}
+    .terminal-label {
+      font-family: var(--font-mono-sys);
+      color: var(--text-sub);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      width: 140px;
+      flex-shrink: 0;
+      padding-top: 4px;
+    }
 
-.nn-node {
-  fill: white;
-  stroke: var(--blue); 
-  stroke-width: 1.5px;
-  opacity: 0.5; 
-  transition: fill 0.1s;
-}
+    .terminal-content {
+      flex: 1;
+    }
 
-.nn-node.active {
-  fill: var(--blue); 
-  opacity: 0.9;
-}
+    .terminal-content.mono {
+      font-family: var(--font-mono-code);
+      font-size: 14px;
+    }
 
-.nn-edge {
-  stroke: var(--blue-dim); 
-  stroke-width: 0.8px;
-  opacity: 0.2;
-  transition: all 0.3s;
-}
+    .terminal-content.serif {
+      font-family: var(--font-serif);
+      font-size: 16px;
+    }
 
-.nn-edge.active {
-  stroke: var(--blue);
-  opacity: 0.7;
-}
+    .skill-group {
+      margin-bottom: 12px;
+    }
 
-/* Expand Button */
-.btn-expand {
-  position: absolute;
-  bottom: -30px;
-  right: 0;
-  background: white;
-  border: 1px solid var(--blue);
-  color: var(--blue);
-  font-family: var(--tech);
-  font-size: 10px;
-  padding: 4px 10px;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.2s;
-  z-index: 10;
-}
+    .skill-title {
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
 
-.btn-expand:hover {
-  background: var(--blue);
-  color: white;
-}
+    /* --------------------
+           NEURAL NETWORK HERO
+        -------------------- */
+    .nn-hero {
+      display: flex;
+      flex-wrap: wrap;
+      /* Allow metrics to break to new line */
+      /* align-items: center; REMOVED to allow top alignment */
+      gap: 30px;
+      border: 1px solid var(--accent);
+      background-color: var(--bg-body);
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 20px 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      position: relative;
+      /* For tooltip positioning */
+    }
 
-/* --------------------
-   ADVANCED MODAL
--------------------- */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(255, 255, 255, 0.98);
-  z-index: 1000;
-  display: none;
-  flex-direction: column;
-  padding: 2rem;
-  overflow-y: auto;
-  backdrop-filter: blur(5px);
-}
+    .digit-panel {
+      border: 1px solid var(--border);
+      background: white;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 140px;
+    }
 
-.modal-overlay.active {
-  display: flex;
-}
+    canvas {
+      background: white;
+      border: 1px dashed var(--accent);
+      cursor: crosshair;
+    }
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 1rem;
-  margin-bottom: 2rem;
-}
+    .prediction-label {
+      font-family: var(--font-mono-sys);
+      font-size: 14px;
+      color: var(--text-sub);
+      text-align: center;
+      margin-top: 5px;
+    }
 
-.modal-grid {
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 2rem;
-  height: 100%;
-}
+    .prediction-value {
+      font-family: var(--font-mono-sys);
+      font-size: 32px;
+      color: var(--accent);
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.2;
+    }
 
-/* Modal Sidebar */
-.modal-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
+    .btn-small-clear {
+      background: white;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      padding: 6px 12px;
+      cursor: pointer;
+      text-transform: uppercase;
+      width: 100%;
+      transition: all 0.2s;
+    }
 
-#modalCanvas {
-  width: 100%;
-  height: 280px; /* Visual Height */
-  border: 2px dashed var(--blue);
-}
+    .btn-small-clear:hover {
+      background: var(--accent);
+      color: white;
+    }
 
-.pixel-grid-28 {
-  display: grid;
-  grid-template-columns: repeat(28, 1fr);
-  width: 140px;
-  height: 140px;
-  border: 1px solid #ddd;
-  background: white;
-}
+    .viz-container {
+      flex: 2;
+      /* Take up more space */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      min-height: 300px;
+      /* Taller */
+    }
 
-.pixel-28 {
-  width: 100%;
-  height: 100%;
-  background-color: #fff;
-}
+    #nnSvg {
+      width: 100%;
+      height: 100%;
+      max-width: 800px;
+      /* Allow it to be bigger */
+      max-height: 350px;
+      overflow: visible;
+    }
 
-.control-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+    .btn-expand {
+      margin-top: 10px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-sub);
+      transition: color 0.2s;
+    }
 
-.tech-btn {
-  background: transparent;
-  border: 1px solid var(--blue);
-  color: var(--blue);
-  padding: 8px 12px;
-  font-family: var(--tech);
-  font-size: 12px;
-  cursor: pointer;
-  text-align: left;
-  display: flex;
-  justify-content: space-between;
-}
+    .btn-expand:hover {
+      color: var(--accent);
+    }
 
-.tech-btn:hover {
-  background: var(--blue);
-  color: white;
-}
+    .btn-expand svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
 
-.tech-btn.primary {
-  background: var(--blue);
-  color: white;
-}
+    /* FULLSCREEN HERO MODE */
+    .nn-hero.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      background: white;
+      padding: 40px;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: 200px 1fr 300px;
+      /* Canvas, Viz, Metrics */
+      align-items: center;
+      overflow: hidden;
+    }
 
-/* Modal Main Visuals */
-.modal-main {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  height: 100%;
-}
+    .nn-hero.fullscreen .metrics-panel {
+      display: block !important;
+      border: none;
+      margin: 0;
+      padding: 0;
+      background: none;
+    }
 
-.network-viz-large {
-  flex: 1;
-  border: 1px solid #eee;
-  background: #fafafa;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+    .nn-hero.fullscreen #nnSvg {
+      max-width: none;
+      height: 80vh;
+      /* Bigger viz */
+      width: 100%;
+    }
 
-/* Softmax Bars */
-.softmax-container {
-  display: flex;
-  gap: 8px;
-  height: 120px;
-  align-items: flex-end;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #ddd;
-}
+    .nn-hero.fullscreen .digit-panel {
+      transform: scale(1.5);
+      /* Bigger input */
+    }
 
-.sbar-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  height: 100%;
-}
+    /* METRICS PANEL (Normal) */
+    .metrics-panel {
+      width: 100%;
+      border-top: 1px dashed var(--border);
+      padding-top: 20px;
+      margin-top: 10px;
+      display: none;
+      /* Toggled */
+    }
 
-.sbar {
-  width: 80%;
-  background: var(--blue);
-  transition: height 0.3s ease;
-  min-height: 2px;
-  opacity: 0.7;
-}
+    .chart-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-.sbar.winner-bar {
-  background: var(--winner);
-  opacity: 1;
-  box-shadow: 0 0 8px rgba(0,212,255,0.4);
-}
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+    }
 
-.sbar-label {
-  margin-top: 6px;
-  font-family: var(--tech);
-  font-size: 14px;
-  font-weight: bold;
-  color: #333;
-}
+    .bar-label {
+      width: 15px;
+      font-weight: bold;
+    }
 
-/* Responsive Modal */
-@media (max-width: 900px) {
-  .modal-grid { grid-template-columns: 1fr; }
-  .modal-sidebar { flex-direction: row; flex-wrap: wrap; }
-}
+    .bar-ui {
+      flex: 1;
+      height: 8px;
+      background: #eee;
+      border-radius: 2px;
+      overflow: hidden;
+    }
 
-/* --------------------
-   REST OF SITE
--------------------- */
-.hero-text p { font-size:21px; margin-top:0; }
-@media (max-width:900px){ .hero-grid { grid-template-columns:1fr; } .diagram-container, .canvas-wrap { min-height:260px; } }
+    .bar-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.3s;
+    }
 
-</style>
+    .stats-container {
+      font-family: var(--font-mono-sys);
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+
+    .btn-close-fs {
+      display: none;
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      background: none;
+      border: 1px solid var(--accent);
+      padding: 8px 16px;
+      font-family: var(--font-mono-sys);
+      cursor: pointer;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .nn-hero.fullscreen .btn-close-fs {
+      display: block;
+    }
+
+    .nn-hero.fullscreen .btn-expand {
+      display: none;
+    }
+
+    /* TOOLTIP */
+    #nn-tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 10;
+      white-space: pre-line;
+      border: 1px solid #444;
+    }
+
+    .neuron {
+      fill: white;
+      stroke: var(--accent);
+      stroke-width: 1.5px;
+      opacity: 0.4;
+      transition: fill 0.1s;
+      cursor: pointer;
+      /* Signal interactivity */
+    }
+
+    .neuron.active {
+      fill: var(--accent);
+      opacity: 0.8;
+    }
+
+    .neuron:hover {
+      stroke: var(--text-main);
+      stroke-width: 2px;
+      opacity: 1 !important;
+    }
+
+    .neuron.winner {
+      fill: var(--winner);
+      stroke: var(--accent);
+      stroke-width: 2.5px;
+      filter: drop-shadow(0 0 3px var(--winner));
+    }
+
+    .edge {
+      stroke: rgba(31, 92, 255, 0.3);
+      stroke-width: 0.8px;
+      opacity: 0.1;
+      /* Lower default opacity for real lines */
+      transition: all 0.3s;
+    }
+
+    .edge.active {
+      stroke: var(--accent);
+      opacity: 0.5;
+    }
+
+    .edge:hover {
+      stroke: var(--text-main);
+      stroke-width: 2px;
+      opacity: 1 !important;
+    }
+
+    .btn-train {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-family: var(--font-mono-sys);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-train:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 0 10px rgba(31, 92, 255, 0.3);
+    }
+
+    .lc-annotation {
+      font-family: var(--font-mono-sys);
+      font-size: 9px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+
+    .lc-annotation.visible {
+      opacity: 0.6;
+    }
+
+    .loop-indicator {
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      color: var(--accent);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      opacity: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .loop-active .loop-indicator {
+      animation: loopPulse 1.5s infinite;
+    }
+
+    @keyframes loopPulse {
+
+      0%,
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+    }
+
+    .lc-analogy-box {
+      margin-top: 30px;
+      padding: 20px;
+      border-left: 2px solid var(--accent);
+      background: rgba(31, 92, 255, 0.03);
+      font-family: var(--font-serif);
+      font-size: 16px;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    /* --------------------
+           EXPERIENCE VISUALIZATIONS (NN + GIT)
+        -------------------- */
+    .experience-section {
+      background-color: var(--bg-body);
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 20px 20px;
+      padding: 80px 0;
+      margin-top: 60px;
+      position: relative;
+      color: var(--text-main);
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .exp-header {
+      border: 1px solid var(--accent);
+      display: inline-block;
+      padding: 6px 20px;
+      margin-bottom: 30px;
+      margin-left: 40px;
+      background: white;
+      box-shadow: 4px 4px 0px var(--grid-line);
+    }
+
+    .exp-header h2 {
+      font-family: var(--font-mono-sys);
+      font-size: 16px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .viz-tabs {
+      display: flex;
+      gap: 15px;
+      margin: 0 40px 40px 40px;
+    }
+
+    .viz-tab {
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .viz-tab.active {
+      background: white;
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 2px 2px 0px var(--grid-line);
+    }
+
+    .viz-tab:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .viz-container {
+      width: 100%;
+      height: 700px;
+      position: relative;
+      display: none;
+    }
+
+    .viz-container.active {
+      display: block;
+    }
+
+    #nnSvg,
+    #gitSvg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Neural Network Styles */
+    .nn-layer {
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .nn-node {
+      fill: white;
+      stroke: var(--accent);
+      stroke-width: 1;
+      transition: all 0.3s;
+    }
+
+    .nn-layer:hover .nn-node {
+      fill: var(--accent);
+      stroke-width: 2;
+    }
+
+    .nn-connection {
+      stroke: var(--grid-line);
+      stroke-width: 0.5;
+      opacity: 0.3;
+      transition: all 0.3s;
+    }
+
+    .nn-connection.active {
+      stroke: var(--accent);
+      stroke-width: 1;
+      opacity: 0.8;
+    }
+
+    .nn-label {
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+      fill: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+
+    .nn-year {
+      font-family: var(--font-mono-sys);
+      font-size: 9px;
+      fill: var(--text-sub);
+      letter-spacing: 1px;
+    }
+
+    /* Git Graph Styles */
+    .git-branch {
+      stroke-width: 2;
+      fill: none;
+      transition: all 0.3s;
+    }
+
+    .git-branch.ml {
+      stroke: var(--accent);
+    }
+
+    .git-branch.infra {
+      stroke: var(--winner);
+    }
+
+    .git-branch.opensource {
+      stroke: #9b59b6;
+    }
+
+    .git-commit {
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .git-commit circle {
+      fill: white;
+      stroke-width: 2;
+      transition: all 0.3s;
+    }
+
+    .git-commit:hover circle {
+      r: 8;
+      filter: drop-shadow(0 0 4px currentColor);
+    }
+
+    .git-label {
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      fill: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .git-date {
+      font-family: var(--font-mono-sys);
+      font-size: 8px;
+      fill: var(--text-sub);
+    }
+
+    .git-legend {
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Shared Info Card */
+    .exp-info-card {
+      position: absolute;
+      background: white;
+      border: 1px solid var(--accent);
+      padding: 24px;
+      border-radius: 0;
+      width: 360px;
+      box-shadow: 8px 8px 0px var(--grid-line);
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .exp-info-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .exp-info-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 0.5px solid var(--border);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+    }
+
+    .exp-info-title {
+      font-family: var(--font-mono-sys);
+      font-size: 13px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0;
+    }
+
+    .exp-info-meta {
+      font-family: var(--font-mono-sys);
+      font-size: 9px;
+      color: var(--text-sub);
+    }
+
+    .exp-info-desc {
+      font-family: var(--font-mono-code);
+      font-size: 11px;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    .learning-curve-card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-top: 40px;
+      position: relative;
+    }
+
+    .learning-curve-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .lc-title {
+      font-family: var(--font-mono-sys);
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .graph-container {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      margin-top: 20px;
+      background: var(--bg-card-dark);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    #learningCurveSvg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .curve-path {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 2px;
+      stroke-dasharray: 1000;
+      /* Needs to be longer than path */
+      stroke-dashoffset: 1000;
+    }
+
+    @keyframes drawCurve {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .grid-lines line {
+      stroke: var(--border);
+      stroke-width: 0.5px;
+    }
+
+    .axis-label {
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      fill: var(--text-sub);
+    }
+
+    .data-point {
+      fill: var(--accent);
+      stroke: white;
+      stroke-width: 1.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .data-point:hover {
+      fill: var(--accent);
+      stroke: var(--accent);
+      stroke-width: 3px;
+      transform: scale(1.2);
+    }
+
+    .lc-tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 10;
+      white-space: pre-line;
+      border: 1px solid #444;
+      max-width: 200px;
+      text-align: center;
+    }
+
+    .lc-tooltip.visible {
+      opacity: 1;
+    }
+
+    .training-log {
+      background: var(--bg-card-dark);
+      border-radius: 4px;
+      padding: 10px;
+      margin-top: 20px;
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      color: var(--text-sub);
+      height: 80px;
+      overflow-y: auto;
+      line-height: 1.5;
+    }
+
+    .training-log div {
+      margin-bottom: 2px;
+    }
+
+    /* --------------------
+           FOOTER
+        -------------------- */
+    .nav-footer {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 60px;
+    }
+
+    .nav-footer a {
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-sub);
+      text-decoration: none;
+      padding: 12px 20px;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .nav-footer a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .page-footer {
+      text-align: center;
+      padding: 40px 0;
+      font-family: var(--font-mono-sys);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-sub);
+    }
+
+    /* --------------------
+           RESPONSIVE
+        -------------------- */
+    @media (max-width: 1000px) {
+      .header {
+        padding: 0 20px;
+      }
+
+      .article-container {
+        padding: 40px 20px;
+      }
+
+      .nn-hero {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .terminal-row {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .terminal-label {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="container">
-  <!-- TOP BAR -->
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-    <h1 style="font-family:var(--tech);font-size:52px;line-height:.9;margin:0;">TARUN:<br/>MAKING<br/>SOFTWARE</h1>
-    <div style="text-align:right;font-family:var(--tech);font-size:12px;color:#666;border-top:1px solid #ddd;padding-top:10px;">
-      A REFERENCE MANUAL FOR PEOPLE WHO DESIGN AND BUILD AI.<br/>
-      WRITTEN AND DEVELOPED BY TARUN.
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-brand">T.</div>
+    <div class="header-status">
+      <span>READY</span>
+      <div style="width:30px; height:1px; background:#ccc;"></div>
     </div>
-  </div>
+  </header>
 
-  <div style="margin:28px 0;color:var(--blue);font-family:var(--tech);opacity:.2;">
-    --------------------------------------------------------------------------------------------------------------------------------
-  </div>
+  <div class="page-wrapper">
 
-  
-<!-- HERO SECTION -->
-<div style="display:grid;grid-template-columns:1.2fr 1fr;gap:60px;margin-top:40px;align-items:center;">
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="article-container">
 
-  <!-- LEFT: DRAWING + NETWORK -->
-  <div class="nn-hero">
+        <!-- TITLE -->
+        <header class="article-header" id="hero">
+          <div class="article-meta">AI ARCHITECT</div>
+          <h1 class="article-title">Developers Portfolio.</h1>
+        </header>
 
-    <!-- DRAWN DIGIT (Main View) -->
-    <div class="digit-panel">
-      <canvas id="digitCanvas" width="120" height="120"></canvas>
-      <div class="digit-label">INPUT (28×28)</div>
-      <!-- NEW CLEAR BUTTON -->
-      <button id="btnClearSmall" class="btn-small-clear">[ CLEAR ]</button>
-    </div>
+        <div class="divider"></div>
 
-    <!-- NETWORK SVG -->
-    <svg id="nnSvg" viewBox="0 0 520 220">
-      <!-- layers generated by JS -->
-    </svg>
+        <!-- NEURAL NETWORK HERO -->
+        <div class="nn-hero" id="nnHero">
+          <button class="btn-close-fs" id="btnCloseFS">EXIT FULLSCREEN</button>
 
-    <!-- EXPAND BUTTON -->
-    <button class="btn-expand" id="btnExpand">[ + EXPAND DIAGRAM ]</button>
+          <div class="digit-panel">
+            <canvas id="digitCanvas" width="120" height="120"></canvas>
+            <div class="prediction-label">PREDICTION</div>
+            <div class="prediction-value" id="predValue">-</div>
+            <div
+              style="font-family:var(--font-mono-sys); font-size:10px; color:var(--accent); text-align:center; margin-top:5px;">
+              INPUT (28×28)</div>
+            <button id="btnClearSmall" class="btn-small-clear">CLEAR</button>
+          </div>
 
-  </div>
+          <div class="viz-container">
+            <svg id="nnSvg" viewBox="0 0 520 220"></svg>
+            <div
+              style="font-family:var(--font-mono-sys); font-size:11px; color:var(--text-sub); margin-top:10px; text-align:center;">
+              Interactive Neural Network (Trained on MNIST).<br>Draw a digit (0-9).
+            </div>
+            <button class="btn-expand" id="btnExpand" title="Toggle Metrics">
+              <!-- Chevron Down Icon -->
+              <svg viewBox="0 0 24 24">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+              </svg>
+            </button>
+          </div>
 
-  <!-- RIGHT: TEXT -->
-  <div>
-    <p style="font-size:21px;margin-top:0;">
-      This is a simplified view of how a neural network classifies handwritten digits.
-    </p>
-    <p>
-      A drawn input is decomposed into pixel activations, propagated through dense layers,
-      and resolved into a probability distribution across output classes.
-    </p>
+          <!-- Tooltip -->
+          <div id="nn-tooltip"></div>
 
-    <div style="margin-top:30px;border-left:3px solid var(--blue);padding-left:25px;">
-      <div style="font-family:var(--tech);font-size:10px;color:var(--blue);margin-bottom:12px;">
-        [ LIVE MODEL TRACE ]
-      </div>
-      <div style="font-family:var(--tech);font-size:14px;line-height:1.8;">
-        ARCH: 784 → 64 → 32 → 10<br/>
-        MODE: FORWARD PASS VISUALIZATION
-      </div>
-    </div>
-  </div>
-</div>
-
-  <div style="margin:28px 0;color:var(--blue);font-family:var(--tech);opacity:.2;">
-    --------------------------------------------------------------------------------------------------------------------------------
-  </div>
-  
-  <!-- REST OF CONTENT -->
-  <section>
-    <div style="font-family: var(--tech); font-size: 11px; border-bottom: 2px solid #000; padding-bottom: 8px; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 40px;">
-      <span>Table of Contents [v4.0]</span>
-      <span>Sections: 4 • Entries: 12</span>
-    </div>
-
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:60px;">
-      <div>
-        <div style="font-family:var(--tech);font-size:15px;color:var(--blue);text-transform:uppercase;border-bottom:1px solid rgba(31,92,255,.2);padding-bottom:6px;margin-bottom:15px;">1. INTELLIGENT AGENTS</div>
-        <ul style="list-style:none;padding:0;margin:0;font-size:15px;">
-          <li style="display:flex;align-items:baseline;margin-bottom:10px;">InfraOps AI Agent<div style="flex:1;border-bottom:1px dotted #ccc;margin:0 10px;"></div><div style="font-family:var(--tech);font-size:10px;color:var(--blue);text-transform:uppercase;">ACTIVE</div></li>
-          <li style="display:flex;align-items:baseline;margin-bottom:10px;">Root-cause analysis<div style="flex:1;border-bottom:1px dotted #ccc;margin:0 10px;"></div><div style="font-family:var(--tech);font-size:10px;color:var(--blue);text-transform:uppercase;">SPEC V2.1</div></li>
-        </ul>
-      </div>
-      <div>
-        <div style="font-family:var(--tech);font-size:15px;color:var(--blue);text-transform:uppercase;border-bottom:1px solid rgba(31,92,255,.2);padding-bottom:6px;margin-bottom:15px;">2. DATA & SECURITY</div>
-        <ul style="list-style:none;padding:0;margin:0;font-size:15px;">
-          <li style="display:flex;align-items:baseline;margin-bottom:10px;">AI Insight Generator<div style="flex:1;border-bottom:1px dotted #ccc;margin:0 10px;"></div><div style="font-family:var(--tech);font-size:10px;color:var(--blue);text-transform:uppercase;">4.2K NODES</div></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <div style="margin:28px 0;color:var(--blue);font-family:var(--tech);opacity:.2;">
-    --------------------------------------------------------------------------------------------------------------------------------
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:flex-start;">
-    <div class="diagram-container" style="min-height:260px;">
-      <div class="fig-label-inside">FIG. 002 — INFRASTRUCTURE</div>
-      <svg class="diagram-svg" viewBox="0 0 200 200" style="width:100%;max-width:340px;">
-        <path d="M60,60 L140,40 L140,140 L60,160 Z" />
-        <line x1="60" y1="85" x2="140" y2="65" />
-        <line x1="60" y1="110" x2="140" y2="90" />
-        <line x1="60" y1="135" x2="140" y2="115" />
-        <circle class="light" style="fill:var(--blue); animation: blink 1s step-end infinite;" cx="75" cy="72" r="2" />
-        <circle class="light" style="fill:var(--blue); animation: blink 1.5s step-end infinite; animation-delay: 0.5s;" cx="75" cy="97" r="2" />
-      </svg>
-      <div style="position:absolute;bottom:50px;left:80px;font-family:var(--tech);font-size:9px;color:var(--blue);border:0.5px solid var(--blue);padding:2px 5px;background:white;">Worker Nodes</div>
-    </div>
-
-    <div>
-      <div style="font-family:var(--tech);font-size:11px;margin-bottom:20px;text-transform:uppercase;color:#999;">Career Path [ Logs ]</div>
-      <div style="border:1px solid #ddd;padding:35px;background:white;">
-        <div style="display:grid;grid-template-columns:50px 1fr;gap:25px;margin-bottom:35px;">
-          <div style="font-family:var(--tech);font-size:12px;color:var(--blue);font-weight:bold;">IN:</div>
-          <div>
-            <h4 style="margin:0 0 8px 0;font-family:var(--tech);font-size:17px;text-transform:uppercase;">Product Engineer — AI Systems</h4>
-            <div style="font-family:var(--tech);font-size:10px;color:#888;margin-bottom:12px;letter-spacing:1px;">2023 — PRESENT</div>
-            <p>Building LLM-based agents and observability tools for production environments.</p>
+          <!-- Metrics Panel -->
+          <div class="metrics-panel" id="metricsPanel">
+            <div class="chart-container" id="confChart">
+              <!-- Bars injected by JS -->
+            </div>
+            <div class="stats-container">
+              <div style="margin-bottom:10px;"><strong>NETWORK STATS</strong></div>
+              <div>L0 (Input): 784 Nodes</div>
+              <div>L1 (Hidden): 64 Neurons (ReLU)</div>
+              <div>L2 (Output): 10 Neurons (Softmax)</div>
+              <div>Total Parameters: ~50k</div>
+              <div style="margin-top:10px;">Inference Time: <span id="infTime">0</span>ms</div>
+            </div>
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:50px 1fr;gap:25px;">
-          <div style="font-family:var(--tech);font-size:12px;color:var(--blue);font-weight:bold;">OUT:</div>
-          <div>
-            <h4 style="margin:0 0 8px 0;font-family:var(--tech);font-size:17px;text-transform:uppercase;">Backend Developer</h4>
-            <div style="font-family:var(--tech);font-size:10px;color:#888;margin-bottom:12px;letter-spacing:1px;">2021 — 2023</div>
-            <p>Designed scalable APIs and data pipelines for high-traffic applications.</p>
+
+        <!-- ABOUT -->
+        <section class="content-section" id="about">
+          <h2>01 // About</h2>
+          <p>
+            Highly motivated web developer with a passion for open source contributions.
+            Proven track record in delivering high-quality solutions through teamwork.
+            Eager to apply expertise to tackle real-world challenges and thrive in continuous learning.
+          </p>
+        </section>
+
+        <!-- SKILLS -->
+        <section class="content-section" id="skills">
+          <h2>02 // Technical Skills</h2>
+          <div class="terminal-card">
+
+            <div class="terminal-row">
+              <div class="terminal-label">LANGUAGES</div>
+              <div class="terminal-content mono">Python, JavaScript (JS), SQL</div>
+            </div>
+
+            <div class="terminal-row">
+              <div class="terminal-label">WEB & FRAMEWORKS</div>
+              <div class="terminal-content mono">
+                Django, FastAPI, Flask, Streamlit, REST APIs, HTML, CSS, Bootstrap
+              </div>
+            </div>
+
+            <div class="terminal-row">
+              <div class="terminal-label">AI & ML</div>
+              <div class="terminal-content mono">
+                Supervised/Unsupervised Learning, CNN, DL, NLP, LLM, RAG, Scikit-learn, TensorFlow, PyTorch, Pandas,
+                NumPy, LangChain, LangGraph, Crew.ai
+              </div>
+            </div>
+
+            <div class="terminal-row">
+              <div class="terminal-label">DATA & TOOLS</div>
+              <div class="terminal-content mono">
+                MySQL, PostgreSQL, MongoDB, Redis, SQLite, ChromaDB, Git, GitHub, GitLab, AWS, Docker, Kubernetes
+              </div>
+            </div>
+
           </div>
-        </div>
+        </section>
+
+        <!-- EXPERIENCE VISUALIZATION -->
+        <section class="experience-section" id="experience">
+          <div class="exp-header">
+            <h2>03 // Experience</h2>
+          </div>
+
+          <!-- Shared Info Card -->
+          <div id="expInfoCard" class="exp-info-card">
+            <div class="exp-info-header">
+              <div class="exp-info-title" id="expInfoTitle">ROLE TITLE</div>
+              <div class="exp-info-meta" id="expInfoMeta">2024-PRESENT</div>
+            </div>
+            <div class="exp-info-desc" id="expInfoDesc">Technical specifications and project outcomes...</div>
+          </div>
+
+          <!-- Git Graph Visualization -->
+          <div class="viz-container active" id="gitViz">
+            <svg id="gitSvg" viewBox="0 0 1400 700" preserveAspectRatio="xMidYMid meet">
+
+              <!-- Main timeline: Open Source (Moved to bottom y=470) -->
+              <line x1="100" y1="470" x2="1350" y2="470" stroke="#9CA3AF" stroke-width="3" />
+
+              <!-- Open Source commit (y=470) -->
+              <g class="git-commit" onclick="showExpInfo(0)">
+                <circle cx="150" cy="470" r="14" fill="#e8e8e8" stroke="#9CA3AF" stroke-width="3" />
+                <text class="git-label" x="150" y="515" text-anchor="middle" fill="var(--text-sub)"
+                  font-size="13px">Open Source</text>
+                <text class="git-date" x="150" y="535" text-anchor="middle" font-size="11px">2021</text>
+              </g>
+
+              <!-- Branch point for UST (July 2024 - Branches UP from bottom) -->
+              <circle cx="500" cy="470" r="6" fill="var(--border)" />
+
+              <!-- Smooth S-curve UP for UST branch (470 -> 260) -->
+              <path d="M 500,470 C 550,470 580,380 610,330 C 630,290 640,260 660,260 L 1350,260" stroke="var(--accent)"
+                stroke-width="3" fill="none" />
+
+              <!-- UST Global commit -->
+              <g class="git-commit" onclick="showExpInfo(1)">
+                <circle cx="700" cy="260" r="16" fill="var(--accent)" stroke="var(--accent)" stroke-width="3" />
+                <text class="git-label" x="700" y="225" text-anchor="middle" fill="var(--accent)" font-size="14px"
+                  font-weight="600">UST GLOBAL</text>
+                <text class="git-date" x="700" y="205" text-anchor="middle" font-size="11px">Jul 2024</text>
+              </g>
+
+              <!-- Project 1: InfraOps AI (y=120) -->
+              <circle cx="800" cy="260" r="5" fill="var(--accent)" />
+              <path d="M 800,260 C 840,260 870,210 900,170 C 920,145 935,130 955,120 L 1350,120" stroke="#2ecc71"
+                stroke-width="2.5" fill="none" />
+              <g class="git-commit" onclick="showExpInfo(2)">
+                <circle cx="1000" cy="120" r="13" fill="#2ecc71" stroke="#2ecc71" stroke-width="3" />
+                <text class="git-label" x="1000" y="85" text-anchor="middle" fill="#2ecc71" font-size="12px"
+                  font-weight="500">INFRAOPS AI</text>
+              </g>
+
+              <!-- Project 2: Insight Gen (y=180) -->
+              <circle cx="950" cy="260" r="5" fill="var(--accent)" />
+              <path d="M 950,260 C 990,260 1020,230 1050,200 C 1070,185 1085,180 1105,180 L 1350,180" stroke="#9b59b6"
+                stroke-width="2.5" fill="none" />
+              <g class="git-commit" onclick="showExpInfo(3)">
+                <circle cx="1180" cy="180" r="13" fill="#9b59b6" stroke="#9b59b6" stroke-width="3" />
+                <text class="git-label" x="1120" y="175" text-anchor="end" fill="#9b59b6" font-size="12px"
+                  font-weight="500">INSIGHT GEN</text>
+              </g>
+
+              <!-- Project 4: AI Monitor (y=330 - Moved ABOVE Validation) -->
+              <circle cx="1280" cy="260" r="5" fill="var(--accent)" />
+              <path d="M 1280,260 C 1300,260 1310,280 1320,310 C 1325,325 1330,330 1335,330 L 1350,330" stroke="#f39c12"
+                stroke-width="2.5" fill="none" />
+              <g class="git-commit" onclick="showExpInfo(5)">
+                <circle cx="1347" cy="330" r="13" fill="#f39c12" stroke="#f39c12" stroke-width="3" />
+                <text class="git-label" x="1347" y="365" text-anchor="middle" fill="#f39c12" font-size="12px"
+                  font-weight="500">AI MONITOR</text>
+              </g>
+
+              <!-- Project 3: Validation (y=400 - Moved BELOW AI Monitor) -->
+              <circle cx="1100" cy="260" r="5" fill="var(--accent)" />
+              <path d="M 1100,260 C 1140,260 1170,320 1200,370 C 1220,390 1235,398 1255,400 L 1350,400" stroke="#e74c3c"
+                stroke-width="2.5" fill="none" />
+              <g class="git-commit" onclick="showExpInfo(4)">
+                <circle cx="1305" cy="400" r="13" fill="#e74c3c" stroke="#e74c3c" stroke-width="3" />
+                <text class="git-label" x="1245" y="405" text-anchor="end" fill="#e74c3c" font-size="12px"
+                  font-weight="500">VALIDATION</text>
+              </g>
+
+              <!-- Timeline markers -->
+              <line x1="50" y1="580" x2="1350" y2="580" stroke="var(--border)" stroke-width="0.5" />
+              <text x="150" y="615" class="git-date" text-anchor="middle" font-size="12px">2021</text>
+              <text x="350" y="615" class="git-date" text-anchor="middle" font-size="12px">2022</text>
+              <text x="450" y="615" class="git-date" text-anchor="middle" font-size="12px">2023</text>
+              <text x="550" y="615" class="git-date" text-anchor="middle" font-size="12px">Jul 2024</text>
+              <text x="1200" y="615" class="git-date" text-anchor="middle" font-size="12px">Present</text>
+            </svg>
+          </div>
+        </section>
       </div>
-    </div>
+
+      <!-- FOOTER -->
+      <div class="nav-footer">
+        <a href="#">Mail</a>
+        <a href="#">Github</a>
+        <a href="#">Linkedin</a>
+        <a href="#">Leetcode</a>
+      </div>
+
+      <div class="page-footer">
+        | MAKING SOFTWARE |<br>
+        A REFERENCE MANUAL FOR PEOPLE WHO DESIGN AND BUILD AI.<br>
+        © 2025 TARUN • [ SECTION 1990 ]
+        <span style="opacity:0.04; margin-left:10px;">attention is all you need</span>
+      </div>
+  </div>
+  </main>
   </div>
 
-  <div style="margin:28px 0;color:var(--blue);font-family:var(--tech);opacity:.2;">
-    --------------------------------------------------------------------------------------------------------------------------------
-  </div>
+  <!-- SCRIPTS -->
+  <script>
+    // ==========================================
+    // REAL MNIST NEURAL NETWORK (Inference Engine)
+    // ==========================================
 
-  <div style="width:100%;height:16px;position:relative;background:#f0f0f0;border:1px solid #ddd;margin:50px 0;overflow:hidden;">
-    <div style="width:75%;height:100%;background:repeating-linear-gradient(45deg,var(--blue),var(--blue) 10px,#3b6eff 10px,#3b6eff 20px);background-size:40px 100%;animation:stripeMove 2s linear infinite;"></div>
-  </div>
+    // Helpers
+    const formatProb = (p) => (p * 100).toFixed(1) + '%';
 
-  <footer style="margin-top:80px;padding:40px 0;border-top:1px solid #ddd;text-align:center;font-family:var(--tech);font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#666;">
-    | MAKING SOFTWARE |<br/>A REFERENCE MANUAL FOR PEOPLE WHO DESIGN AND BUILD AI.<br/>© 2025 TARUN • [ SECTION 1990 ]
-  </footer>
-</div>
+    const initRealNN = () => {
+      const weights = window.modelData; // Loaded from model_weights.js
+      if (!weights) {
+        console.error("Weights not loaded!");
+        return;
+      }
 
-<!-- =========================
-     ADVANCED MODAL
-========================= -->
-<div class="modal-overlay" id="advancedModal">
-  <div class="modal-header">
-    <div>
-      <h2 style="margin:0;font-family:var(--tech);font-size:24px;">NEURAL NETWORK ARCHITECTURE</h2>
-      <div style="font-family:var(--mono);font-size:12px;color:#666;">SYS.01 // MNIST-CLASSIFIER-V1</div>
-    </div>
-    <button class="btn" id="btnCloseModal" style="padding:10px 20px;">[ CLOSE PANEL ]</button>
-  </div>
+      // Canvas & UI Setup
+      const canvas = document.getElementById("digitCanvas");
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
-  <div class="modal-grid">
-    <!-- LEFT: CONTROLS & PREVIEW -->
-    <div class="modal-sidebar">
-      
-      <!-- DRAWING CANVAS -->
-      <div>
-        <div style="font-family:var(--tech);font-size:10px;color:var(--blue);margin-bottom:5px;">INPUT CANVAS (DRAW HERE)</div>
-        <!-- Internal resolution reduced to 140x140 for performance -->
-        <canvas id="modalCanvas" width="140" height="140"></canvas>
-      </div>
+      // White Canvas, Black Ink (Standard)
+      const resetCanvas = () => {
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, 120, 120);
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 8; // Reduced from 12
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+      };
+      resetCanvas();
 
-      <!-- RAW PIXEL GRID -->
-      <div style="display:flex; gap:10px; align-items:center;">
-         <div style="font-family:var(--tech);font-size:10px;color:var(--blue);">28×28 GRID</div>
-         <div class="pixel-grid-28" id="pixelGrid28"></div>
-      </div>
+      let drawing = false;
+      const getPos = (e) => {
+        const r = canvas.getBoundingClientRect();
+        return {
+          x: (e.touches ? e.touches[0].clientX : e.clientX) - r.left,
+          y: (e.touches ? e.touches[0].clientY : e.clientY) - r.top
+        };
+      };
 
-      <!-- CONTROLS -->
-      <div class="control-group">
-        <div style="font-family:var(--tech);font-size:10px;color:var(--blue);">OPERATIONS</div>
-        <button class="tech-btn primary" id="btnRunAdv">RUN INFERENCE <span>▶</span></button>
-        <button class="tech-btn" id="btnStepAdv">STEP LAYER <span>→</span></button>
-        <button class="tech-btn" id="btnClearAdv">CLEAR INPUT <span>×</span></button>
-      </div>
+      // Drawing Handlers
+      canvas.addEventListener('mousedown', e => { drawing = true; ctx.beginPath(); ctx.moveTo(getPos(e).x, getPos(e).y); });
+      canvas.addEventListener('mousemove', e => {
+        if (drawing) {
+          ctx.lineTo(getPos(e).x, getPos(e).y);
+          ctx.stroke();
+          predict();
+        }
+      });
+      const stop = () => { drawing = false; predict(); };
+      canvas.addEventListener('mouseup', stop);
+      canvas.addEventListener('mouseleave', stop);
 
-      <div class="control-group">
-        <div style="font-family:var(--tech);font-size:10px;color:var(--blue);">CONFIGURATION</div>
-        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;align-items:center;">
-          <span>Sparse Mode</span>
-          <input type="checkbox" id="checkSparse">
-        </div>
-      </div>
+      document.getElementById('btnClearSmall').onclick = () => {
+        resetCanvas();
+        document.getElementById('predValue').innerText = "-";
+        updateChart(new Array(10).fill(0));
+        document.querySelectorAll('.neuron.active').forEach(n => n.classList.remove('active', 'winner'));
+        // Clear visualization values
+        window.vizNodes.forEach(n => delete n.val);
+        // Redraw viz to clear
+        updateViz(new Float32Array(784), new Float32Array(64), new Float32Array(10), -1);
+      };
 
-    </div>
+      // Expand Button Logic
+      const btnExpand = document.getElementById('btnExpand');
+      const nnHero = document.getElementById('nnHero');
+      const btnCloseFS = document.getElementById('btnCloseFS');
 
-    <!-- RIGHT: VISUALIZATION -->
-    <div class="modal-main">
-      
-      <!-- PROBABILITY BARS -->
-      <div class="softmax-container" id="softmaxViz">
-        <!-- Generated by JS -->
-      </div>
+      btnExpand.onclick = () => {
+        nnHero.classList.add('fullscreen');
+        document.body.style.overflow = 'hidden'; // Lock scroll
+        // Resize logic if needed? CSS handles 80vh
+      };
 
-      <!-- NETWORK SVG -->
-      <div class="network-viz-large" id="networkContainerLarge">
-        <svg id="nnSvgLarge" viewBox="0 0 800 400" style="width:100%;height:100%;"></svg>
-      </div>
+      if (btnCloseFS) {
+        btnCloseFS.onclick = () => {
+          nnHero.classList.remove('fullscreen');
+          document.body.style.overflow = ''; // Unlock scroll
+        };
+      }
 
-    </div>
-  </div>
-</div>
+      // Network Config
+      const W1 = new Float32Array(weights[0].weights.flat());
+      const B1 = new Float32Array(weights[0].biases);
+      const W2 = new Float32Array(weights[1].weights.flat());
+      const B2 = new Float32Array(weights[1].biases);
 
-<!-- =========================
-         SCRIPT (LAG FIXED)
-========================= -->
-<script>
-/* =========================
-   STATE & CONFIG
-========================= */
-const CONFIG = {
-  gridSize: 28,
-  hiddenLayers: [64, 32],
-  outputSize: 10
-};
+      // Visualization Setup
+      // Input Layer: 784 is too big. Let's visualize a downscaled grid or just a column.
+      // User asked for "input nodes are missing".
+      // Let's add a column of 50 representative nodes for Layer 0.
+      buildViz(784, 64, 10);
 
-const state = {
-  inputGrid: new Float32Array(CONFIG.gridSize * CONFIG.gridSize),
-  prediction: null,
-  probabilities: new Array(10).fill(0),
-  isSparse: false,
-  animationTimers: [],
-  // Cache DOM elements
-  largeNodes: [],
-  largeEdges: [],
-  smallNodes: [],
-  smallEdges: []
-};
+      // PREDICTION ENGINE
+      function predict() {
+        const startT = performance.now();
 
-// DOM Elements
-const modal = document.getElementById("advancedModal");
-const btnExpand = document.getElementById("btnExpand");
-const btnClose = document.getElementById("btnCloseModal");
-const pixelGrid28 = document.getElementById("pixelGrid28");
+        const input = extractInput();
+        if (!input) return;
 
-/* =========================
-   CANVAS HANDLER
-========================= */
-function setupCanvas(canvasId, size) {
-  const canvas = document.getElementById(canvasId);
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
-  
-  ctx.fillStyle = "white";
-  ctx.fillRect(0,0,size,size);
-  ctx.lineWidth = size > 150 ? 15 : 8; 
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-  ctx.strokeStyle = "#1f5cff";
+        // 2. Forward Pass (L1)
+        const h_activations = new Float32Array(64);
+        for (let j = 0; j < 64; j++) {
+          let sum = B1[j];
+          for (let i = 0; i < 784; i++) {
+            if (input[i] > 0) {
+              sum += input[i] * W1[i * 64 + j];
+            }
+          }
+          h_activations[j] = Math.max(0, sum);
+        }
 
-  let drawing = false;
+        // 3. Forward Pass (L2)
+        const o_activations = new Float32Array(10);
+        for (let j = 0; j < 10; j++) {
+          let sum = B2[j];
+          for (let i = 0; i < 64; i++) {
+            sum += h_activations[i] * W2[i * 10 + j];
+          }
+          o_activations[j] = sum;
+        }
 
-  const getPos = (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    
-    return {
-      x: (clientX - rect.left) * scaleX,
-      y: (clientY - rect.top) * scaleY
+        // Softmax
+        const maxLogit = Math.max(...o_activations);
+        const exps = o_activations.map(l => Math.exp(l - maxLogit));
+        const sumExps = exps.reduce((a, b) => a + b, 0);
+        const probs = exps.map(e => e / sumExps);
+
+        const endT = performance.now();
+        document.getElementById('infTime').innerText = (endT - startT).toFixed(2);
+
+        // 4. Update UI
+        const pred = probs.indexOf(Math.max(...probs));
+        document.getElementById('predValue').innerText = pred;
+        updateChart(probs);
+
+        // Pass Input to Viz? We need a summarized input for the 50 nodes.
+        // Let's map 784 -> 50 by averaging chunks? Or just sampling?
+        // Sampling is easier. 784 / 50 ~= 15.6. Step 15.
+        updateViz(input, h_activations, probs, pred);
+      }
+
+      // Helper: Canvas to Input (Invert Colors for MNIST)
+      function extractInput() {
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = 28; tempCanvas.height = 28;
+        const tCtx = tempCanvas.getContext('2d');
+        tCtx.drawImage(canvas, 0, 0, 28, 28);
+        const imgData = tCtx.getImageData(0, 0, 28, 28).data;
+        const input = new Float32Array(784);
+        let hasUrl = false;
+        for (let i = 0; i < 784; i++) {
+          const val = (255 - imgData[i * 4]);
+          input[i] = val / 255.0;
+          if (val > 0) hasUrl = true;
+        }
+        return hasUrl ? input : null;
+      }
+
+      function updateChart(probs) {
+        const chart = document.getElementById('confChart');
+        chart.innerHTML = '';
+        probs.forEach((p, i) => {
+          const row = document.createElement('div');
+          row.className = 'bar-row';
+          row.innerHTML = `
+                   <div class="bar-label" style="width:20px; font-size:14px;">${i}</div>
+                   <div class="bar-ui" style="height:12px;"><div class="bar-fill" style="width: ${p * 100}%"></div></div>
+                   <div style="width:40px; text-align:right; font-size:14px;">${Math.round(p * 100)}%</div>
+                `;
+          chart.appendChild(row);
+        });
+      }
     };
-  };
 
-  const start = (e) => {
-    e.preventDefault();
-    drawing = true;
-    const {x, y} = getPos(e);
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-  };
+    // VIZ BUILDER 
+    function buildViz(l1, l2, l3) {
+      const svg = document.getElementById("nnSvg");
+      svg.innerHTML = '';
+      // Make it bigger
+      const width = 800, height = 300;
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
 
-  const move = (e) => {
-    e.preventDefault();
-    if (!drawing) return;
-    const {x, y} = getPos(e);
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  };
+      const layerGap = width / 4;
 
-  const end = (e) => {
-    if(e) e.preventDefault();
-    if(drawing) {
-      drawing = false;
-      processInput(ctx, size);
-    }
-  };
+      const neurons = [];
+      const linesGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      svg.appendChild(linesGroup);
+      const nodesGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      svg.appendChild(nodesGroup);
 
-  canvas.addEventListener('mousedown', start);
-  canvas.addEventListener('mousemove', move);
-  canvas.addEventListener('mouseup', end);
-  canvas.addEventListener('mouseleave', end);
-  canvas.addEventListener('touchstart', start);
-  canvas.addEventListener('touchmove', move);
-  canvas.addEventListener('touchend', end);
-
-  return { canvas, ctx };
-}
-
-const mainCanvas = setupCanvas("digitCanvas", 120);
-const modalCanvas = setupCanvas("modalCanvas", 140); 
-
-/* =========================
-   PROCESSING
-========================= */
-
-function processInput(ctx, size) {
-  const blockSize = size / CONFIG.gridSize;
-  const imgData = ctx.getImageData(0, 0, size, size).data;
-  
-  state.inputGrid.fill(0);
-
-  for(let y=0; y<CONFIG.gridSize; y++) {
-    for(let x=0; x<CONFIG.gridSize; x++) {
-      const cx = Math.floor(x*blockSize + blockSize/2);
-      const cy = Math.floor(y*blockSize + blockSize/2);
-      const idx = (cy*size + cx)*4;
-      const val = 1 - (imgData[idx]/255); 
-      if(val > 0.1) state.inputGrid[y*CONFIG.gridSize + x] = val;
-    }
-  }
-
-  centerGrid(state.inputGrid);
-
-  updatePixelGridUI();
-  runRecognition();
-}
-
-function centerGrid(grid) {
-  let minR=28, maxR=-1, minC=28, maxC=-1;
-  for(let r=0; r<28; r++){
-    for(let c=0; c<28; c++){
-      if(grid[r*28+c] > 0.2) {
-        if(r<minR) minR=r;
-        if(r>maxR) maxR=r;
-        if(c<minC) minC=c;
-        if(c>maxC) maxC=c;
+      // Input Layer (Sampled 50 nodes)
+      const inputCount = 50;
+      const yGapI = height / (inputCount + 1);
+      for (let i = 0; i < inputCount; i++) {
+        const cx = layerGap * 1.0;
+        const cy = (i + 1) * yGapI;
+        const realIdx = Math.floor(i * (784 / inputCount));
+        const c = createNode(cx, cy, 0, realIdx);
+        c.setAttribute('r', 2);
+        nodesGroup.appendChild(c);
+        neurons.push({ el: c, cx, cy, layer: 0, idx: realIdx, vIdx: i });
       }
-    }
-  }
-  if(maxR === -1) return; 
 
-  const h = maxR - minR + 1;
-  const w = maxC - minC + 1;
-  const content = new Float32Array(28*28);
-  
-  for(let r=0; r<h; r++) {
-    for(let c=0; c<w; c++) {
-      const val = grid[(minR+r)*28 + (minC+c)];
-      content[(r+ (28-h)/2)*28 + (c+ (28-w)/2)] = val;
-    }
-  }
-  
-  grid.fill(0);
-  for(let i=0; i<28*28; i++) {
-    if(content[i] > 0) grid[i] = content[i];
-  }
-}
-
-/* =========================
-   RECOGNITION
-========================= */
-
-const digitDefs = {
-  0: [
-    [2,4,2,24], [2,4,26,4], [26,4,26,24], [26,24,2,24], 
-    [4,6,4,22], [24,6,24,22], [6,4,22,4], [6,24,22,24]
-  ],
-  1: [
-    [12,4,12,24], [10,4,14,4], [12,24,16,24]
-  ],
-  2: [
-    [4,4,24,4], [24,4,24,14], [24,14,4,24], [4,24,24,24], [10,14,22,14]
-  ],
-  3: [
-    [4,4,24,4], [24,4,24,24], [4,24,24,24], [4,14,24,14], [6,10,22,18]
-  ],
-  4: [
-    [4,4,4,14], [4,14,24,14], [24,4,24,24], [22,4,26,4]
-  ],
-  5: [
-    [24,4,4,4], [4,4,4,14], [4,14,24,14], [24,14,24,24], [24,24,4,24]
-  ],
-  6: [
-    [20,4,6,4], [6,4,4,14], [4,14,4,24], [4,24,24,24], [24,24,24,14], [24,14,6,14]
-  ],
-  7: [
-    [4,4,24,4], [24,4,4,24], [10,14,24,14]
-  ],
-  8: [
-    [6,4,22,4], [22,4,22,24], [22,24,6,24], [6,24,6,4], [6,14,22,14]
-  ],
-  9: [
-    [6,24,22,24], [22,24,24,14], [24,14,24,4], [24,4,6,4], [6,4,6,14]
-  ]
-};
-
-function getTemplate(digit) {
-  const grid = new Float32Array(28*28);
-  const lines = digitDefs[digit];
-  lines.forEach(line => {
-    const [x1,y1,x2,y2] = line;
-    const steps = Math.max(Math.abs(x2-x1), Math.abs(y2-y1));
-    for(let i=0; i<=steps; i++) {
-      const t = steps === 0 ? 0 : i/steps;
-      const x = Math.floor(x1 + (x2-x1)*t);
-      const y = Math.floor(y1 + (y2-y1)*t);
-      for(let dy=-1.5; dy<=1.5; dy++){
-        for(let dx=-1.5; dx<=1.5; dx++){
-          const ny = Math.floor(y+dy);
-          const nx = Math.floor(x+dx);
-          if(ny>=0 && ny<28 && nx>=0 && nx<28) grid[ny*28+nx] = 1;
-        }
+      // Hidden Layer
+      const yGapH = height / (64 + 1);
+      for (let i = 0; i < 64; i++) {
+        const cx = layerGap * 2.0;
+        const cy = (i + 1) * yGapH;
+        const c = createNode(cx, cy, 1, i);
+        nodesGroup.appendChild(c);
+        neurons.push({ el: c, cx, cy, layer: 1, idx: i });
       }
+
+      // Output Layer
+      const yGapO = height / (10 + 1);
+      for (let i = 0; i < 10; i++) {
+        const cx = layerGap * 3.0;
+        const cy = (i + 1) * yGapO;
+        const c = createNode(cx, cy, 2, i);
+        c.setAttribute('r', 6);
+        nodesGroup.appendChild(c);
+        neurons.push({ el: c, cx, cy, layer: 2, idx: i });
+      }
+
+      const edges = [];
+      // L0 -> L1 Edges (Sampled: connect each L0 to 3 random L1s)
+      neurons.filter(n => n.layer === 0).forEach(inp => {
+        const targets = neurons.filter(n => n.layer === 1).sort(() => 0.5 - Math.random()).slice(0, 3);
+        targets.forEach(hid => {
+          const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          l.setAttribute("x1", inp.cx); l.setAttribute("y1", inp.cy);
+          l.setAttribute("x2", hid.cx); l.setAttribute("y2", hid.cy);
+          l.classList.add("edge");
+          linesGroup.appendChild(l);
+          edges.push({ el: l, src_layer: 0, src_idx: inp.idx, tgt_idx: hid.idx });
+        });
+      });
+
+      // L1 -> L2 Edges (All)
+      neurons.filter(n => n.layer === 1).forEach(h => {
+        neurons.filter(n => n.layer === 2).forEach(o => {
+          const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          l.setAttribute("x1", h.cx); l.setAttribute("y1", h.cy);
+          l.setAttribute("x2", o.cx); l.setAttribute("y2", o.cy);
+          l.classList.add("edge");
+          linesGroup.appendChild(l);
+          edges.push({ el: l, src_layer: 1, src_idx: h.idx, tgt_idx: o.idx });
+        });
+      });
+
+      window.vizNodes = neurons;
+      window.vizEdges = edges;
     }
-  });
-  return grid;
-}
 
-const templates = {};
-for(let i=0; i<10; i++) templates[i] = getTemplate(i);
-
-function runRecognition() {
-  clearAnimations();
-
-  const diffs = [];
-  for(let d=0; d<10; d++) {
-    let diff = 0;
-    const tpl = templates[d];
-    for(let i=0; i<28*28; i++) {
-      const user = state.inputGrid[i];
-      const temp = tpl[i];
-      if(user > 0 && temp === 0) diff += 1.5;
-      else if(user === 0 && temp > 0) diff += 0.5;
-    }
-    diffs.push(diff);
-  }
-
-  const probs = diffs.map(d => {
-    const sigma = 60; 
-    return Math.exp(-(d*d)/(2*sigma*sigma));
-  });
-  
-  const sumProbs = probs.reduce((a,b)=>a+b,0) || 1;
-  state.probabilities = probs.map(p => p/sumProbs);
-  
-  const maxIdx = state.probabilities.indexOf(Math.max(...state.probabilities));
-  state.prediction = state.probabilities[maxIdx] > 0.2 ? maxIdx : null;
-
-  updateSmallVisuals();
-  updateLargeVisuals(); 
-  
-  animateSmallNetwork();
-  if(modal.classList.contains('active')) {
-    animateLargeNetwork();
-  }
-}
-
-function clearAnimations() {
-  state.animationTimers.forEach(t => clearTimeout(t));
-  state.animationTimers = [];
-}
-
-/* =========================
-   UI UPDATES
-========================= */
-
-function updatePixelGridUI() {
-  pixelGrid28.innerHTML = '';
-  const frag = document.createDocumentFragment();
-  for(let i=0; i<28*28; i++) {
-    const val = state.inputGrid[i];
-    const d = document.createElement('div');
-    d.className = 'pixel-28';
-    d.style.backgroundColor = val > 0.2 ? '#000' : '#fff';
-    frag.appendChild(d);
-  }
-  pixelGrid28.appendChild(frag);
-}
-
-function updateSmallVisuals() {
-  state.smallNodes.forEach(n => n.classList.remove('active'));
-  state.smallEdges.forEach(e => e.classList.remove('active'));
-}
-
-function updateLargeVisuals() {
-  const container = document.getElementById('softmaxViz');
-  container.innerHTML = '';
-  state.probabilities.forEach((p, i) => {
-    const col = document.createElement('div');
-    col.className = 'sbar-col';
-    const bar = document.createElement('div');
-    bar.className = 'sbar';
-    bar.style.height = Math.max(5, p*100) + '%';
-    if(i === state.prediction) bar.classList.add('winner-bar');
-    const lbl = document.createElement('div');
-    lbl.className = 'sbar-label';
-    lbl.innerText = i;
-    if(i === state.prediction) lbl.style.color = 'var(--winner)';
-    col.appendChild(bar);
-    col.appendChild(lbl);
-    container.appendChild(col);
-  });
-}
-
-function animateSmallNetwork() {
-  const nodes = state.smallNodes;
-  const edges = state.smallEdges;
-  
-  const startH1 = 28; const startH2 = 38; const startOut = 46;
-
-  if(state.prediction === null) return;
-
-  // 1. Input
-  for(let i=0; i<28; i++) {
-    if(state.inputGrid[i] > 0.3 && nodes[i]) nodes[i].classList.add('active');
-  }
-
-  // 2. Hidden 1 (150ms)
-  const t1 = setTimeout(() => {
-    for(let i=startH1; i<startH2; i++) nodes[i].classList.add('active');
-    edges.forEach(e => e.classList.add('active')); 
-  }, 150);
-  state.animationTimers.push(t1);
-
-  // 3. Hidden 2 (300ms)
-  const t2 = setTimeout(() => {
-    for(let i=startH2; i<startOut; i++) nodes[i].classList.add('active');
-  }, 300);
-  state.animationTimers.push(t2);
-
-  // 4. Output (450ms)
-  const t3 = setTimeout(() => {
-    const winner = startOut + state.prediction;
-    if(nodes[winner]) nodes[winner].classList.add('active');
-  }, 450);
-  state.animationTimers.push(t3);
-}
-
-function animateLargeNetwork() {
-  const nodes = state.largeNodes;
-  const edges = state.largeEdges;
-  
-  // Structure: [28, 48, 24, 10] -> Reduced for performance
-  const startH1 = 28; const startH2 = 76; const startOut = 100;
-
-  if(state.prediction === null) return;
-
-  // 1. Input
-  for(let i=0; i<28; i++) {
-    if(state.inputGrid[i] > 0.3) nodes[i].classList.add('active');
-  }
-
-  // 2. H1 (200ms)
-  const t1 = setTimeout(() => {
-    for(let i=startH1; i<startH2; i++) nodes[i].classList.add('active');
-    // OPTIMIZATION: Only light up random 20% of edges to reduce DOM paint load
-    for(let e of edges) {
-       if(Math.random() > 0.8) e.classList.add('active');
-    }
-  }, 200);
-  state.animationTimers.push(t1);
-
-  // 3. H2 (400ms)
-  const t2 = setTimeout(() => {
-    for(let i=startH2; i<startOut; i++) nodes[i].classList.add('active');
-  }, 400);
-  state.animationTimers.push(t2);
-
-  // 4. Out (600ms)
-  const t3 = setTimeout(() => {
-    const winner = startOut + state.prediction;
-    if(nodes[winner]) {
-      nodes[winner].classList.add('active', 'winner');
-    }
-  }, 600);
-  state.animationTimers.push(t3);
-}
-
-/* =========================
-   SVG BUILDER (OPTIMIZED)
-========================= */
-function buildNetwork(svgEl, isLarge) {
-  svgEl.innerHTML = '';
-  const width = isLarge ? 800 : 520;
-  const height = isLarge ? 400 : 220;
-  
-  // PERFORMANCE FIX: Reduced Hidden Layers in Large View
-  // Old: [28, 64, 32, 10] -> ~4000 edges (Laggy)
-  // New: [28, 48, 24, 10] -> ~1800 edges (Smooth)
-  const structure = isLarge ? [28, 48, 24, 10] : [28, 10, 8, 10];
-  
-  const layerGap = width / (structure.length + 1);
-
-  structure.forEach((count, li) => {
-    const yGap = height / (count + 1);
-    for(let i=0; i<count; i++) {
-      const cx = (li+1) * layerGap;
-      const cy = (i+1) * yGap;
-      
+    function createNode(cx, cy, layer, idx) {
       const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      c.setAttribute("cx", cx);
-      c.setAttribute("cy", cy);
-      c.setAttribute("r", isLarge ? 5 : 3);
-      c.classList.add(isLarge ? "neuron" : "nn-node");
-      svgEl.appendChild(c);
+      c.setAttribute("cx", cx); c.setAttribute("cy", cy); c.setAttribute("r", layer === 1 ? 3 : 5);
+      c.classList.add("neuron");
+      c.addEventListener('mouseenter', (e) => showTooltip(e, layer, idx));
+      c.addEventListener('mouseleave', hideTooltip);
+      return c;
+    }
 
-      if (li > 0) {
-        const prevCount = structure[li-1];
-        const prevYGap = height / (prevCount + 1);
-        for(let j=0; j<prevCount; j++) {
-           if(!isLarge && Math.random() > 0.3) continue; 
-           const pcx = li * layerGap;
-           const pcy = (j+1) * prevYGap;
-           
-           const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
-           l.setAttribute("x1", pcx); l.setAttribute("y1", pcy);
-           l.setAttribute("x2", cx); l.setAttribute("y2", cy);
-           l.classList.add(isLarge ? "edge" : "nn-edge");
-           svgEl.insertBefore(l, svgEl.firstChild);
+    // VIZ UPDATE
+    function updateViz(input, hidden, output, winnerIdx) {
+      // Update Nodes
+      window.vizNodes.filter(n => n.layer === 0).forEach(n => {
+        const val = input ? input[n.idx] : 0;
+        n.val = val;
+        n.el.style.opacity = Math.min(0.2 + val * 0.8, 1);
+        n.el.style.fill = val > 0 ? "var(--accent)" : "white";
+      });
+      window.vizNodes.filter(n => n.layer === 1).forEach(n => {
+        const val = hidden[n.idx];
+        n.val = val;
+        n.el.style.opacity = Math.min(0.2 + val * 0.6, 1);
+        if (val > 0) n.el.classList.add('active');
+        else n.el.classList.remove('active');
+      });
+      window.vizNodes.filter(n => n.layer === 2).forEach(n => {
+        const val = output[n.idx];
+        n.val = val;
+        n.el.style.opacity = Math.min(0.3 + val, 1);
+        if (n.idx === winnerIdx) n.el.classList.add('winner', 'active');
+        else n.el.classList.remove('winner', 'active');
+      });
+
+      // Update Edges
+      for (let i = 0; i < window.vizEdges.length; i++) {
+        const e = window.vizEdges[i];
+
+        if (e.src_layer === 0) {
+          // L0->L1
+          const val = input ? input[e.src_idx] : 0;
+          if (val > 0.1) {
+            e.el.style.opacity = 0.4;
+            e.el.style.strokeWidth = '0.5px';
+          } else {
+            e.el.style.opacity = 0.02;
+            e.el.style.strokeWidth = '0.5px';
+          }
+        } else {
+          // L1->L2
+          const hVal = hidden[e.src_idx];
+          if (hVal > 0.5 && e.tgt_idx === winnerIdx) {
+            e.el.style.opacity = 0.7;
+            e.el.style.strokeWidth = '1.5px';
+          } else {
+            e.el.style.opacity = 0.04;
+            e.el.style.strokeWidth = '0.5px';
+          }
         }
       }
     }
-  });
 
-  // Cache Elements
-  if(isLarge) {
-    state.largeNodes = Array.from(document.querySelectorAll('#nnSvgLarge .neuron'));
-    state.largeEdges = Array.from(document.querySelectorAll('#nnSvgLarge .edge'));
-  } else {
-    state.smallNodes = Array.from(document.querySelectorAll('#nnSvg .nn-node'));
-    state.smallEdges = Array.from(document.querySelectorAll('#nnSvg .nn-edge'));
-  }
-}
+    // TOOLTIP LOGIC
+    const tooltip = document.getElementById('nn-tooltip');
 
-buildNetwork(document.getElementById("nnSvg"), false);
-buildNetwork(document.getElementById("nnSvgLarge"), true);
+    function showTooltip(e, layer, idx) {
+      const n = window.vizNodes.find(x => x.layer === layer && x.idx === idx);
+      const rect = n.el.getBoundingClientRect();
+      // Adjust for fullscreen vs normal
+      const isFS = document.getElementById('nnHero').classList.contains('fullscreen');
+      const heroRect = isFS ? { top: 0, left: 0 } : document.querySelector('.nn-hero').getBoundingClientRect();
 
-/* =========================
-   INTERACTIONS
-========================= */
-// NEW: Clear Button Small
-document.getElementById('btnClearSmall').onclick = () => {
-  mainCanvas.ctx.fillStyle = "white";
-  mainCanvas.ctx.fillRect(0,0,120,120);
-  // Also clear modal state to sync
-  state.inputGrid.fill(0);
-  state.probabilities.fill(0);
-  state.prediction = null;
-  processInput(mainCanvas.ctx, 120);
-  updateSmallVisuals();
-  state.smallNodes.forEach(n => n.classList.remove('active'));
-  state.smallEdges.forEach(e => e.classList.remove('active'));
-};
+      const top = rect.top - heroRect.top - 40;
+      const left = rect.left - heroRect.left - 20;
 
-btnExpand.onclick = () => {
-  modal.classList.add('active');
-  updateLargeVisuals();
-  if(state.prediction !== null) animateLargeNetwork();
-};
+      // Get Bias
+      let bias = 0;
+      const weights = window.modelData;
+      if (weights) {
+        if (layer === 1) bias = weights[0].biases[idx];
+        else if (layer === 2) bias = weights[1].biases[idx];
+      }
 
-btnClose.onclick = () => modal.classList.remove('active');
+      let content = '';
+      if (layer === 0) {
+        content = `Input Pixel [${idx}]\nValue: ${(n.val || 0).toFixed(2)}`;
+      } else if (layer === 1) {
+        content = `Hidden Neuron #${idx}\nActivation: ${(n.val || 0).toFixed(4)}\nBias: ${bias.toFixed(4)}`;
+      } else {
+        content = `Output Neuron #${idx}\nProbability: ${(n.val * 100 || 0).toFixed(2)}%\nBias: ${bias.toFixed(4)}`;
+      }
 
-document.getElementById('btnRunAdv').onclick = () => {
-  clearAnimations();
-  runRecognition();
-};
+      tooltip.innerHTML = content;
+      tooltip.style.top = top + 'px';
+      tooltip.style.left = left + 'px';
+      tooltip.style.opacity = 1;
+      tooltip.style.zIndex = 10000; // High Z for Fullscreen
+    }
 
-document.getElementById('btnClearAdv').onclick = () => {
-  modalCanvas.ctx.fillStyle = "white";
-  modalCanvas.ctx.fillRect(0,0,140,140);
-  mainCanvas.ctx.fillStyle = "white";
-  mainCanvas.ctx.fillRect(0,0,120,120);
-  
-  clearAnimations();
-  state.inputGrid.fill(0);
-  state.probabilities.fill(0);
-  state.prediction = null;
-  
-  processInput(modalCanvas.ctx, 140);
-  updateLargeVisuals();
-  
-  state.largeNodes.forEach(n => n.classList.remove('active', 'winner'));
-  state.largeEdges.forEach(e => e.classList.remove('active'));
-};
+    function hideTooltip() { tooltip.style.opacity = 0; }
 
-document.getElementById('checkSparse').onchange = (e) => {
-  state.isSparse = e.target.checked;
-  buildNetwork(document.getElementById("nnSvgLarge"), true);
-};
+    // MOUNTAIN TIMELINE LOGIC
+    function toggleExp(idx) {
+      const card = document.getElementById('expInfoCard');
+      const title = document.getElementById('expInfoTitle');
+      const desc = document.getElementById('expInfoDesc');
+      const peaks = document.querySelectorAll('.mountain-peak');
 
-</script>
+      const peak = peaks[idx];
+      const pTitle = peak.getAttribute('data-title');
+      const pDesc = peak.getAttribute('data-desc');
+
+      title.innerText = pTitle;
+      desc.innerText = pDesc;
+
+      // Position Card
+      const rect = peak.getBoundingClientRect();
+      const containerRect = document.querySelector('.timeline-container').getBoundingClientRect();
+
+      card.style.left = (rect.left - containerRect.left + rect.width / 4) + 'px';
+      card.style.top = (rect.top - containerRect.top - 100) + 'px';
+
+      // Toggle
+      if (card.classList.contains('visible') && card.dataset.activeIdx == idx) {
+        card.classList.remove('visible');
+        card.dataset.activeIdx = -1;
+      } else {
+        card.classList.add('visible');
+        card.dataset.activeIdx = idx;
+      }
+    }
+
+    function initMountainAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const peaks = entry.target.querySelectorAll('.mountain-peak');
+            peaks.forEach((peak, i) => {
+              peak.style.transition = `all 1s cubic-bezier(0.165, 0.84, 0.44, 1) ${i * 0.2}s`;
+              peak.style.transform = 'scaleY(1)';
+              peak.style.opacity = peak.dataset.originalOpacity || 0.7;
+            });
+          }
+        });
+      }, { threshold: 0.2 });
+
+      const section = document.querySelector('.mountain-experience');
+      if (section) {
+        // Initial state
+        section.querySelectorAll('.mountain-peak').forEach(peak => {
+          peak.dataset.originalOpacity = peak.style.opacity;
+          peak.style.transform = 'scaleY(0)';
+          peak.style.transformOrigin = 'bottom';
+          peak.style.opacity = '0';
+        });
+        observer.observe(section);
+      }
+    }
+
+    // ==========================================
+    // EXPERIENCE VISUALIZATION FUNCTIONS
+    // ==========================================
+
+    const expData = [
+      {
+        title: "Open Source Contributor",
+        meta: "2021-PRESENT",
+        desc: "Actively contributing to various open source projects, improving code quality, fixing bugs, and adding new features. Focus on LLM tooling, LangChain adapters, and web performance optimization."
+      },
+      {
+        title: "Product Engineer Associate I - UST",
+        meta: "JULY 2024-PRESENT",
+        desc: "Leading AI initiatives and developing enterprise-grade solutions for Fortune 500 clients. Managing multiple AI/ML projects focused on infrastructure automation, data insights, and intelligent monitoring systems."
+      },
+      {
+        title: "InfraOps AI Agent",
+        meta: "UST PROJECT",
+        desc: "Designed and implemented an AI agent leveraging LLMs to monitor infrastructure health (uptime, CPU utilization, anomaly detection). Built automation features for remediation tasks with human-in-the-loop approval. Developed an interactive Streamlit UI with dynamic visualization graphs."
+      },
+      {
+        title: "AI Insight Generator",
+        meta: "UST PROJECT",
+        desc: "Built an Excel-driven insight engine with schema extraction and DB storage. Used LLMs to generate SQL queries, summarize results, and recommend actions. Delivered streaming chat-style outputs with multi-agent support for different file types and dynamic graph generation."
+      },
+      {
+        title: "Validation Module",
+        meta: "UST PROJECT",
+        desc: "Led a team to R&D and develop a plugin that sanitized sensitive data before AI model ingestion by masking and later demasking data using secure mapping, ensuring compliance and safety."
+      },
+      {
+        title: "AI-Based Monitoring Automator",
+        meta: "UST PROJECT",
+        desc: "Developed an AI-driven monitoring system that decomposed user input into tasks, referenced SOPs/knowledge bases, and automated log analysis, anomaly detection, and root cause identification."
+      }
+    ];
+
+    function switchViz(vizType) {
+      // Update tabs
+      document.querySelectorAll('.viz-tab').forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Update containers
+      document.querySelectorAll('.viz-container').forEach(container => container.classList.remove('active'));
+      if (vizType === 'nn') {
+        document.getElementById('nnViz').classList.add('active');
+      } else {
+        document.getElementById('gitViz').classList.add('active');
+      }
+
+      // Hide info card when switching
+      document.getElementById('expInfoCard').classList.remove('visible');
+    }
+
+    function showExpInfo(idx) {
+      const card = document.getElementById('expInfoCard');
+      const title = document.getElementById('expInfoTitle');
+      const meta = document.getElementById('expInfoMeta');
+      const desc = document.getElementById('expInfoDesc');
+
+      const exp = expData[idx];
+      title.innerText = exp.title;
+      meta.innerText = exp.meta;
+      desc.innerText = exp.desc;
+
+      // Position card near click
+      const event = window.event;
+      if (event) {
+        const section = document.querySelector('.experience-section');
+        const rect = section.getBoundingClientRect();
+
+        card.style.left = Math.min(event.clientX - rect.left, rect.width - 400) + 'px';
+        card.style.top = (event.clientY - rect.top + 20) + 'px';
+      }
+
+      // Toggle visibility
+      if (card.classList.contains('visible') && card.dataset.activeIdx == idx) {
+        card.classList.remove('visible');
+        card.dataset.activeIdx = -1;
+      } else {
+        card.classList.add('visible');
+        card.dataset.activeIdx = idx;
+      }
+    }
+
+    function initExpAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Animate NN nodes
+            const nnNodes = entry.target.querySelectorAll('.nn-node');
+            nnNodes.forEach((node, i) => {
+              setTimeout(() => {
+                node.style.transition = 'all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)';
+                node.style.transform = 'scale(1)';
+                node.style.opacity = '1';
+              }, i * 150);
+            });
+
+            // Animate connections
+            const connections = entry.target.querySelectorAll('.nn-connection');
+            connections.forEach((conn, i) => {
+              setTimeout(() => {
+                conn.style.transition = 'all 0.4s ease-out';
+                conn.style.opacity = '0.3';
+              }, 600 + i * 100);
+            });
+          }
+        });
+      }, { threshold: 0.2 });
+
+      const section = document.querySelector('.experience-section');
+      if (section) {
+        // Initial state for NN nodes
+        section.querySelectorAll('.nn-node').forEach(node => {
+          node.style.transform = 'scale(0)';
+          node.style.opacity = '0';
+        });
+        section.querySelectorAll('.nn-connection').forEach(conn => {
+          conn.style.opacity = '0';
+        });
+        observer.observe(section);
+      }
+    }
+
+    // Run Init
+    window.addEventListener('load', () => {
+      if (typeof initRealNN === 'function') initRealNN();
+      initExpAnimations();
+    });
+  </script>
 </body>
+
 </html>
