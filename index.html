@@ -533,6 +533,248 @@
       right: 30px;
     }
 
+    /* ========================================
+       MARKOV CHAIN HERO - FINAL HORIZONTAL SPLIT
+       ======================================== */
+
+    .markov-hero-final {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    /* Main Split: MODEL (left) | TEXT (right) */
+    .markov-split-final {
+      display: flex;
+      align-items: stretch;
+      gap: 30px;
+      width: 100%;
+    }
+
+    /* LEFT: Model Side */
+    .model-side {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      min-width: 160px;
+    }
+
+    /* Input Display */
+    .input-display {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--accent);
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+    }
+
+    .input-display.active {
+      box-shadow: 0 0 15px var(--accent);
+    }
+
+    .input-label {
+      color: var(--text-sub);
+    }
+
+    .input-word {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Arrows */
+    .arrow-down,
+    .arrow-right-out {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.4;
+      transition: all 0.3s;
+    }
+
+    .arrow-down svg {
+      width: 18px;
+      height: 25px;
+    }
+
+    .arrow-right-out svg {
+      width: 40px;
+      height: 18px;
+    }
+
+    .arrow-down.active,
+    .arrow-right-out.active {
+      opacity: 1;
+      filter: drop-shadow(0 0 8px var(--accent));
+    }
+
+    /* Model Box */
+    .model-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 15px;
+      background: rgba(0, 96, 255, 0.05);
+      border: 2px dashed var(--accent);
+      border-radius: 8px;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .model-box.active {
+      border-style: solid;
+      box-shadow: 0 0 30px var(--accent);
+      background: rgba(0, 96, 255, 0.2);
+    }
+
+    .model-icon {
+      width: 60px;
+      height: 60px;
+    }
+
+    .model-label {
+      font-family: var(--font-mono-sys);
+      font-size: 9px;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    .processing-dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .processing-dot.active {
+      opacity: 1;
+      animation: pulse 0.3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.5);
+      }
+    }
+
+    /* Feedback Indicator */
+    .feedback-indicator {
+      opacity: 0.5;
+      transition: all 0.3s;
+    }
+
+    .feedback-indicator.active {
+      opacity: 1;
+    }
+
+    .feedback-label {
+      font-family: var(--font-mono-sys);
+      font-size: 8px;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    /* RIGHT: Text Side */
+    .text-side {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      align-content: flex-start;
+      gap: 10px;
+      padding: 25px;
+      background: rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      min-height: 200px;
+    }
+
+    .generated-text {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: baseline;
+    }
+
+    .gen-word {
+      font-family: var(--font-main);
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--text-main);
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.4s ease-out;
+    }
+
+    .gen-word.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .gen-word.highlight {
+      color: var(--accent);
+      text-shadow: 0 0 15px var(--accent);
+    }
+
+    .cursor-blink {
+      font-family: var(--font-main);
+      font-size: 2rem;
+      animation: blink 1s step-end infinite;
+      color: var(--accent);
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    /* Floating Word for Animation */
+    .floating-word {
+      position: fixed;
+      font-family: var(--font-main);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent);
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0;
+      transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .floating-word.visible {
+      opacity: 1;
+    }
+
     /* TOOLTIP */
     #nn-tooltip {
       position: absolute;
@@ -1506,7 +1748,7 @@
 
     <!-- Header (Integrated) -->
     <header class="hero-header">
-      <div class="header-brand">T.</div>
+      <div class="header-brand">Tarun.</div>
       <div class="header-status">
         <!-- Tagline -->
         <span
@@ -1543,66 +1785,77 @@
         <div class="tech-frame-br"></div>
       </div>
 
-      <!-- Title Area -->
-      <div style="text-align: center; z-index: 5; margin-bottom: 30px;">
-        <div class="hero-subtitle">SYSTEM.NEURAL_NET [v4.0]</div>
-        <h1 class="hero-title" style="font-size: 2.5rem; letter-spacing: -2px;">LIVE INFERENCE<br>ENGINE.</h1>
+      <!-- MARKOV CHAIN TEXT GENERATION - HORIZONTAL SPLIT -->
+      <div id="markovHero" class="markov-hero-final">
+
+        <!-- Floating Word Element (for animations from header to model) -->
+        <div class="floating-word" id="floatingWord"></div>
+
+        <!-- Main Split: MODEL (left) | TEXT (right) -->
+        <div class="markov-split-final">
+
+          <!-- LEFT: Model Section -->
+          <div class="model-side" id="modelSide">
+            <!-- Current Input Display -->
+            <div class="input-display" id="inputDisplay">
+              <span class="input-label">INPUT:</span>
+              <span class="input-word" id="inputWord">-</span>
+            </div>
+
+            <!-- Arrow into model -->
+            <div class="arrow-down" id="arrowIn">
+              <svg viewBox="0 0 20 30">
+                <line x1="10" y1="0" x2="10" y2="22" stroke="var(--accent)" stroke-width="2" />
+                <polygon points="5,22 10,30 15,22" fill="var(--accent)" />
+              </svg>
+            </div>
+
+            <!-- Model Box -->
+            <div class="model-box" id="modelBox">
+              <svg viewBox="0 0 80 80" class="model-icon">
+                <circle cx="40" cy="15" r="6" fill="var(--accent)" opacity="0.8" />
+                <circle cx="20" cy="35" r="6" fill="var(--accent)" opacity="0.8" />
+                <circle cx="60" cy="35" r="6" fill="var(--accent)" opacity="0.8" />
+                <circle cx="30" cy="60" r="6" fill="var(--accent)" opacity="0.8" />
+                <circle cx="50" cy="60" r="6" fill="var(--accent)" opacity="0.8" />
+                <line x1="40" y1="21" x2="25" y2="30" stroke="var(--accent)" stroke-width="1.5" />
+                <line x1="40" y1="21" x2="55" y2="30" stroke="var(--accent)" stroke-width="1.5" />
+                <line x1="25" y1="40" x2="32" y2="55" stroke="var(--accent)" stroke-width="1.5" />
+                <line x1="55" y1="40" x2="48" y2="55" stroke="var(--accent)" stroke-width="1.5" />
+                <line x1="36" y1="60" x2="44" y2="60" stroke="var(--accent)" stroke-width="1.5" />
+              </svg>
+              <div class="model-label">MARKOV MODEL</div>
+              <div class="processing-dot" id="processingDot"></div>
+            </div>
+
+            <!-- Arrow out to text -->
+            <div class="arrow-right-out" id="arrowOut">
+              <svg viewBox="0 0 50 20">
+                <line x1="0" y1="10" x2="40" y2="10" stroke="var(--accent)" stroke-width="2" />
+                <polygon points="40,5 50,10 40,15" fill="var(--accent)" />
+              </svg>
+            </div>
+
+            <!-- Feedback Loop Indicator -->
+            <div class="feedback-indicator" id="feedbackIndicator">
+              <span class="feedback-label">↺ FEEDBACK</span>
+            </div>
+          </div>
+
+          <!-- RIGHT: Generated Text Section -->
+          <div class="text-side" id="textSide">
+            <div class="generated-text" id="generatedText">
+              <!-- Words will appear here -->
+            </div>
+            <span class="cursor-blink" id="cursorBlink">|</span>
+          </div>
+
+        </div>
+
       </div>
 
-      <!-- NEURAL NETWORK - Seamlessly Integrated -->
-      <div id="nnHero" class="nn-hero-integrated"
-        style="display: flex; gap: 30px; align-items: center; justify-content: center; position: relative; z-index: 10; background: rgba(0,0,0,0.3); padding: 20px 30px; border: 1px solid var(--border); border-radius: 4px;">
-
-        <!-- Digit Panel -->
-        <div class="digit-panel" style="background: rgba(0,0,0,0.6); border: 1px solid var(--accent); padding: 12px;">
-          <canvas id="digitCanvas" width="100" height="100"
-            style="background: #0a0a0a; border: 1px dashed var(--accent); cursor: crosshair;"></canvas>
-          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px;">
-            <span style="font-family:var(--font-mono-sys); font-size:9px; color:var(--text-sub);">INPUT</span>
-            <span class="prediction-value" id="predValue" style="font-size: 28px;">-</span>
-          </div>
-          <button id="btnClearSmall" class="btn-small-clear"
-            style="background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 8px; font-size: 9px; padding: 4px;">CLEAR</button>
-        </div>
-
-        <!-- Main Viz -->
-        <div style="display: flex; flex-direction: column; align-items: center;">
-          <svg id="nnSvg" viewBox="0 0 520 220" style="overflow: visible; width: 450px; height: 200px;"></svg>
-          <div
-            style="font-family:var(--font-mono-sys); font-size:9px; color:var(--text-sub); margin-top:8px; text-align:center;">
-            Draw a digit (0-9) on the canvas.
-          </div>
-        </div>
-
-        <!-- Tooltip -->
-        <div id="nn-tooltip"></div>
-
-        <!-- Metrics Panel (for FS) -->
-        <div class="metrics-panel" id="metricsPanel" style="display: none;">
-          <div class="chart-container" id="confChart"></div>
-          <div class="stats-container">
-            <div>L1: 64 Neurons | L2: 10 Neurons</div>
-            <div>Inference: <span id="infTime">0</span>ms</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Expand Button - More Prominent -->
-      <button id="btnExpand"
-        style="margin-top: 15px; background: none; border: 1px solid var(--border); color: var(--text-sub); font-family: var(--font-mono-sys); font-size: 9px; padding: 6px 15px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; z-index: 10; display: flex; align-items: center; gap: 5px;">
-        <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;">
-          <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
-        </svg>
-        EXPAND
-      </button>
-
-      <!-- Fullscreen Exit Button -->
-      <button class="btn-close-fs" id="btnCloseFS">EXIT FULLSCREEN</button>
-
-      <!-- Quote -->
-      <p class="hero-quote" style="margin-top: 30px;">
-        "In the digital void, structure is the only truth."
-      </p>
+      <!-- Subtitle -->
+      <div class="hero-subtitle" style="margin-top: 30px;">GENERATIVE TEXT ENGINE</div>
 
       <div class="sys-status">
         CPU_LOAD: 0.04%<br>
@@ -1882,8 +2135,208 @@
   </main>
   </div>
 
+
+
   <!-- SCRIPTS -->
   <script>
+    // ==========================================
+    // MARKOV CHAIN TEXT GENERATION ANIMATION - FINAL
+    // ==========================================
+
+    const markovAnimation = (() => {
+      // Words to generate - each word predicts the next
+      const words = ["Tarun.", "Engineering", "the", "bridge", "between", "algorithms", "and", "real", "world", "impact."];
+
+      // DOM Elements (final layout)
+      const inputDisplay = document.getElementById('inputDisplay');
+      const inputWord = document.getElementById('inputWord');
+      const modelBox = document.getElementById('modelBox');
+      const processingDot = document.getElementById('processingDot');
+      const arrowIn = document.getElementById('arrowIn');
+      const arrowOut = document.getElementById('arrowOut');
+      const feedbackIndicator = document.getElementById('feedbackIndicator');
+      const generatedText = document.getElementById('generatedText');
+      const cursorBlink = document.getElementById('cursorBlink');
+      const floatingWord = document.getElementById('floatingWord');
+      const headerBrand = document.querySelector('.header-brand');
+      const textSide = document.getElementById('textSide');
+
+      let currentWordIndex = 0;
+
+      // Create a word element for hero text
+      function createWordElement(word) {
+        const span = document.createElement('span');
+        span.className = 'gen-word';
+        span.textContent = word;
+        return span;
+      }
+
+      // Animate floating word from source to target
+      function animateFloatingWord(word, fromEl, toEl, callback) {
+        if (!floatingWord) { if (callback) callback(); return; }
+
+        const fromRect = fromEl.getBoundingClientRect();
+        const toRect = toEl.getBoundingClientRect();
+
+        floatingWord.textContent = word;
+        floatingWord.style.left = (fromRect.left + fromRect.width / 2) + 'px';
+        floatingWord.style.top = (fromRect.top + fromRect.height / 2) + 'px';
+        floatingWord.classList.add('visible');
+
+        setTimeout(() => {
+          floatingWord.style.left = (toRect.left + toRect.width / 2) + 'px';
+          floatingWord.style.top = (toRect.top + toRect.height / 2) + 'px';
+        }, 50);
+
+        setTimeout(() => {
+          floatingWord.classList.remove('visible');
+          if (callback) callback();
+        }, 600);
+      }
+
+      // Animate "Tarun." from header to input display, then process through model
+      function animateHeaderToModel(callback) {
+        if (!headerBrand || !inputDisplay) { if (callback) callback(); return; }
+
+        // Flash header
+        headerBrand.style.transition = 'text-shadow 0.3s';
+        headerBrand.style.textShadow = '0 0 25px var(--accent)';
+
+        setTimeout(() => {
+          // Animate floating word from header to INPUT display
+          animateFloatingWord(words[0], headerBrand, inputDisplay, () => {
+            headerBrand.style.textShadow = '';
+
+            // Now show it in input display
+            inputWord.textContent = words[0];
+            inputDisplay.classList.add('active');
+
+            // Arrow IN
+            setTimeout(() => {
+              arrowIn.classList.add('active');
+            }, 200);
+
+            // Model processes
+            setTimeout(() => {
+              inputDisplay.classList.remove('active');
+              arrowIn.classList.remove('active');
+              modelBox.classList.add('active');
+              processingDot.classList.add('active');
+            }, 500);
+
+            // Processing complete
+            setTimeout(() => {
+              processingDot.classList.remove('active');
+            }, 1000);
+
+            // Arrow OUT
+            setTimeout(() => {
+              arrowOut.classList.add('active');
+            }, 1100);
+
+            // Output - add first word to text side
+            setTimeout(() => {
+              modelBox.classList.remove('active');
+              arrowOut.classList.remove('active');
+
+              if (callback) callback();
+            }, 1300);
+          });
+        }, 400);
+      }
+
+      // Animation step: input → model → output → text
+      function animateStep() {
+        if (currentWordIndex >= words.length) {
+          // Animation complete
+          setTimeout(() => {
+            if (cursorBlink) cursorBlink.style.display = 'none';
+          }, 500);
+          return;
+        }
+
+        const currentWord = words[currentWordIndex];
+        const nextWord = words[currentWordIndex + 1];
+        const isLastWord = currentWordIndex >= words.length - 1;
+
+        // Step 1: Show current word as input
+        inputWord.textContent = currentWord;
+        inputDisplay.classList.add('active');
+
+        // Step 2: Arrow IN glows
+        setTimeout(() => {
+          arrowIn.classList.add('active');
+        }, 300);
+
+        // Step 3: Model processes
+        setTimeout(() => {
+          inputDisplay.classList.remove('active');
+          arrowIn.classList.remove('active');
+          modelBox.classList.add('active');
+          processingDot.classList.add('active');
+        }, 600);
+
+        // Step 4: Processing complete
+        setTimeout(() => {
+          processingDot.classList.remove('active');
+        }, 1100);
+
+        // Step 5: Arrow OUT glows
+        setTimeout(() => {
+          arrowOut.classList.add('active');
+        }, 1200);
+
+        // Step 6: Output word appears in text side
+        setTimeout(() => {
+          modelBox.classList.remove('active');
+          arrowOut.classList.remove('active');
+
+          if (nextWord) {
+            // Add word to text side
+            const wordEl = createWordElement(nextWord);
+            generatedText.appendChild(wordEl);
+            setTimeout(() => {
+              wordEl.classList.add('visible', 'highlight');
+              setTimeout(() => wordEl.classList.remove('highlight'), 400);
+            }, 50);
+          }
+
+          // Step 7: Feedback loop - animate back to input
+          if (nextWord && !isLastWord) {
+            setTimeout(() => {
+              feedbackIndicator.classList.add('active');
+              const lastWord = generatedText.querySelector('.gen-word:last-child');
+              if (lastWord) {
+                animateFloatingWord(nextWord, lastWord, inputDisplay, () => {
+                  feedbackIndicator.classList.remove('active');
+                  currentWordIndex++;
+                  setTimeout(animateStep, 300);
+                });
+              }
+            }, 500);
+          } else {
+            currentWordIndex++;
+            setTimeout(animateStep, 600);
+          }
+        }, 1400);
+      }
+
+      // Start animation
+      function start() {
+        // First, animate "Tarun." from header to model
+        animateHeaderToModel(() => {
+          // Add first word to text side
+          const firstWord = createWordElement(words[0]);
+          generatedText.appendChild(firstWord);
+          setTimeout(() => firstWord.classList.add('visible'), 100);
+
+          // Start the animation loop
+          setTimeout(animateStep, 500);
+        });
+      }
+
+      return { start };
+    })();
     // ==========================================
     // REAL MNIST NEURAL NETWORK (Inference Engine)
     // ==========================================
@@ -1900,6 +2353,7 @@
 
       // Canvas & UI Setup
       const canvas = document.getElementById("digitCanvas");
+      if (!canvas) { console.log('NN Hero not found, skipping init'); return; }
       const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
       // White Canvas, Black Ink (Standard)
@@ -2049,10 +2503,10 @@
           const row = document.createElement('div');
           row.className = 'bar-row';
           row.innerHTML = `
-                   <div class="bar-label" style="width:20px; font-size:14px;">${i}</div>
-                   <div class="bar-ui" style="height:12px;"><div class="bar-fill" style="width: ${p * 100}%"></div></div>
-                   <div style="width:40px; text-align:right; font-size:14px;">${Math.round(p * 100)}%</div>
-                `;
+    <div class="bar-label" style="width:20px; font-size:14px;">${i}</div>
+    <div class="bar-ui" style="height:12px;"><div class="bar-fill" style="width: ${p * 100}%"></div></div>
+    <div style="width:40px; text-align:right; font-size:14px;">${Math.round(p * 100)}%</div>
+    `;
           chart.appendChild(row);
         });
       }
@@ -2296,38 +2750,6 @@
       }
     }
 
-    // THEME TOGGLE
-    document.getElementById('themeToggle').onclick = () => {
-      const current = document.documentElement.getAttribute('data-theme');
-      const iconSun = document.getElementById('iconSun');
-      const iconMoon = document.getElementById('iconMoon');
-
-      if (current === 'light') {
-        document.documentElement.removeAttribute('data-theme');
-        // Show sun (to indicate "click to go light")
-        iconSun.style.display = 'block';
-        iconMoon.style.display = 'none';
-      } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-        // Show moon (to indicate "click to go dark")
-        iconSun.style.display = 'none';
-        iconMoon.style.display = 'block';
-      }
-    };
-
-    // EXPAND BUTTON (Fullscreen Toggle)
-    document.getElementById('btnExpand').onclick = () => {
-      const nnHero = document.getElementById('nnHero');
-      nnHero.classList.add('fullscreen');
-      document.body.style.overflow = 'hidden';
-    };
-
-    document.getElementById('btnCloseFS').onclick = () => {
-      const nnHero = document.getElementById('nnHero');
-      nnHero.classList.remove('fullscreen');
-      document.body.style.overflow = '';
-    };
-
     // ==========================================
     // EXPERIENCE VISUALIZATION FUNCTIONS
     // ==========================================
@@ -2513,9 +2935,30 @@
       }
     }
 
+    // THEME TOGGLE
+    const themeBtn = document.getElementById('themeToggle');
+    if (themeBtn) {
+      themeBtn.onclick = () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const iconSun = document.getElementById('iconSun');
+        const iconMoon = document.getElementById('iconMoon');
+
+        if (current === 'light') {
+          document.documentElement.removeAttribute('data-theme');
+          iconSun.style.display = 'block';
+          iconMoon.style.display = 'none';
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+          iconSun.style.display = 'none';
+          iconMoon.style.display = 'block';
+        }
+      };
+    }
+
     // Run Init
     window.addEventListener('load', () => {
       if (typeof initRealNN === 'function') initRealNN();
+      if (typeof markovAnimation !== 'undefined') markovAnimation.start();
       initExpAnimations();
       initGitAnimations();
     });
