@@ -8,29 +8,49 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Share+Tech+Mono&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Share+Tech+Mono&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap"
     rel="stylesheet">
   <script src="model_weights.js"></script> <!-- Real MNIST Weights -->
   <style>
     :root {
-      /* GLOBAL VARIABLES */
+      /* --- THEME COLORS (SCI-FI / TECH) - DEFAULT --- */
+      --bg-body: #0a0a0a;
+      --bg-card: #111111;
+      --text-main: #e0e0e0;
+      --text-sub: #a0a0a0;
+      --text-code: #d0d0d0;
+      --accent: #3b82f6;
+      /* Blue Accent */
+      --accent-soft: rgba(59, 130, 246, 0.2);
+      --border: rgba(255, 255, 255, 0.1);
+      --border-sub: rgba(255, 255, 255, 0.05);
+      --border-nav: rgba(255, 255, 255, 0.1);
+      --grid-line: rgba(255, 255, 255, 0.05);
+
+      /* --- FONTS --- */
+      --font-serif: 'EB Garamond', Georgia, serif;
+      --font-main: 'Inter', sans-serif;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-mono-sys: 'Share Tech Mono', monospace;
+      --font-mono-code: 'JetBrains Mono', monospace;
+      --font-pixel: 'Press Start 2P', cursive;
+
+      /* --- VIZ COLORS --- */
+      --winner: #00d4ff;
+    }
+
+    [data-theme="light"] {
       --bg-body: #fdfdfd;
       --bg-card: #ffffff;
       --text-main: #1a1a1a;
       --text-sub: #666666;
       --text-code: #24292e;
       --accent: #1f5cff;
+      --accent-soft: rgba(31, 92, 255, 0.1);
       --border: #e1e4e8;
       --border-sub: #eaecef;
       --border-nav: #e1e4e8;
       --grid-line: rgba(31, 92, 255, 0.15);
-      /* FONTS */
-      --font-serif: 'EB Garamond', Georgia, serif;
-      --font-mono-sys: 'Share Tech Mono', monospace;
-      --font-mono-code: 'JetBrains Mono', monospace;
-      --font-pixel: 'Press Start 2P', cursive;
-      /* VIZ COLORS */
-      --winner: #00d4ff;
     }
 
     * {
@@ -40,13 +60,14 @@
     }
 
     body {
-      background: var(--bg-body);
+      background-color: var(--bg-body);
       color: var(--text-main);
-      font-family: var(--font-serif);
+      font-family: var(--font-main);
       line-height: 1.6;
-      font-size: 18px;
+      font-size: 16px;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     /* --------------------
@@ -455,6 +476,63 @@
       display: none;
     }
 
+    /* Fullscreen for INTEGRATED Hero NN */
+    .nn-hero-integrated.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      background: var(--bg-body);
+      padding: 60px;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: 180px 1fr 280px;
+      gap: 40px;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 0;
+    }
+
+    .nn-hero-integrated.fullscreen .metrics-panel {
+      display: flex !important;
+      flex-direction: column;
+      gap: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .nn-hero-integrated.fullscreen .chart-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .nn-hero-integrated.fullscreen #nnSvg {
+      width: 100%;
+      height: 70vh;
+      max-width: none;
+    }
+
+    .nn-hero-integrated.fullscreen .digit-panel {
+      transform: scale(1.4);
+      transform-origin: left center;
+    }
+
+    .nn-hero-integrated.fullscreen .btn-close-fs {
+      display: block !important;
+      position: fixed;
+      top: 20px;
+      right: 30px;
+    }
+
     /* TOOLTIP */
     #nn-tooltip {
       position: absolute;
@@ -790,6 +868,138 @@
       letter-spacing: 1px;
     }
 
+    /* --------------------
+       DEV LOGS (BLUE LIST STYLE)
+       -------------------- */
+    :root {
+      --toc-blue: #2c5282;
+      --toc-badge-bg: #ebf8ff;
+      --toc-badge-text: #2c5282;
+    }
+
+    .dev-logs-section {
+      padding: 60px 40px;
+      margin: 0;
+      background: #fafafa;
+      color: #333;
+      border-top: 1px solid var(--border);
+    }
+
+    .toc-pattern {
+      font-family: var(--font-mono-sys);
+      font-size: 12px;
+      color: #888;
+      letter-spacing: -2px;
+      /* Reduced spacing to group dots */
+      text-align: center;
+      margin-bottom: 40px;
+      white-space: nowrap;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .toc-pattern::before {
+      content: ":⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮";
+      display: block;
+    }
+
+    .toc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      font-family: var(--font-mono-sys);
+      font-size: 13px;
+      text-transform: uppercase;
+      color: #888;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 15px;
+    }
+
+    .toc-title {
+      font-weight: 400;
+      letter-spacing: 1px;
+      font-size: 14px;
+      color: var(--toc-blue);
+      /* Highlight title slightly */
+    }
+
+    .toc-meta {
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      /* 2 Columns as requested */
+      column-gap: 80px;
+      /* Generous gap */
+      row-gap: 50px;
+    }
+
+    @media (max-width: 800px) {
+      .toc-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .toc-cat-header {
+      font-family: var(--font-mono-sys);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--toc-blue);
+      text-transform: uppercase;
+      margin-bottom: 25px;
+      letter-spacing: 2px;
+    }
+
+    .toc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .toc-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 15px;
+      color: #444;
+      cursor: pointer;
+    }
+
+    .toc-item:hover .toc-text {
+      color: var(--toc-blue);
+      text-decoration: underline;
+      text-decoration-color: var(--toc-blue);
+    }
+
+    /* Removed bullets for this style (list layout) */
+    .toc-bullet {
+      display: none;
+    }
+
+    .toc-text {
+      white-space: normal;
+      /* Allow wrapping if needed */
+    }
+
+    .toc-dots {
+      flex-grow: 1;
+      border-bottom: 2px dotted #aaa;
+      /* Darkened for visibility */
+      margin: 0 10px;
+      position: relative;
+      top: -4px;
+    }
+
+    /* Hidden elements as per user request */
+    .toc-extra {
+      display: none;
+    }
+
     /* --- GIT GRAPH ANIMATIONS --- */
     @keyframes drawLine {
       to {
@@ -1073,80 +1283,348 @@
         width: 100%;
       }
     }
+
+    /* --- HERO SECTION (SCI-FI) --- */
+    .hero-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background: var(--bg-body);
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-bg-pattern {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(circle at center, black, transparent 80%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .scanning-line {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      top: 0;
+      left: 0;
+      opacity: 0.2;
+      animation: scan 8s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes scan {
+      0% {
+        top: 0;
+      }
+
+      100% {
+        top: 100%;
+      }
+    }
+
+    /* Override Header for Hero */
+    .hero-header {
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      z-index: 10;
+      position: relative;
+    }
+
+    .hero-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 80px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .tech-frame {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      height: 60%;
+      border: 1px solid var(--border);
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.5;
+    }
+
+    .tech-frame-tl,
+    .tech-frame-tr,
+    .tech-frame-bl,
+    .tech-frame-br {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--accent);
+    }
+
+    .tech-frame-tl {
+      top: -2px;
+      left: -2px;
+      border-right: 0;
+      border-bottom: 0;
+    }
+
+    .tech-frame-tr {
+      top: -2px;
+      right: -2px;
+      border-left: 0;
+      border-bottom: 0;
+    }
+
+    .tech-frame-bl {
+      bottom: -2px;
+      left: -2px;
+      border-right: 0;
+      border-top: 0;
+    }
+
+    .tech-frame-br {
+      bottom: -2px;
+      right: -2px;
+      border-left: 0;
+      border-top: 0;
+    }
+
+    .hero-title {
+      font-family: var(--font-mono-sys);
+      /* Share Tech Mono */
+      font-size: 5rem;
+      letter-spacing: -4px;
+      margin-bottom: 8px;
+      color: var(--text-main);
+      text-shadow: 0 0 20px var(--accent-soft);
+      text-align: center;
+      line-height: 1;
+    }
+
+    .hero-subtitle {
+      display: inline-block;
+      font-family: var(--font-mono-sys);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: var(--accent);
+      margin-bottom: 24px;
+      background: var(--bg-body);
+      padding: 6px 16px;
+      border: 1px solid var(--accent-soft);
+      z-index: 5;
+    }
+
+    .hero-quote {
+      font-family: var(--font-main);
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--text-sub);
+      margin: 32px auto 0;
+      opacity: 0.7;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .sys-status {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      font-family: var(--font-mono-sys);
+      font-size: 9px;
+      color: var(--accent);
+      text-align: right;
+      opacity: 0.6;
+      line-height: 1.5;
+      z-index: 5;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-sub);
+      animation: bounce 2s infinite;
+      z-index: 5;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      20%,
+      50%,
+      80%,
+      100% {
+        transform: translateY(0) translateX(-50%);
+      }
+
+      40% {
+        transform: translateY(-10px) translateX(-50%);
+      }
+
+      60% {
+        transform: translateY(-5px) translateX(-50%);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 3rem;
+      }
+
+      .tech-frame {
+        width: 90%;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="header-brand">T.</div>
-    <div class="header-status">
-      <span>READY</span>
-      <div style="width:30px; height:1px; background:#ccc;"></div>
-    </div>
-  </header>
+  <!-- FULLSCREEN HERO WRAPPER -->
+  <div class="hero-wrapper">
+    <div class="hero-bg-pattern"></div>
+    <div class="scanning-line"></div>
 
-  <div class="page-wrapper">
+    <!-- Header (Integrated) -->
+    <header class="hero-header">
+      <div class="header-brand">T.</div>
+      <div class="header-status">
+        <!-- Tagline -->
+        <span
+          style="font-family: var(--font-mono-sys); font-size: 9px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; text-align: right; line-height: 1.4;">
+          OPTIMIZE DATA STRUCTURES.<br>ONE NEURON AT A TIME.
+        </span>
+        <!-- Theme Toggle (Bordered Box) -->
+        <button id="themeToggle"
+          style="background: none; border: 1px solid var(--border); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-left: 15px;"
+          title="Toggle Theme">
+          <!-- Sun Icon (for dark mode) -->
+          <svg id="iconSun" viewBox="0 0 24 24"
+            style="width: 14px; height: 14px; fill: var(--text-sub); display: block;">
+            <path
+              d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z" />
+          </svg>
+          <!-- Moon Icon (hidden by default) -->
+          <svg id="iconMoon" viewBox="0 0 24 24"
+            style="width: 14px; height: 14px; fill: var(--text-sub); display: none;">
+            <path
+              d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Content -->
+    <section class="hero-content">
+      <!-- Decorative Frame -->
+      <div class="tech-frame">
+        <div class="tech-frame-tl"></div>
+        <div class="tech-frame-tr"></div>
+        <div class="tech-frame-bl"></div>
+        <div class="tech-frame-br"></div>
+      </div>
+
+      <!-- Title Area -->
+      <div style="text-align: center; z-index: 5; margin-bottom: 30px;">
+        <div class="hero-subtitle">SYSTEM.NEURAL_NET [v4.0]</div>
+        <h1 class="hero-title" style="font-size: 2.5rem; letter-spacing: -2px;">LIVE INFERENCE<br>ENGINE.</h1>
+      </div>
+
+      <!-- NEURAL NETWORK - Seamlessly Integrated -->
+      <div id="nnHero" class="nn-hero-integrated"
+        style="display: flex; gap: 30px; align-items: center; justify-content: center; position: relative; z-index: 10; background: rgba(0,0,0,0.3); padding: 20px 30px; border: 1px solid var(--border); border-radius: 4px;">
+
+        <!-- Digit Panel -->
+        <div class="digit-panel" style="background: rgba(0,0,0,0.6); border: 1px solid var(--accent); padding: 12px;">
+          <canvas id="digitCanvas" width="100" height="100"
+            style="background: #0a0a0a; border: 1px dashed var(--accent); cursor: crosshair;"></canvas>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px;">
+            <span style="font-family:var(--font-mono-sys); font-size:9px; color:var(--text-sub);">INPUT</span>
+            <span class="prediction-value" id="predValue" style="font-size: 28px;">-</span>
+          </div>
+          <button id="btnClearSmall" class="btn-small-clear"
+            style="background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 8px; font-size: 9px; padding: 4px;">CLEAR</button>
+        </div>
+
+        <!-- Main Viz -->
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <svg id="nnSvg" viewBox="0 0 520 220" style="overflow: visible; width: 450px; height: 200px;"></svg>
+          <div
+            style="font-family:var(--font-mono-sys); font-size:9px; color:var(--text-sub); margin-top:8px; text-align:center;">
+            Draw a digit (0-9) on the canvas.
+          </div>
+        </div>
+
+        <!-- Tooltip -->
+        <div id="nn-tooltip"></div>
+
+        <!-- Metrics Panel (for FS) -->
+        <div class="metrics-panel" id="metricsPanel" style="display: none;">
+          <div class="chart-container" id="confChart"></div>
+          <div class="stats-container">
+            <div>L1: 64 Neurons | L2: 10 Neurons</div>
+            <div>Inference: <span id="infTime">0</span>ms</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expand Button - More Prominent -->
+      <button id="btnExpand"
+        style="margin-top: 15px; background: none; border: 1px solid var(--border); color: var(--text-sub); font-family: var(--font-mono-sys); font-size: 9px; padding: 6px 15px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; z-index: 10; display: flex; align-items: center; gap: 5px;">
+        <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;">
+          <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+        </svg>
+        EXPAND
+      </button>
+
+      <!-- Fullscreen Exit Button -->
+      <button class="btn-close-fs" id="btnCloseFS">EXIT FULLSCREEN</button>
+
+      <!-- Quote -->
+      <p class="hero-quote" style="margin-top: 30px;">
+        "In the digital void, structure is the only truth."
+      </p>
+
+      <div class="sys-status">
+        CPU_LOAD: 0.04%<br>
+        MEM_CORE: 100%<br>
+        LOC: 12°44'N 77°35'E<br>
+        ST_STATE: READY
+      </div>
+
+      <div class="scroll-indicator">Scroll down</div>
+    </section>
+  </div>
+
+  <div class="page-wrapper" style="padding-top: 0;">
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
       <div class="article-container">
-
-        <!-- TITLE -->
-        <header class="article-header" id="hero">
-          <div class="article-meta">AI ARCHITECT</div>
-          <h1 class="article-title">Developers Portfolio.</h1>
-        </header>
+        <!-- (Original Header Removed) -->
 
         <div class="divider"></div>
 
-        <!-- NEURAL NETWORK HERO -->
-        <div class="nn-hero" id="nnHero">
-          <button class="btn-close-fs" id="btnCloseFS">EXIT FULLSCREEN</button>
 
-          <div class="digit-panel">
-            <canvas id="digitCanvas" width="120" height="120"></canvas>
-            <div class="prediction-label">PREDICTION</div>
-            <div class="prediction-value" id="predValue">-</div>
-            <div
-              style="font-family:var(--font-mono-sys); font-size:10px; color:var(--accent); text-align:center; margin-top:5px;">
-              INPUT (28×28)</div>
-            <button id="btnClearSmall" class="btn-small-clear">CLEAR</button>
-          </div>
-
-          <div class="viz-container">
-            <svg id="nnSvg" viewBox="0 0 520 220"></svg>
-            <div
-              style="font-family:var(--font-mono-sys); font-size:11px; color:var(--text-sub); margin-top:10px; text-align:center;">
-              Interactive Neural Network (Trained on MNIST).<br>Draw a digit (0-9).
-            </div>
-            <button class="btn-expand" id="btnExpand" title="Toggle Metrics">
-              <!-- Chevron Down Icon -->
-              <svg viewBox="0 0 24 24">
-                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
-              </svg>
-            </button>
-          </div>
-
-          <!-- Tooltip -->
-          <div id="nn-tooltip"></div>
-
-          <!-- Metrics Panel -->
-          <div class="metrics-panel" id="metricsPanel">
-            <div class="chart-container" id="confChart">
-              <!-- Bars injected by JS -->
-            </div>
-            <div class="stats-container">
-              <div style="margin-bottom:10px;"><strong>NETWORK STATS</strong></div>
-              <div>L0 (Input): 784 Nodes</div>
-              <div>L1 (Hidden): 64 Neurons (ReLU)</div>
-              <div>L2 (Output): 10 Neurons (Softmax)</div>
-              <div>Total Parameters: ~50k</div>
-              <div style="margin-top:10px;">Inference Time: <span id="infTime">0</span>ms</div>
-            </div>
-          </div>
-        </div>
 
         <!-- ABOUT -->
         <section class="content-section" id="about">
@@ -1287,6 +1765,103 @@
             </svg>
           </div>
         </section>
+
+        <!-- DEV LOGS SECTION -->
+        <section class="dev-logs-section">
+          <!-- Top Pattern -->
+          <!-- Decorative breaker pattern: :⋮:⋮ repeating -->
+          <div class="toc-pattern"></div>
+
+          <div class="toc-header">
+            <!-- <section class="content-section" id="skills"> -->
+            <!-- <h2>02 // Technical Skills</h2> -->
+            <span class="toc-title">DEV LOGS</span>
+            <span class="toc-meta">Sections: 4 &middot; Entries: 12</span>
+          </div>
+
+          <div class="toc-grid">
+            <!-- 1. VIM -->
+            <div class="toc-category">
+              <div class="toc-cat-header">1. VIM</div>
+              <ul class="toc-list">
+                <li class="toc-item">
+                  <span class="toc-text">Getting Started</span>
+                  <div class="toc-dots"></div>
+                </li>
+                <li class="toc-item">
+                  <span class="toc-text">Making Vim Work</span>
+                  <div class="toc-dots"></div>
+                </li>
+                <li class="toc-item">
+                  <span class="toc-text">Vim vs Neovim</span>
+                  <div class="toc-dots"></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- 2. GIT -->
+            <div class="toc-category">
+              <div class="toc-cat-header">2. GIT</div>
+              <ul class="toc-list">
+                <li class="toc-item">
+                  <span class="toc-text">Everyday Workflow</span>
+                  <div class="toc-dots"></div>
+                </li>
+                <li class="toc-item">
+                  <span class="toc-text">Rebase Explained</span>
+                  <div class="toc-dots"></div>
+                </li>
+                <li class="toc-item">
+                  <span class="toc-text">Merge Conflicts</span>
+                  <div class="toc-dots"></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- 3. REDIS -->
+            <div class="toc-category">
+              <div class="toc-cat-header">3. REDIS</div>
+              <ul class="toc-list">
+                <li class="toc-item">
+                  <span class="toc-text">What is Redis?</span>
+                  <div class="toc-dots"></div>
+                </li>
+                <li class="toc-item">
+                  <span class="toc-text">Data Structures</span>
+                  <div class="toc-dots"></div>
+                </li>
+                <li class="toc-item">
+                  <span class="toc-text">Redis + Docker</span>
+                  <div class="toc-dots"></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- 4. DOCKER -->
+            <div class="toc-category">
+              <div class="toc-cat-header">4. DOCKER</div>
+              <ul class="toc-list">
+                <li class="toc-item">
+                  <span class="toc-text">Containers 101</span>
+                  <div class="toc-dots"></div>
+                </li>
+                <li class="toc-item">
+                  <span class="toc-text">Managing Logs</span>
+                  <div class="toc-dots"></div>
+                </li>
+                <li class="toc-item">
+                  <span class="toc-text">Docker Compose</span>
+                  <div class="toc-dots"></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Bottom Pattern -->
+          <div class="toc-pattern" style="margin-top: 40px; margin-bottom: 0;">
+          </div>
+        </section>
+
       </div>
 
       <!-- FOOTER -->
@@ -1720,6 +2295,38 @@
         observer.observe(section);
       }
     }
+
+    // THEME TOGGLE
+    document.getElementById('themeToggle').onclick = () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const iconSun = document.getElementById('iconSun');
+      const iconMoon = document.getElementById('iconMoon');
+
+      if (current === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        // Show sun (to indicate "click to go light")
+        iconSun.style.display = 'block';
+        iconMoon.style.display = 'none';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        // Show moon (to indicate "click to go dark")
+        iconSun.style.display = 'none';
+        iconMoon.style.display = 'block';
+      }
+    };
+
+    // EXPAND BUTTON (Fullscreen Toggle)
+    document.getElementById('btnExpand').onclick = () => {
+      const nnHero = document.getElementById('nnHero');
+      nnHero.classList.add('fullscreen');
+      document.body.style.overflow = 'hidden';
+    };
+
+    document.getElementById('btnCloseFS').onclick = () => {
+      const nnHero = document.getElementById('nnHero');
+      nnHero.classList.remove('fullscreen');
+      document.body.style.overflow = '';
+    };
 
     // ==========================================
     // EXPERIENCE VISUALIZATION FUNCTIONS
