@@ -669,7 +669,7 @@
 
     .viz-container {
       width: 100%;
-      height: 700px;
+      height: 450px;
       position: relative;
       display: none;
     }
@@ -768,16 +768,19 @@
 
     .git-label {
       font-family: var(--font-mono-sys);
-      font-size: 10px;
+      font-size: 13px !important;
       fill: var(--text-main);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
+      font-weight: 700 !important;
     }
 
     .git-date {
       font-family: var(--font-mono-sys);
-      font-size: 8px;
+      font-size: 11px !important;
       fill: var(--text-sub);
+      font-weight: 600 !important;
+      letter-spacing: 0.5px;
     }
 
     .git-legend {
@@ -785,6 +788,53 @@
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
+    }
+
+    /* --- GIT GRAPH ANIMATIONS --- */
+    @keyframes drawLine {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes fadeInNode {
+      from {
+        opacity: 0;
+        transform: scale(0);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes zoomOutGraph {
+      from {
+        transform: scale(2.5);
+        transform-origin: 150px 400px;
+      }
+
+      to {
+        transform: scale(1);
+        transform-origin: 150px 400px;
+      }
+    }
+
+    .git-path-anim {
+      /* Stroke-dasharray set by JS */
+      animation: drawLine 1.5s ease-out forwards;
+    }
+
+    .git-node-anim {
+      opacity: 0;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: fadeInNode 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    #gitSvg.zooming {
+      animation: zoomOutGraph 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
 
     /* Shared Info Card */
@@ -1158,83 +1208,82 @@
             <div class="exp-info-desc" id="expInfoDesc">Technical specifications and project outcomes...</div>
           </div>
 
-          <!-- Git Graph Visualization -->
           <div class="viz-container active" id="gitViz">
-            <svg id="gitSvg" viewBox="0 0 1400 700" preserveAspectRatio="xMidYMid meet">
+            <svg id="gitSvg" viewBox="0 0 1400 500" preserveAspectRatio="xMidYMid meet">
+              <g id="gitZoomGroup">
+                <!-- Main timeline: Open Source (Moved to bottom y=400) -->
+                <line class="git-path" id="path-0" x1="100" y1="400" x2="1350" y2="400" stroke="#9CA3AF"
+                  stroke-width="3" />
 
-              <!-- Main timeline: Open Source (Moved to bottom y=470) -->
-              <line x1="100" y1="470" x2="1350" y2="470" stroke="#9CA3AF" stroke-width="3" />
+                <!-- Open Source commit (y=400) -->
+                <g class="git-commit git-node" id="node-0" onclick="showExpInfo(0)">
+                  <circle cx="150" cy="400" r="14" fill="#e8e8e8" stroke="#9CA3AF" stroke-width="3" />
+                  <text class="git-label" x="150" y="445" text-anchor="middle" fill="var(--text-sub)">Open Source</text>
+                </g>
 
-              <!-- Open Source commit (y=470) -->
-              <g class="git-commit" onclick="showExpInfo(0)">
-                <circle cx="150" cy="470" r="14" fill="#e8e8e8" stroke="#9CA3AF" stroke-width="3" />
-                <text class="git-label" x="150" y="515" text-anchor="middle" fill="var(--text-sub)"
-                  font-size="13px">Open Source</text>
-                <text class="git-date" x="150" y="535" text-anchor="middle" font-size="11px">2021</text>
-              </g>
+                <!-- Branch point for UST -->
+                <circle class="git-node-sm" cx="500" cy="400" r="6" fill="var(--border)" />
 
-              <!-- Branch point for UST (July 2024 - Branches UP from bottom) -->
-              <circle cx="500" cy="470" r="6" fill="var(--border)" />
+                <!-- Smooth S-curve UP for UST branch (400 -> 220) -->
+                <path class="git-path" id="path-1"
+                  d="M 500,400 C 550,400 580,320 610,270 C 630,240 640,220 660,220 L 1350,220" stroke="var(--accent)"
+                  stroke-width="3" fill="none" />
 
-              <!-- Smooth S-curve UP for UST branch (470 -> 260) -->
-              <path d="M 500,470 C 550,470 580,380 610,330 C 630,290 640,260 660,260 L 1350,260" stroke="var(--accent)"
-                stroke-width="3" fill="none" />
+                <!-- UST Global commit -->
+                <g class="git-commit git-node" id="node-1" onclick="showExpInfo(1)">
+                  <circle cx="700" cy="220" r="16" fill="var(--accent)" stroke="var(--accent)" stroke-width="3" />
+                  <text class="git-label" x="700" y="185" text-anchor="middle" fill="var(--accent)">UST GLOBAL</text>
+                  <text class="git-date" x="700" y="165" text-anchor="middle">Jul 2024</text>
+                </g>
 
-              <!-- UST Global commit -->
-              <g class="git-commit" onclick="showExpInfo(1)">
-                <circle cx="700" cy="260" r="16" fill="var(--accent)" stroke="var(--accent)" stroke-width="3" />
-                <text class="git-label" x="700" y="225" text-anchor="middle" fill="var(--accent)" font-size="14px"
-                  font-weight="600">UST GLOBAL</text>
-                <text class="git-date" x="700" y="205" text-anchor="middle" font-size="11px">Jul 2024</text>
-              </g>
+                <!-- Project 1: InfraOps AI (y=100) -->
+                <circle class="git-node-sm" cx="800" cy="220" r="5" fill="var(--accent)" />
+                <path class="git-path" id="path-2"
+                  d="M 800,220 C 840,220 870,180 900,150 C 920,120 935,110 955,100 L 1350,100" stroke="#2ecc71"
+                  stroke-width="2.5" fill="none" />
+                <g class="git-commit git-node" id="node-2" onclick="showExpInfo(2)">
+                  <circle cx="1000" cy="100" r="13" fill="#2ecc71" stroke="#2ecc71" stroke-width="3" />
+                  <text class="git-label" x="1000" y="65" text-anchor="middle" fill="#2ecc71">INFRAOPS AI</text>
+                </g>
 
-              <!-- Project 1: InfraOps AI (y=120) -->
-              <circle cx="800" cy="260" r="5" fill="var(--accent)" />
-              <path d="M 800,260 C 840,260 870,210 900,170 C 920,145 935,130 955,120 L 1350,120" stroke="#2ecc71"
-                stroke-width="2.5" fill="none" />
-              <g class="git-commit" onclick="showExpInfo(2)">
-                <circle cx="1000" cy="120" r="13" fill="#2ecc71" stroke="#2ecc71" stroke-width="3" />
-                <text class="git-label" x="1000" y="85" text-anchor="middle" fill="#2ecc71" font-size="12px"
-                  font-weight="500">INFRAOPS AI</text>
-              </g>
+                <!-- Project 2: Insight Gen (y=150) -->
+                <circle class="git-node-sm" cx="950" cy="220" r="5" fill="var(--accent)" />
+                <path class="git-path" id="path-3"
+                  d="M 950,220 C 990,220 1020,200 1050,170 C 1070,160 1085,150 1105,150 L 1350,150" stroke="#9b59b6"
+                  stroke-width="2.5" fill="none" />
+                <g class="git-commit git-node" id="node-3" onclick="showExpInfo(3)">
+                  <circle cx="1180" cy="150" r="13" fill="#9b59b6" stroke="#9b59b6" stroke-width="3" />
+                  <text class="git-label" x="1180" y="124" text-anchor="middle" fill="#9b59b6">INSIGHT GEN</text>
+                </g>
 
-              <!-- Project 2: Insight Gen (y=180) -->
-              <circle cx="950" cy="260" r="5" fill="var(--accent)" />
-              <path d="M 950,260 C 990,260 1020,230 1050,200 C 1070,185 1085,180 1105,180 L 1350,180" stroke="#9b59b6"
-                stroke-width="2.5" fill="none" />
-              <g class="git-commit" onclick="showExpInfo(3)">
-                <circle cx="1180" cy="180" r="13" fill="#9b59b6" stroke="#9b59b6" stroke-width="3" />
-                <text class="git-label" x="1120" y="175" text-anchor="end" fill="#9b59b6" font-size="12px"
-                  font-weight="500">INSIGHT GEN</text>
-              </g>
+                <!-- Project 4: AI Monitor (y=280) -->
+                <circle class="git-node-sm" cx="1280" cy="220" r="5" fill="var(--accent)" />
+                <path class="git-path" id="path-4"
+                  d="M 1280,220 C 1300,220 1310,240 1320,260 C 1325,275 1330,280 1335,280 L 1350,280" stroke="#f39c12"
+                  stroke-width="2.5" fill="none" />
+                <g class="git-commit git-node" id="node-4" onclick="showExpInfo(5)">
+                  <circle cx="1347" cy="280" r="13" fill="#f39c12" stroke="#f39c12" stroke-width="3" />
+                  <text class="git-label" x="1347" y="315" text-anchor="middle" fill="#f39c12">AI MONITOR</text>
+                </g>
 
-              <!-- Project 4: AI Monitor (y=330 - Moved ABOVE Validation) -->
-              <circle cx="1280" cy="260" r="5" fill="var(--accent)" />
-              <path d="M 1280,260 C 1300,260 1310,280 1320,310 C 1325,325 1330,330 1335,330 L 1350,330" stroke="#f39c12"
-                stroke-width="2.5" fill="none" />
-              <g class="git-commit" onclick="showExpInfo(5)">
-                <circle cx="1347" cy="330" r="13" fill="#f39c12" stroke="#f39c12" stroke-width="3" />
-                <text class="git-label" x="1347" y="365" text-anchor="middle" fill="#f39c12" font-size="12px"
-                  font-weight="500">AI MONITOR</text>
-              </g>
-
-              <!-- Project 3: Validation (y=400 - Moved BELOW AI Monitor) -->
-              <circle cx="1100" cy="260" r="5" fill="var(--accent)" />
-              <path d="M 1100,260 C 1140,260 1170,320 1200,370 C 1220,390 1235,398 1255,400 L 1350,400" stroke="#e74c3c"
-                stroke-width="2.5" fill="none" />
-              <g class="git-commit" onclick="showExpInfo(4)">
-                <circle cx="1305" cy="400" r="13" fill="#e74c3c" stroke="#e74c3c" stroke-width="3" />
-                <text class="git-label" x="1245" y="405" text-anchor="end" fill="#e74c3c" font-size="12px"
-                  font-weight="500">VALIDATION</text>
+                <!-- Project 3: Validation (y=340) -->
+                <circle class="git-node-sm" cx="1100" cy="220" r="5" fill="var(--accent)" />
+                <path class="git-path" id="path-5"
+                  d="M 1100,220 C 1140,220 1170,280 1200,320 C 1220,335 1235,340 1255,340 L 1350,340" stroke="#e74c3c"
+                  stroke-width="2.5" fill="none" />
+                <g class="git-commit git-node" id="node-5" onclick="showExpInfo(4)">
+                  <circle cx="1305" cy="340" r="13" fill="#e74c3c" stroke="#e74c3c" stroke-width="3" />
+                  <text class="git-label" x="1305" y="375" text-anchor="middle" fill="#e74c3c">VALIDATION</text>
+                </g>
               </g>
 
               <!-- Timeline markers -->
-              <line x1="50" y1="580" x2="1350" y2="580" stroke="var(--border)" stroke-width="0.5" />
-              <text x="150" y="615" class="git-date" text-anchor="middle" font-size="12px">2021</text>
-              <text x="350" y="615" class="git-date" text-anchor="middle" font-size="12px">2022</text>
-              <text x="450" y="615" class="git-date" text-anchor="middle" font-size="12px">2023</text>
-              <text x="550" y="615" class="git-date" text-anchor="middle" font-size="12px">Jul 2024</text>
-              <text x="1200" y="615" class="git-date" text-anchor="middle" font-size="12px">Present</text>
+              <line x1="50" y1="460" x2="1350" y2="460" stroke="var(--border)" stroke-width="0.5" />
+              <text x="150" y="490" class="git-date" text-anchor="middle">2021</text>
+              <text x="350" y="490" class="git-date" text-anchor="middle">2022</text>
+              <text x="450" y="490" class="git-date" text-anchor="middle">2023</text>
+              <text x="500" y="490" class="git-date" text-anchor="middle">Jul 2024</text>
+              <text x="1200" y="490" class="git-date" text-anchor="middle">Present</text>
             </svg>
           </div>
         </section>
@@ -1797,10 +1846,71 @@
       }
     }
 
+    function initGitAnimations() {
+      const svg = document.getElementById('gitSvg');
+      const zoomGroup = document.getElementById('gitZoomGroup');
+      if (!svg || !zoomGroup) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            startGitAnimation();
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+
+      const container = document.getElementById('gitViz');
+      if (container) observer.observe(container);
+    }
+
+    function startGitAnimation() {
+      const svg = document.getElementById('gitSvg');
+      svg.classList.add('zooming');
+
+      const sequence = [
+        { id: 'path-0', delay: 500 },
+        { id: 'path-1', delay: 1500 },
+        { id: 'path-2', delay: 2500 },
+        { id: 'path-3', delay: 2800 },
+        { id: 'path-4', delay: 3100 },
+        { id: 'path-5', delay: 3400 }
+      ];
+
+      sequence.forEach(item => {
+        const p = document.getElementById(item.id);
+        if (p) {
+          const len = p.getTotalLength();
+          p.style.strokeDasharray = len;
+          p.style.strokeDashoffset = len;
+
+          setTimeout(() => {
+            p.classList.add('git-path-anim');
+
+            const nodeId = item.id.replace('path', 'node');
+            const node = document.getElementById(nodeId);
+            if (node) {
+              setTimeout(() => {
+                node.classList.add('git-node-anim');
+              }, 1000);
+            }
+          }, item.delay);
+        }
+      });
+
+      // Initial Open Source node
+      const node0 = document.getElementById('node-0');
+      if (node0) {
+        node0.style.opacity = 0;
+        setTimeout(() => node0.classList.add('git-node-anim'), 500);
+      }
+    }
+
     // Run Init
     window.addEventListener('load', () => {
       if (typeof initRealNN === 'function') initRealNN();
       initExpAnimations();
+      initGitAnimations();
     });
   </script>
 </body>
