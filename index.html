@@ -331,8 +331,8 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      min-height: 300px;
-      /* Taller */
+      min-height: 60vh;
+      /* Taller for better centering */
     }
 
     #nnSvg {
@@ -542,18 +542,25 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      position: relative;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       z-index: 10;
-      width: 100%;
-      max-width: 900px;
+      width: 75%;
+      height: 55%;
+      max-width: none;
+      padding: 0 30px;
+      box-sizing: border-box;
     }
 
     /* Main Split: MODEL (left) | TEXT (right) */
     .markov-split-final {
       display: flex;
-      align-items: stretch;
-      gap: 30px;
+      align-items: center;
+      gap: 40px;
       width: 100%;
+      justify-content: center;
     }
 
     /* LEFT: Model Side */
@@ -561,12 +568,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 10px;
       padding: 20px;
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--border);
       border-radius: 4px;
-      min-width: 160px;
+      min-width: 180px;
     }
 
     /* Input Display */
@@ -680,20 +688,53 @@
       }
     }
 
-    /* Feedback Indicator */
-    .feedback-indicator {
-      opacity: 0.5;
-      transition: all 0.3s;
+    /* Fast-forward button */
+    .fastforward-btn {
+      background: rgba(0, 255, 170, 0.05);
+      border: 1px solid rgba(0, 255, 170, 0.3);
+      color: var(--accent);
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 5px;
+      opacity: 0.6;
     }
 
-    .feedback-indicator.active {
+    .fastforward-btn:hover {
+      background: rgba(0, 255, 170, 0.2);
+      transform: scale(1.1);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    .fastforward-btn:active {
+      transform: scale(0.95);
+    }
+
+    .fastforward-btn.active {
+      background: var(--accent);
+      color: var(--bg-main);
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(0, 255, 170, 0.4);
       opacity: 1;
+    }
+
+    /* Feedback State (when word is looping back) */
+    .fastforward-btn.feedback-active {
+      opacity: 1;
+      border-color: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
     }
 
     .feedback-label {
       font-family: var(--font-mono-sys);
       font-size: 8px;
-      color: var(--accent);
+      color: inherit;
       letter-spacing: 1px;
     }
 
@@ -701,22 +742,25 @@
     .text-side {
       flex: 1;
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       align-items: flex-start;
-      align-content: flex-start;
-      gap: 10px;
-      padding: 25px;
+      justify-content: center;
+      gap: 0;
+      padding: 40px;
       background: rgba(0, 0, 0, 0.15);
       border: 1px solid var(--border);
       border-radius: 4px;
-      min-height: 200px;
+      min-height: 280px;
+      max-width: 700px;
+      overflow: visible;
     }
 
     .generated-text {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       align-items: baseline;
+      width: 100%;
     }
 
     .gen-word {
@@ -729,7 +773,58 @@
       transition: all 0.4s ease-out;
     }
 
+    /* Title style - "Tarun. Engineering the art of possible." */
+    .gen-word-title {
+      font-family: var(--font-main);
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--text-main);
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.4s ease-out;
+    }
+
+    /* Subtitle style - "Product Engineer & Gen AI Specialist" - BOLD & BIGGER */
+    .gen-word-subtitle {
+      font-family: var(--font-main);
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-main);
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.4s ease-out;
+      display: inline;
+      width: auto;
+      margin-top: 0;
+    }
+
+    /* First subtitle word creates the line break */
+    .gen-word-subtitle:first-of-type {
+      display: inline-block;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    /* Body text style - smaller description */
+    .gen-word-body {
+      font-family: var(--font-main);
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--text-main);
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.4s ease-out;
+    }
+
     .gen-word.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Make all word types visible when they have the .visible class */
+    .gen-word-title.visible,
+    .gen-word-subtitle.visible,
+    .gen-word-body.visible {
       opacity: 1;
       transform: translateX(0);
     }
@@ -741,7 +836,7 @@
 
     .cursor-blink {
       font-family: var(--font-main);
-      font-size: 2rem;
+      font-size: 1.2rem;
       animation: blink 1s step-end infinite;
       color: var(--accent);
     }
@@ -1667,7 +1762,11 @@
       background: var(--bg-body);
       padding: 6px 16px;
       border: 1px solid var(--accent-soft);
-      z-index: 5;
+      position: absolute;
+      bottom: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 15;
     }
 
     .hero-quote {
@@ -1753,7 +1852,7 @@
         <!-- Tagline -->
         <span
           style="font-family: var(--font-mono-sys); font-size: 9px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; text-align: right; line-height: 1.4;">
-          OPTIMIZE DATA STRUCTURES.<br>ONE NEURON AT A TIME.
+          Engineering <br> the art of possible.
         </span>
         <!-- Theme Toggle (Bordered Box) -->
         <button id="themeToggle"
@@ -1785,11 +1884,11 @@
         <div class="tech-frame-br"></div>
       </div>
 
+      <!-- Floating Word Element (for animations from header to model) -->
+      <div class="floating-word" id="floatingWord"></div>
+
       <!-- MARKOV CHAIN TEXT GENERATION - HORIZONTAL SPLIT -->
       <div id="markovHero" class="markov-hero-final">
-
-        <!-- Floating Word Element (for animations from header to model) -->
-        <div class="floating-word" id="floatingWord"></div>
 
         <!-- Main Split: MODEL (left) | TEXT (right) -->
         <div class="markov-split-final">
@@ -1836,18 +1935,23 @@
               </svg>
             </div>
 
-            <!-- Feedback Loop Indicator -->
-            <div class="feedback-indicator" id="feedbackIndicator">
-              <span class="feedback-label">↺ FEEDBACK</span>
-            </div>
+            <!-- Fast Forward Button (Replaced Feedback Label) -->
+            <button class="fastforward-btn" id="fastforwardBtn" title="Speed up animation">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                style="width: 12px; height: 12px; stroke-width: 3px;">
+                <polyline points="13 18 19 12 13 6"></polyline>
+                <polyline points="6 18 12 12 6 6"></polyline>
+              </svg>
+              <span class="feedback-label">FAST FORWARD</span>
+            </button>
           </div>
 
           <!-- RIGHT: Generated Text Section -->
           <div class="text-side" id="textSide">
             <div class="generated-text" id="generatedText">
               <!-- Words will appear here -->
+              <span class="cursor-blink" id="cursorBlink">|</span>
             </div>
-            <span class="cursor-blink" id="cursorBlink">|</span>
           </div>
 
         </div>
@@ -1855,7 +1959,7 @@
       </div>
 
       <!-- Subtitle -->
-      <div class="hero-subtitle" style="margin-top: 30px;">GENERATIVE TEXT ENGINE</div>
+      <div class="hero-subtitle" style="margin-top: 30px;">AI OUTPUT // PROFILE_SUMMARY</div>
 
       <div class="sys-status">
         CPU_LOAD: 0.04%<br>
@@ -2145,7 +2249,38 @@
 
     const markovAnimation = (() => {
       // Words to generate - each word predicts the next
-      const words = ["Tarun.", "Engineering", "the", "bridge", "between", "algorithms", "and", "real", "world", "impact."];
+      // Structure: { text: "word", class: "style-class", lineBreak: true/false }
+      // ** markers are visible initially, then removed when closing ** appears
+      const words = [
+        { text: "Tarun.", class: "gen-word-title" },
+        { text: "**Product", class: "marker" },
+        { text: "Engineer", class: "gen-word-body" },
+        { text: "&", class: "gen-word-body" },
+        { text: "Gen", class: "gen-word-body" },
+        { text: "AI", class: "gen-word-body" },
+        { text: "Specialist.", class: "gen-word-body" },
+        { text: "**", class: "marker", lineBreak: true },
+        { text: "I", class: "gen-word-body" },
+        { text: "build", class: "gen-word-body" },
+        { text: "the", class: "gen-word-body" },
+        { text: "infrastructure", class: "gen-word-body" },
+        { text: "behind", class: "gen-word-body" },
+        { text: "the", class: "gen-word-body" },
+        { text: "intelligence.", class: "gen-word-body" },
+        { text: "Merging", class: "gen-word-body" },
+        { text: "full-stack", class: "gen-word-body" },
+        { text: "web", class: "gen-word-body" },
+        { text: "architecture", class: "gen-word-body" },
+        { text: "with", class: "gen-word-body" },
+        { text: "Large", class: "gen-word-body" },
+        { text: "Language", class: "gen-word-body" },
+        { text: "Models", class: "gen-word-body" },
+        { text: "to", class: "gen-word-body" },
+        { text: "create", class: "gen-word-body" },
+        { text: "autonomous,", class: "gen-word-body" },
+        { text: "production-ready", class: "gen-word-body" },
+        { text: "systems.", class: "gen-word-body" }
+      ];
 
       // DOM Elements (final layout)
       const inputDisplay = document.getElementById('inputDisplay');
@@ -2154,21 +2289,65 @@
       const processingDot = document.getElementById('processingDot');
       const arrowIn = document.getElementById('arrowIn');
       const arrowOut = document.getElementById('arrowOut');
-      const feedbackIndicator = document.getElementById('feedbackIndicator');
       const generatedText = document.getElementById('generatedText');
       const cursorBlink = document.getElementById('cursorBlink');
       const floatingWord = document.getElementById('floatingWord');
       const headerBrand = document.querySelector('.header-brand');
       const textSide = document.getElementById('textSide');
+      const fastforwardBtn = document.getElementById('fastforwardBtn');
+      const feedbackIndicator = fastforwardBtn; // Reuse button for feedback animation state
 
       let currentWordIndex = 0;
+      let isBoldSection = false; // Track if we're inside ** markers
+      let boldStartIndex = -1; // Track where bold section starts
+      let speedMultiplier = 1; // Animation speed multiplier (1 = normal, 5 = fast)
 
-      // Create a word element for hero text
-      function createWordElement(word) {
+      // Create a word element for hero text with proper styling
+      function createWordElement(wordObj, index) {
         const span = document.createElement('span');
-        span.className = 'gen-word';
-        span.textContent = word;
+        span.className = wordObj.class || 'gen-word';
+        span.textContent = wordObj.text;
+        span.dataset.wordIndex = index; // Use passed index
+
+        // Mark if this is a marker for later removal
+        if (wordObj.class === 'marker' || wordObj.text === '**') {
+          span.dataset.isMarker = 'true';
+        }
+
         return span;
+      }
+
+      // Apply bold styling to words between markers and remove the markers
+      function applyBoldStyling() {
+        const allWords = generatedText.querySelectorAll('span[data-word-index]');
+
+        allWords.forEach(word => {
+          const idx = parseInt(word.dataset.wordIndex);
+
+          // Apply bold styling to words between markers
+          // include +1 because the closing marker is at currentWordIndex + 1
+          if (idx >= boldStartIndex && idx <= currentWordIndex + 1) {
+            word.style.fontWeight = '800';
+            word.style.fontSize = '1.8rem';
+
+            // If it's a marker, strip the asterisks
+            if (word.dataset.isMarker === 'true') {
+              word.textContent = word.textContent.replace(/\*\*/g, '');
+              // If empty after stripping, remove it
+              if (word.textContent.trim() === '') {
+                word.remove();
+              }
+            }
+          }
+        });
+      }
+
+      // Create a line break element
+      function createLineBreak() {
+        const br = document.createElement('div');
+        br.style.flexBasis = '100%';
+        br.style.height = '10px';
+        return br;
       }
 
       // Animate floating word from source to target
@@ -2176,7 +2355,6 @@
         if (!floatingWord) { if (callback) callback(); return; }
 
         const fromRect = fromEl.getBoundingClientRect();
-        const toRect = toEl.getBoundingClientRect();
 
         floatingWord.textContent = word;
         floatingWord.style.left = (fromRect.left + fromRect.width / 2) + 'px';
@@ -2184,14 +2362,16 @@
         floatingWord.classList.add('visible');
 
         setTimeout(() => {
+          // Recalculate target position at animation time
+          const toRect = toEl.getBoundingClientRect();
           floatingWord.style.left = (toRect.left + toRect.width / 2) + 'px';
           floatingWord.style.top = (toRect.top + toRect.height / 2) + 'px';
-        }, 50);
+        }, 50 / speedMultiplier);
 
         setTimeout(() => {
           floatingWord.classList.remove('visible');
           if (callback) callback();
-        }, 600);
+        }, 600 / speedMultiplier);
       }
 
       // Animate "Tarun." from header to input display, then process through model
@@ -2204,11 +2384,11 @@
 
         setTimeout(() => {
           // Animate floating word from header to INPUT display
-          animateFloatingWord(words[0], headerBrand, inputDisplay, () => {
+          animateFloatingWord(words[0].text, headerBrand, inputDisplay, () => {
             headerBrand.style.textShadow = '';
 
             // Now show it in input display
-            inputWord.textContent = words[0];
+            inputWord.textContent = words[0].text;
             inputDisplay.classList.add('active');
 
             // Arrow IN
@@ -2251,7 +2431,7 @@
           // Animation complete
           setTimeout(() => {
             if (cursorBlink) cursorBlink.style.display = 'none';
-          }, 500);
+          }, 500 / speedMultiplier);
           return;
         }
 
@@ -2260,13 +2440,13 @@
         const isLastWord = currentWordIndex >= words.length - 1;
 
         // Step 1: Show current word as input
-        inputWord.textContent = currentWord;
+        inputWord.textContent = currentWord.text;
         inputDisplay.classList.add('active');
 
         // Step 2: Arrow IN glows
         setTimeout(() => {
           arrowIn.classList.add('active');
-        }, 300);
+        }, 300 / speedMultiplier);
 
         // Step 3: Model processes
         setTimeout(() => {
@@ -2274,17 +2454,17 @@
           arrowIn.classList.remove('active');
           modelBox.classList.add('active');
           processingDot.classList.add('active');
-        }, 600);
+        }, 600 / speedMultiplier);
 
         // Step 4: Processing complete
         setTimeout(() => {
           processingDot.classList.remove('active');
-        }, 1100);
+        }, 1100 / speedMultiplier);
 
         // Step 5: Arrow OUT glows
         setTimeout(() => {
           arrowOut.classList.add('active');
-        }, 1200);
+        }, 1200 / speedMultiplier);
 
         // Step 6: Output word appears in text side
         setTimeout(() => {
@@ -2292,46 +2472,102 @@
           arrowOut.classList.remove('active');
 
           if (nextWord) {
-            // Add word to text side
-            const wordEl = createWordElement(nextWord);
-            generatedText.appendChild(wordEl);
-            setTimeout(() => {
-              wordEl.classList.add('visible', 'highlight');
-              setTimeout(() => wordEl.classList.remove('highlight'), 400);
-            }, 50);
+            // Add word to text side first
+            const wordEl = createWordElement(nextWord, currentWordIndex + 1);
+            if (wordEl) {
+              generatedText.appendChild(wordEl);
+
+              setTimeout(() => {
+                wordEl.classList.add('visible', 'highlight');
+                setTimeout(() => wordEl.classList.remove('highlight'), 400 / speedMultiplier);
+              }, 50 / speedMultiplier);
+            }
+
+            // Check if this is a marker (AFTER appending)
+            if (nextWord.class === 'marker' || nextWord.text === '**') {
+              if (!isBoldSection) {
+                // First marker - start bold section
+                isBoldSection = true;
+                boldStartIndex = currentWordIndex;
+              } else {
+                // Second marker - end bold section and apply styling
+                isBoldSection = false;
+                // Apply styling AFTER the marker is in the DOM
+                setTimeout(() => applyBoldStyling(), 100 / speedMultiplier);
+              }
+            }
+
+            // Add line break if needed
+            if (nextWord.lineBreak) {
+              generatedText.appendChild(createLineBreak());
+            }
+
+            // Always move cursor to the end
+            if (cursorBlink) {
+              generatedText.appendChild(cursorBlink);
+            }
           }
 
           // Step 7: Feedback loop - animate back to input
           if (nextWord && !isLastWord) {
             setTimeout(() => {
-              feedbackIndicator.classList.add('active');
-              const lastWord = generatedText.querySelector('.gen-word:last-child');
+              feedbackIndicator.classList.add('feedback-active');
+              const lastWord = generatedText.querySelector('span:last-of-type');
               if (lastWord) {
-                animateFloatingWord(nextWord, lastWord, inputDisplay, () => {
-                  feedbackIndicator.classList.remove('active');
+                animateFloatingWord(nextWord.text, lastWord, inputDisplay, () => {
+                  feedbackIndicator.classList.remove('feedback-active');
                   currentWordIndex++;
-                  setTimeout(animateStep, 300);
+                  setTimeout(animateStep, 300 / speedMultiplier);
                 });
+              } else {
+                // No visible word to animate from, skip to next
+                currentWordIndex++;
+                setTimeout(animateStep, 300 / speedMultiplier);
               }
-            }, 500);
+            }, 500 / speedMultiplier);
           } else {
             currentWordIndex++;
-            setTimeout(animateStep, 600);
+            setTimeout(animateStep, 600 / speedMultiplier);
           }
-        }, 1400);
+        }, 1400 / speedMultiplier);
       }
 
       // Start animation
       function start() {
-        // First, animate "Tarun." from header to model
+        // Animate "Tarun." from header to model, which outputs **
         animateHeaderToModel(() => {
-          // Add first word to text side
-          const firstWord = createWordElement(words[0]);
+          // Add first output word (**) to text side
+          const firstWord = createWordElement(words[1], 1); // words[1] is **
           generatedText.appendChild(firstWord);
           setTimeout(() => firstWord.classList.add('visible'), 100);
 
-          // Start the animation loop
-          setTimeout(animateStep, 500);
+          // Initialize bold section since first output is **
+          isBoldSection = true;
+          boldStartIndex = 1; // Start at index 1 (**)
+
+          // Move cursor to end
+          if (cursorBlink) {
+            generatedText.appendChild(cursorBlink);
+          }
+
+          // Start the animation loop from index 1
+          currentWordIndex = 1;
+          setTimeout(animateStep, 500 / speedMultiplier);
+        });
+      }
+
+      // Fast-forward button handler
+      if (fastforwardBtn) {
+        fastforwardBtn.addEventListener('click', () => {
+          if (speedMultiplier === 1) {
+            speedMultiplier = 5;
+            fastforwardBtn.classList.add('active');
+            fastforwardBtn.title = 'Normal speed';
+          } else {
+            speedMultiplier = 1;
+            fastforwardBtn.classList.remove('active');
+            fastforwardBtn.title = 'Speed up animation';
+          }
         });
       }
 
