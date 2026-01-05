@@ -10,7 +10,6 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Share+Tech+Mono&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap"
     rel="stylesheet">
-  <script src="model_weights.js"></script> <!-- Real MNIST Weights -->
   <style>
     :root {
       /* --- THEME COLORS (SCI-FI / TECH) - DEFAULT --- */
@@ -636,8 +635,8 @@
       gap: 8px;
       padding: 15px;
       background: rgba(0, 96, 255, 0.05);
-      border: 2px dashed var(--accent);
-      border-radius: 8px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
       transition: all 0.3s;
       position: relative;
     }
@@ -646,6 +645,315 @@
       border-style: solid;
       box-shadow: 0 0 30px var(--accent);
       background: rgba(0, 96, 255, 0.2);
+    }
+
+    /* Black Box & Expansion UI */
+    .model-box .info-icon {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      cursor: pointer;
+      opacity: 0.5;
+      transition: all 0.2s;
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      color: var(--accent);
+    }
+
+    .model-action-row {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .expand-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--font-mono-sys);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 20;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .expand-btn:hover {
+      background: var(--accent);
+      color: var(--bg-body);
+      box-shadow: 0 0 15px var(--accent);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .model-box .info-icon:hover,
+    .model-box .expand-icon:hover {
+      opacity: 1;
+    }
+
+    /* Tooltip */
+    .latent-tooltip {
+      position: absolute;
+      bottom: 110%;
+      right: 0;
+      background: var(--bg-main);
+      border: 1px solid var(--accent);
+      padding: 6px 10px;
+      font-family: var(--font-mono-sys);
+      font-size: 9px;
+      color: var(--accent);
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 100;
+      box-shadow: 0 0 15px rgba(0, 255, 170, 0.2);
+    }
+
+    .info-icon:hover+.latent-tooltip {
+      opacity: 1;
+    }
+
+    /* Modal Overlay */
+    .model-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(6, 6, 8, 0.95);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .model-modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      width: 95%;
+      max-width: 1200px;
+      height: 85vh;
+      background: var(--bg-main);
+      border: 1px solid var(--accent);
+      padding: 0;
+      position: relative;
+      box-shadow: 0 0 80px rgba(0, 255, 170, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-split {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .modal-left {
+      width: 400px;
+      border-right: 1px solid rgba(0, 255, 170, 0.1);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      background: rgba(0, 0, 0, 0.2);
+      overflow-y: auto;
+    }
+
+    .modal-right {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      background: rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .modal-preview-label {
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      opacity: 0.6;
+    }
+
+    #modalGeneratedText {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: baseline;
+      width: 100%;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      color: var(--accent);
+      cursor: pointer;
+      font-family: var(--font-mono-sys);
+      font-size: 20px;
+      opacity: 0.6;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      opacity: 1;
+      transform: rotate(90deg);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      border-bottom: 1px solid rgba(0, 255, 170, 0.1);
+      padding: 20px 30px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-info-text {
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+      color: var(--text-sub);
+      line-height: 1.6;
+      border-left: 2px solid var(--accent);
+      padding-left: 15px;
+      margin: 10px 0;
+    }
+
+    .expanded-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+    }
+
+    /* Training Inputs */
+    .training-area {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .training-label {
+      font-family: var(--font-mono-sys);
+      font-size: 9px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .training-input {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(0, 255, 170, 0.3);
+      color: var(--accent);
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      padding: 8px;
+      border-radius: 4px;
+      width: 100%;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+    }
+
+    .training-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(0, 255, 170, 0.2);
+    }
+
+    .seed-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .seed-input-row input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(0, 255, 170, 0.3);
+      color: var(--accent);
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    .run-btn {
+      background: var(--accent);
+      color: var(--bg-main);
+      border: none;
+      padding: 8px 15px;
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+      font-weight: 800;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+
+    .run-btn:hover {
+      box-shadow: 0 0 15px var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .run-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Tech Callouts (Reference Style) */
+    .tech-callout {
+      position: absolute;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .callout-line {
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.3;
+    }
+
+    .callout-label {
+      font-family: var(--font-mono-sys);
+      font-size: 8px;
+      color: var(--accent);
+      opacity: 0.6;
+      white-space: nowrap;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .model-icon {
@@ -776,8 +1084,8 @@
     /* Title style - "Tarun. Engineering the art of possible." */
     .gen-word-title {
       font-family: var(--font-main);
-      font-size: 2rem;
-      font-weight: 600;
+      font-size: 2.4rem;
+      font-weight: 800;
       color: var(--text-main);
       opacity: 0;
       transform: translateX(-20px);
@@ -787,22 +1095,20 @@
     /* Subtitle style - "Product Engineer & Gen AI Specialist" - BOLD & BIGGER */
     .gen-word-subtitle {
       font-family: var(--font-main);
-      font-size: 1.8rem;
+      font-size: 2.22rem;
       font-weight: 800;
       color: var(--text-main);
       opacity: 0;
       transform: translateX(-20px);
       transition: all 0.4s ease-out;
       display: inline;
-      width: auto;
-      margin-top: 0;
+      margin-bottom: 5px;
     }
 
     /* First subtitle word creates the line break */
     .gen-word-subtitle:first-of-type {
-      display: inline-block;
-      width: 100%;
-      margin-top: 20px;
+      display: inline;
+      margin-top: 0;
     }
 
     /* Body text style - smaller description */
@@ -1852,7 +2158,7 @@
         <!-- Tagline -->
         <span
           style="font-family: var(--font-mono-sys); font-size: 9px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; text-align: right; line-height: 1.4;">
-          Engineering <br> the art of possible.
+          Engineering <br> the art of possible
         </span>
         <!-- Theme Toggle (Bordered Box) -->
         <button id="themeToggle"
@@ -1911,20 +2217,124 @@
 
             <!-- Model Box -->
             <div class="model-box" id="modelBox">
+              <div class="info-icon"></div>
+              <div class="latent-tooltip">LATENT PROBABILISTIC STATE TRANSITION ENGINE</div>
+
               <svg viewBox="0 0 80 80" class="model-icon">
-                <circle cx="40" cy="15" r="6" fill="var(--accent)" opacity="0.8" />
-                <circle cx="20" cy="35" r="6" fill="var(--accent)" opacity="0.8" />
-                <circle cx="60" cy="35" r="6" fill="var(--accent)" opacity="0.8" />
-                <circle cx="30" cy="60" r="6" fill="var(--accent)" opacity="0.8" />
-                <circle cx="50" cy="60" r="6" fill="var(--accent)" opacity="0.8" />
-                <line x1="40" y1="21" x2="25" y2="30" stroke="var(--accent)" stroke-width="1.5" />
-                <line x1="40" y1="21" x2="55" y2="30" stroke="var(--accent)" stroke-width="1.5" />
-                <line x1="25" y1="40" x2="32" y2="55" stroke="var(--accent)" stroke-width="1.5" />
-                <line x1="55" y1="40" x2="48" y2="55" stroke="var(--accent)" stroke-width="1.5" />
-                <line x1="36" y1="60" x2="44" y2="60" stroke="var(--accent)" stroke-width="1.5" />
+                <!-- Placeholder Icon (Minimalist) -->
+                <rect x="35" y="35" width="10" height="10" fill="var(--accent)" opacity="0.1" />
               </svg>
-              <div class="model-label">MARKOV MODEL</div>
+              <div class="model-label">BLACK BOX</div>
               <div class="processing-dot" id="processingDot"></div>
+              <button class="expand-btn" id="expandModelBtn">?</button>
+            </div>
+
+            <!-- Action Row (Removed) -->
+            <div class="model-action-row">
+            </div>
+
+            <!-- Modal Overlay -->
+            <div class="model-modal" id="modelModal">
+              <div class="modal-content">
+                <div class="modal-close" id="closeModalBtn">&times;</div>
+
+                <div class="modal-header">
+                  <svg viewBox="0 0 80 80" style="width: 32px; height: 32px;">
+                    <g>
+                      <circle cx="40" cy="15" r="6" fill="var(--accent)" opacity="0.8" />
+                      <circle cx="20" cy="35" r="6" fill="var(--accent)" opacity="0.8" />
+                      <circle cx="60" cy="35" r="6" fill="var(--accent)" opacity="0.8" />
+                      <circle cx="30" cy="60" r="6" fill="var(--accent)" opacity="0.8" />
+                      <circle cx="50" cy="60" r="6" fill="var(--accent)" opacity="0.8" />
+                      <line x1="40" y1="21" x2="25" y2="30" stroke="var(--accent)" stroke-width="1.5" />
+                      <line x1="40" y1="21" x2="55" y2="30" stroke="var(--accent)" stroke-width="1.5" />
+                      <line x1="25" y1="40" x2="32" y2="55" stroke="var(--accent)" stroke-width="1.5" />
+                      <line x1="55" y1="40" x2="48" y2="55" stroke="var(--accent)" stroke-width="1.5" />
+                      <line x1="36" y1="60" x2="44" y2="60" stroke="var(--accent)" stroke-width="1.5" />
+                    </g>
+                  </svg>
+                  <div
+                    style="font-family: var(--font-mono-sys); font-size: 14px; color: var(--accent); letter-spacing: 2px;">
+                    MARKOV MODEL ARCHITECTURE
+                  </div>
+                </div>
+
+                <div class="modal-split">
+                  <div class="modal-left">
+                    <div class="modal-info-text">
+                      A Markov Model is a stochastic system that predicts the next "state" (word) based solely on the
+                      current state.
+                      It builds a probability map from the provided training data to simulate human-like patterns.
+                    </div>
+
+                    <div class="expanded-panel">
+                      <div class="training-area">
+                        <div class="training-label">
+                          <span>Training Corpus</span>
+                          <span id="corpusSize">0 bytes</span>
+                        </div>
+                        <textarea class="training-input" id="trainingInput"
+                          placeholder="Paste training text here...">I build the infrastructure behind the intelligence. Merging full-stack web architecture with Large Language Models to create autonomous, production-ready systems. Product Engineer specializing in Gen AI applications. Building scalable solutions that combine traditional software engineering with modern AI capabilities.</textarea>
+                      </div>
+
+                      <div class="seed-input-row">
+                        <span class="training-label" style="width: 60px;">Seed:</span>
+                        <input type="text" id="seedInput" value="I">
+                        <button class="run-btn" id="runGenerationBtn">Run Engine</button>
+                      </div>
+
+                      <!-- Decorative Callouts inside modal left -->
+                      <div style="margin-top: 20px; border-top: 1px solid rgba(0, 255, 170, 0.1); padding-top: 20px;">
+                        <div class="training-label">Architecture Status</div>
+                        <div
+                          style="font-family: var(--font-mono-sys); font-size: 10px; color: var(--accent); margin-top: 10px;">
+                          > NODE_STATE: STOCHASTIC<br>
+                          > TRANSITION: FIRST_ORDER<br>
+                          > MEMORY_CAP: LATENT_ONLY
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal-right">
+                    <div class="modal-preview-label">REAL-TIME PREVIEW // OUTPUT_STREAM</div>
+
+                    <!-- Internal Animation Components for Modal -->
+                    <div
+                      style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px; border-bottom: 1px solid rgba(0, 255, 170, 0.05); padding-bottom: 20px;">
+                      <div class="input-display" id="modalInputDisplay" style="min-width: 120px;">
+                        <span class="input-label">IN:</span>
+                        <span class="input-word" id="modalInputWord">---</span>
+                      </div>
+
+                      <div class="arrow-right-out" id="modalArrowIn" style="width: 30px;">
+                        <svg viewBox="0 0 50 20">
+                          <line x1="0" y1="10" x2="40" y2="10" stroke="var(--accent)" stroke-width="2" />
+                          <polygon points="40,5 50,10 40,15" fill="var(--accent)" />
+                        </svg>
+                      </div>
+
+                      <div class="model-box" id="modalModelBox" style="padding: 10px; min-width: 80px;">
+                        <div class="processing-dot" id="modalProcessingDot"></div>
+                        <div
+                          style="font-family: var(--font-mono-sys); font-size: 8px; color: var(--accent); margin-top: 5px;">
+                          PROCESSING</div>
+                      </div>
+
+                      <div class="arrow-right-out" id="modalArrowOut" style="width: 30px;">
+                        <svg viewBox="0 0 50 20">
+                          <line x1="0" y1="10" x2="40" y2="10" stroke="var(--accent)" stroke-width="2" />
+                          <polygon points="40,5 50,10 40,15" fill="var(--accent)" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div id="modalGeneratedText" style="width: 100%;">
+                      <!-- Words will appear here during preview run -->
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Arrow out to text -->
@@ -2248,44 +2658,98 @@
     // ==========================================
 
     const markovAnimation = (() => {
-      // Words to generate - each word predicts the next
-      // Structure: { text: "word", class: "style-class", lineBreak: true/false }
-      // ** markers are visible initially, then removed when closing ** appears
-      const words = [
-        { text: "Tarun.", class: "gen-word-title" },
-        { text: "**Product", class: "marker" },
-        { text: "Engineer", class: "gen-word-body" },
-        { text: "&", class: "gen-word-body" },
-        { text: "Gen", class: "gen-word-body" },
-        { text: "AI", class: "gen-word-body" },
-        { text: "Specialist.", class: "gen-word-body" },
-        { text: "**", class: "marker", lineBreak: true },
-        { text: "I", class: "gen-word-body" },
-        { text: "build", class: "gen-word-body" },
-        { text: "the", class: "gen-word-body" },
-        { text: "infrastructure", class: "gen-word-body" },
-        { text: "behind", class: "gen-word-body" },
-        { text: "the", class: "gen-word-body" },
-        { text: "intelligence.", class: "gen-word-body" },
-        { text: "Merging", class: "gen-word-body" },
-        { text: "full-stack", class: "gen-word-body" },
-        { text: "web", class: "gen-word-body" },
-        { text: "architecture", class: "gen-word-body" },
-        { text: "with", class: "gen-word-body" },
-        { text: "Large", class: "gen-word-body" },
-        { text: "Language", class: "gen-word-body" },
-        { text: "Models", class: "gen-word-body" },
-        { text: "to", class: "gen-word-body" },
-        { text: "create", class: "gen-word-body" },
-        { text: "autonomous,", class: "gen-word-body" },
-        { text: "production-ready", class: "gen-word-body" },
-        { text: "systems.", class: "gen-word-body" }
-      ];
+      // Internal state for the generator
+      class MarkovGenerator {
+        constructor() {
+          this.chain = {};
+          this.startWords = [];
+        }
 
-      // DOM Elements (final layout)
+        train(text) {
+          this.chain = {};
+          this.startWords = [];
+
+          // Clean up and tokenize
+          // Handle markers ** and punctuation
+          const words = text.split(/\s+/).filter(w => w.trim().length > 0);
+
+          for (let i = 0; i < words.length - 1; i++) {
+            const current = words[i];
+            const next = words[i + 1];
+
+            if (!this.chain[current]) this.chain[current] = [];
+            this.chain[current].push(next);
+
+            // Words that look like names or markers often start a sentence
+            if (current.charAt(0) === current.charAt(0).toUpperCase() || current.startsWith('**')) {
+              this.startWords.push(current);
+            }
+          }
+        }
+
+        generate(seed, length = 30) {
+          let current = seed;
+          // Ensure we start with a valid word from the chain if possible, else random
+          if (!this.chain[current]) {
+            current = this.startWords[Math.floor(Math.random() * this.startWords.length)] || seed;
+          }
+
+          const result = [{ text: current }];
+          const history = [current];
+
+          for (let i = 0; i < length; i++) {
+            let possibleNext = this.chain[current];
+
+            // 1. Dead end check
+            if (!possibleNext || possibleNext.length === 0) {
+              current = this.startWords[Math.floor(Math.random() * this.startWords.length)];
+              possibleNext = this.chain[current];
+              if (!possibleNext) break;
+            }
+
+            // 2. Pick next word
+            let next = possibleNext[Math.floor(Math.random() * possibleNext.length)];
+
+            // 3. Loop Detection (Simple & Aggressive)
+            // Check if 'next' completes a pattern seen recently
+            // We look at the last 10 words. If 'next' appears too often, we jump.
+            const recent = history.slice(-12);
+            const count = recent.filter(w => w === next).length;
+
+            if (count >= 1) { // Very strict: if we see the same word recently, JUMP.
+              // Too much repetition. Force a random jump to a start word.
+              const jumpWord = this.startWords[Math.floor(Math.random() * this.startWords.length)];
+              if (jumpWord && jumpWord !== next) {
+                next = jumpWord;
+                // Also clear history slightly to allow new pattern
+                history.length = 0;
+              }
+            }
+
+            // 4. Formatting
+            let className = 'gen-word-body';
+            if (next.startsWith('**') || result[result.length - 1].text === '**') {
+              className = 'marker';
+            }
+
+            result.push({ text: next, class: className });
+            history.push(next);
+            current = next;
+
+            // 5. Length limit for intro animation
+            if (i > 25 && /[.!?]/.test(next) && !next.startsWith('**')) break;
+          }
+          return result;
+        }
+      }
+
+      const generator = new MarkovGenerator();
+
+      // DOM Elements
       const inputDisplay = document.getElementById('inputDisplay');
       const inputWord = document.getElementById('inputWord');
       const modelBox = document.getElementById('modelBox');
+      const modelSide = document.querySelector('.model-side');
       const processingDot = document.getElementById('processingDot');
       const arrowIn = document.getElementById('arrowIn');
       const arrowOut = document.getElementById('arrowOut');
@@ -2293,76 +2757,104 @@
       const cursorBlink = document.getElementById('cursorBlink');
       const floatingWord = document.getElementById('floatingWord');
       const headerBrand = document.querySelector('.header-brand');
-      const textSide = document.getElementById('textSide');
       const fastforwardBtn = document.getElementById('fastforwardBtn');
-      const feedbackIndicator = fastforwardBtn; // Reuse button for feedback animation state
+      const feedbackIndicator = fastforwardBtn;
 
+      // New Controls
+      const expandModelBtn = document.getElementById('expandModelBtn');
+      const modelModal = document.getElementById('modelModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const trainingInput = document.getElementById('trainingInput');
+      const seedInput = document.getElementById('seedInput');
+      const runGenerationBtn = document.getElementById('runGenerationBtn');
+      const corpusSize = document.getElementById('corpusSize');
+
+      let currentWords = [];
       let currentWordIndex = 0;
-      let isBoldSection = false; // Track if we're inside ** markers
-      let boldStartIndex = -1; // Track where bold section starts
-      let speedMultiplier = 1; // Animation speed multiplier (1 = normal, 5 = fast)
+      let isBoldSection = false;
+      let boldStartIndex = -1;
+      let speedMultiplier = 1;
+      let isRunning = false;
 
-      // Create a word element for hero text with proper styling
-      function createWordElement(wordObj, index) {
+      // Update corpus size label
+      const updateSizeLabel = () => {
+        const size = new Blob([trainingInput.value]).size;
+        corpusSize.textContent = `${size} bytes`;
+      };
+      trainingInput.addEventListener('input', updateSizeLabel);
+      updateSizeLabel(); // Initialize on load
+      updateSizeLabel();
+
+      // Modal Toggle
+      expandModelBtn.addEventListener('click', () => {
+        modelModal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scroll
+      });
+
+      closeModalBtn.addEventListener('click', () => {
+        modelModal.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+
+      // Close on backdrop click
+      modelModal.addEventListener('click', (e) => {
+        if (e.target === modelModal) closeModalBtn.click();
+      });
+
+      // Info Icon Click
+      const infoIcon = document.querySelector('.info-icon');
+      infoIcon.addEventListener('click', () => {
+        alert("MARKOV CHAIN LOGIC:\nA stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event.\n\nIn this implementation, the engine builds a first-order transition map from the provided training corpus to predict the 'next' token based on current latent state.");
+      });
+
+      function createWordElement(wordObj, index, container) {
         const span = document.createElement('span');
-        span.className = wordObj.class || 'gen-word';
+        span.className = wordObj.class || 'gen-word-body';
         span.textContent = wordObj.text;
-        span.dataset.wordIndex = index; // Use passed index
+        span.dataset.wordIndex = index;
 
-        // Mark if this is a marker for later removal
-        if (wordObj.class === 'marker' || wordObj.text === '**') {
+        if (wordObj.class === 'marker' || wordObj.text.startsWith('**') || wordObj.text.endsWith('**')) {
           span.dataset.isMarker = 'true';
         }
-
         return span;
       }
 
-      // Apply bold styling to words between markers and remove the markers
-      function applyBoldStyling() {
-        const allWords = generatedText.querySelectorAll('span[data-word-index]');
-
+      function applyBoldStyling(container, boldStart, currentIndex) {
+        const allWords = container.querySelectorAll('span[data-word-index]');
         allWords.forEach(word => {
           const idx = parseInt(word.dataset.wordIndex);
-
-          // Apply bold styling to words between markers
-          // include +1 because the closing marker is at currentWordIndex + 1
-          if (idx >= boldStartIndex && idx <= currentWordIndex + 1) {
-            word.style.fontWeight = '800';
-            word.style.fontSize = '1.8rem';
-
-            // If it's a marker, strip the asterisks
+          if (idx >= boldStart && idx <= currentIndex + 1) {
+            const wasVisible = word.classList.contains('visible');
+            word.className = 'gen-word-subtitle';
+            if (wasVisible) word.classList.add('visible'); // Preserve visibility
             if (word.dataset.isMarker === 'true') {
               word.textContent = word.textContent.replace(/\*\*/g, '');
-              // If empty after stripping, remove it
-              if (word.textContent.trim() === '') {
-                word.remove();
-              }
+              if (word.textContent.trim() === '') word.remove();
             }
+          } else if (idx < boldStart) {
+            const wasVisible = word.classList.contains('visible');
+            word.className = 'gen-word-title';
+            if (wasVisible) word.classList.add('visible'); // Preserve visibility
           }
         });
       }
 
-      // Create a line break element
       function createLineBreak() {
         const br = document.createElement('div');
-        br.style.flexBasis = '100%';
-        br.style.height = '10px';
+        br.style.width = '100%';
+        br.style.height = '15px';
         return br;
       }
 
-      // Animate floating word from source to target
       function animateFloatingWord(word, fromEl, toEl, callback) {
-        if (!floatingWord) { if (callback) callback(); return; }
-
+        if (!floatingWord) return callback?.();
         const fromRect = fromEl.getBoundingClientRect();
-
         floatingWord.textContent = word;
         floatingWord.style.left = (fromRect.left + fromRect.width / 2) + 'px';
         floatingWord.style.top = (fromRect.top + fromRect.height / 2) + 'px';
         floatingWord.classList.add('visible');
 
         setTimeout(() => {
-          // Recalculate target position at animation time
           const toRect = toEl.getBoundingClientRect();
           floatingWord.style.left = (toRect.left + toRect.width / 2) + 'px';
           floatingWord.style.top = (toRect.top + toRect.height / 2) + 'px';
@@ -2370,206 +2862,255 @@
 
         setTimeout(() => {
           floatingWord.classList.remove('visible');
-          if (callback) callback();
+          callback?.();
         }, 600 / speedMultiplier);
       }
 
-      // Animate "Tarun." from header to input display, then process through model
-      function animateHeaderToModel(callback) {
-        if (!headerBrand || !inputDisplay) { if (callback) callback(); return; }
+      function animateStep(state) {
+        const {
+          targetContainer,
+          targets,
+          words,
+          currentIndex
+        } = state;
 
-        // Flash header
-        headerBrand.style.transition = 'text-shadow 0.3s';
-        headerBrand.style.textShadow = '0 0 25px var(--accent)';
-
-        setTimeout(() => {
-          // Animate floating word from header to INPUT display
-          animateFloatingWord(words[0].text, headerBrand, inputDisplay, () => {
-            headerBrand.style.textShadow = '';
-
-            // Now show it in input display
-            inputWord.textContent = words[0].text;
-            inputDisplay.classList.add('active');
-
-            // Arrow IN
-            setTimeout(() => {
-              arrowIn.classList.add('active');
-            }, 200);
-
-            // Model processes
-            setTimeout(() => {
-              inputDisplay.classList.remove('active');
-              arrowIn.classList.remove('active');
-              modelBox.classList.add('active');
-              processingDot.classList.add('active');
-            }, 500);
-
-            // Processing complete
-            setTimeout(() => {
-              processingDot.classList.remove('active');
-            }, 1000);
-
-            // Arrow OUT
-            setTimeout(() => {
-              arrowOut.classList.add('active');
-            }, 1100);
-
-            // Output - add first word to text side
-            setTimeout(() => {
-              modelBox.classList.remove('active');
-              arrowOut.classList.remove('active');
-
-              if (callback) callback();
-            }, 1300);
-          });
-        }, 400);
-      }
-
-      // Animation step: input → model → output → text
-      function animateStep() {
-        if (currentWordIndex >= words.length) {
-          // Animation complete
-          setTimeout(() => {
-            if (cursorBlink) cursorBlink.style.display = 'none';
-          }, 500 / speedMultiplier);
+        if (!state.isRunning || state.currentIndex >= words.length) {
+          state.isRunning = false;
+          if (state.cursor) state.cursor.style.display = 'none';
           return;
         }
 
-        const currentWord = words[currentWordIndex];
-        const nextWord = words[currentWordIndex + 1];
-        const isLastWord = currentWordIndex >= words.length - 1;
+        const currentWord = words[state.currentIndex];
+        const nextWord = words[state.currentIndex + 1];
+        const isLastWord = state.currentIndex >= words.length - 1;
 
-        // Step 1: Show current word as input
-        inputWord.textContent = currentWord.text;
-        inputDisplay.classList.add('active');
+        // Visual feedback for processing
+        targets.inputWord.textContent = currentWord.text;
+        targets.inputDisplay.classList.add('active');
 
-        // Step 2: Arrow IN glows
+        setTimeout(() => targets.arrowIn.classList.add('active'), 200 / speedMultiplier);
+
         setTimeout(() => {
-          arrowIn.classList.add('active');
-        }, 300 / speedMultiplier);
+          targets.inputDisplay.classList.remove('active');
+          targets.arrowIn.classList.remove('active');
+          targets.modelBox.classList.add('active');
+          targets.processingDot.classList.add('active');
+        }, 400 / speedMultiplier);
 
-        // Step 3: Model processes
-        setTimeout(() => {
-          inputDisplay.classList.remove('active');
-          arrowIn.classList.remove('active');
-          modelBox.classList.add('active');
-          processingDot.classList.add('active');
-        }, 600 / speedMultiplier);
+        setTimeout(() => targets.processingDot.classList.remove('active'), 800 / speedMultiplier);
+        setTimeout(() => targets.arrowOut.classList.add('active'), 900 / speedMultiplier);
 
-        // Step 4: Processing complete
         setTimeout(() => {
-          processingDot.classList.remove('active');
-        }, 1100 / speedMultiplier);
-
-        // Step 5: Arrow OUT glows
-        setTimeout(() => {
-          arrowOut.classList.add('active');
-        }, 1200 / speedMultiplier);
-
-        // Step 6: Output word appears in text side
-        setTimeout(() => {
-          modelBox.classList.remove('active');
-          arrowOut.classList.remove('active');
+          targets.modelBox.classList.remove('active');
+          targets.arrowOut.classList.remove('active');
 
           if (nextWord) {
-            // Add word to text side first
-            const wordEl = createWordElement(nextWord, currentWordIndex + 1);
-            if (wordEl) {
-              generatedText.appendChild(wordEl);
+            const wordEl = createWordElement(nextWord, state.currentIndex + 1, targetContainer);
+            targetContainer.appendChild(wordEl);
 
-              setTimeout(() => {
-                wordEl.classList.add('visible', 'highlight');
-                setTimeout(() => wordEl.classList.remove('highlight'), 400 / speedMultiplier);
-              }, 50 / speedMultiplier);
-            }
+            // FORCE VISIBILITY: Ensure the element appears
+            // Use a slight delay to allow CSS transition if desired, or immediate for title/subtitle
+            const appearanceDelay = (nextWord.class === 'gen-word-title' || nextWord.class === 'gen-word-subtitle') ? 50 : 50;
 
-            // Check if this is a marker (AFTER appending)
-            if (nextWord.class === 'marker' || nextWord.text === '**') {
-              if (!isBoldSection) {
-                // First marker - start bold section
-                isBoldSection = true;
-                boldStartIndex = currentWordIndex;
+            setTimeout(() => {
+              wordEl.classList.add('visible', 'highlight');
+              if (state.cursor) targetContainer.appendChild(state.cursor); // Keep cursor at end
+              setTimeout(() => wordEl.classList.remove('highlight'), 300 / speedMultiplier);
+            }, appearanceDelay / speedMultiplier);
+
+            // Marker logic - if word has **, toggle bolding
+            if (nextWord.text.startsWith('**') || nextWord.text.endsWith('**') || (nextWord.text === '**')) {
+              if (!state.isBoldSection) {
+                state.isBoldSection = true;
+                state.boldStartIndex = state.currentIndex + 1;
               } else {
-                // Second marker - end bold section and apply styling
-                isBoldSection = false;
-                // Apply styling AFTER the marker is in the DOM
-                setTimeout(() => applyBoldStyling(), 100 / speedMultiplier);
+                state.isBoldSection = false;
+                setTimeout(() => applyBoldStyling(targetContainer, state.boldStartIndex, state.currentIndex + 1), 50 / speedMultiplier);
               }
             }
 
-            // Add line break if needed
-            if (nextWord.lineBreak) {
-              generatedText.appendChild(createLineBreak());
-            }
-
-            // Always move cursor to the end
-            if (cursorBlink) {
-              generatedText.appendChild(cursorBlink);
-            }
+            if (nextWord.lineBreak) targetContainer.appendChild(createLineBreak());
           }
 
-          // Step 7: Feedback loop - animate back to input
           if (nextWord && !isLastWord) {
+            // Speed up the gap between words
             setTimeout(() => {
               feedbackIndicator.classList.add('feedback-active');
-              const lastWord = generatedText.querySelector('span:last-of-type');
-              if (lastWord) {
-                animateFloatingWord(nextWord.text, lastWord, inputDisplay, () => {
-                  feedbackIndicator.classList.remove('feedback-active');
-                  currentWordIndex++;
-                  setTimeout(animateStep, 300 / speedMultiplier);
-                });
-              } else {
-                // No visible word to animate from, skip to next
-                currentWordIndex++;
-                setTimeout(animateStep, 300 / speedMultiplier);
-              }
-            }, 500 / speedMultiplier);
+              const spans = targetContainer.querySelectorAll('span');
+              const lastEl = spans[spans.length - 1] || targetContainer;
+
+              animateFloatingWord(nextWord.text, lastEl, targets.inputDisplay, () => {
+                feedbackIndicator.classList.remove('feedback-active');
+                state.currentIndex++;
+                animateStep(state);
+              });
+            }, 300 / speedMultiplier);
           } else {
-            currentWordIndex++;
-            setTimeout(animateStep, 600 / speedMultiplier);
+            state.currentIndex++;
+            setTimeout(() => animateStep(state), 500 / speedMultiplier);
           }
-        }, 1400 / speedMultiplier);
+        }, 1100 / speedMultiplier);
       }
 
-      // Start animation
+      // Separate states for Hero and Modal
+      const heroState = {
+        isRunning: false,
+        currentIndex: 0,
+        isBoldSection: false,
+        boldStartIndex: -1,
+        cursor: cursorBlink,
+        targetContainer: generatedText,
+        targets: {
+          inputDisplay, inputWord, modelBox, processingDot, arrowIn, arrowOut
+        }
+      };
+
+      const modalState = {
+        isRunning: false,
+        currentIndex: 0,
+        isBoldSection: false,
+        boldStartIndex: -1,
+        cursor: null,
+        targetContainer: null,
+        targets: {}
+      };
+
+      function initModalState() {
+        modalState.targetContainer = document.getElementById('modalGeneratedText');
+        modalState.targets = {
+          inputDisplay: document.getElementById('modalInputDisplay'),
+          inputWord: document.getElementById('modalInputWord'),
+          modelBox: document.getElementById('modalModelBox'),
+          processingDot: document.getElementById('modalProcessingDot'),
+          arrowIn: document.getElementById('modalArrowIn'),
+          arrowOut: document.getElementById('modalArrowOut')
+        };
+        modalState.cursor = cursorBlink.cloneNode(true);
+        modalState.cursor.id = 'modalCursorBlink';
+      }
+
+      function startAnimation(state, seed, wordsCount = 60) {
+        if (state === modalState && !state.targetContainer) initModalState();
+
+        if (state.isRunning) {
+          state.isRunning = false;
+          setTimeout(() => startAnimation(state, seed, wordsCount), 100);
+          return;
+        }
+        state.isRunning = true;
+
+        generator.train(trainingInput.value);
+        const actualSeed = seed || seedInput.value.trim() || 'I';
+
+        // For HERO: Show static content (no generation)
+        // For MODAL: Generate content using Markov from seed
+        let allWords;
+        let seedWord = null; // Word to animate but not display
+
+        if (state === heroState) {
+          // Static content for hero section
+          // "Tarun" is the SEED (Input) that generates "**Product"
+          // So "Tarun" must be words[0], but it is NOT added to the display container
+          seedWord = "Tarun";
+          allWords = [
+            { text: "Tarun", class: "seed-word" }, // Index 0: Input for first step
+            { text: "**Product", class: "marker" }, // Index 1: Output of first step
+            { text: "Engineer", class: "gen-word-body" },
+            { text: "&", class: "gen-word-body" },
+            { text: "Gen", class: "gen-word-body" },
+            { text: "AI", class: "gen-word-body" },
+            { text: "Specialist.**", class: "marker", lineBreak: true },
+            { text: "I", class: "gen-word-body" },
+            { text: "build", class: "gen-word-body" },
+            { text: "the", class: "gen-word-body" },
+            { text: "infrastructure", class: "gen-word-body" },
+            { text: "behind", class: "gen-word-body" },
+            { text: "the", class: "gen-word-body" },
+            { text: "intelligence.", class: "gen-word-body" },
+            { text: "Merging", class: "gen-word-body" },
+            { text: "full-stack", class: "gen-word-body" },
+            { text: "web", class: "gen-word-body" },
+            { text: "architecture", class: "gen-word-body" },
+            { text: "with", class: "gen-word-body" },
+            { text: "Large", class: "gen-word-body" },
+            { text: "Language", class: "gen-word-body" },
+            { text: "Models", class: "gen-word-body" },
+            { text: "to", class: "gen-word-body" },
+            { text: "create", class: "gen-word-body" },
+            { text: "autonomous,", class: "gen-word-body" },
+            { text: "production-ready", class: "gen-word-body" },
+            { text: "systems.", class: "gen-word-body" }
+          ];
+        } else {
+          // Dynamic generation for modal - NO hardcoded header, pure generation from seed
+          allWords = generator.generate(actualSeed, wordsCount);
+        }
+
+        state.words = allWords;
+
+        state.targetContainer.innerHTML = '';
+        state.currentIndex = 0;
+        state.isBoldSection = false; // Start false, let marker logic handle it
+        state.boldStartIndex = -1; // Will be set when opening marker is encountered
+
+        if (state.cursor) {
+          state.cursor.style.display = 'inline-block';
+          state.targetContainer.appendChild(state.cursor);
+        }
+
+        const origin = (state === heroState) ? headerBrand : expandModelBtn;
+
+        // For hero: animate "Tarun" as seed but don't show it
+        // For modal: show first word immediately
+        if (state === heroState && seedWord) {
+          // Animate "Tarun" from header brand to Input
+          animateFloatingWord(seedWord, origin, state.targets.inputDisplay, () => {
+            // Start processing loop. 
+            // animateStep uses words[currentIndex] as Input.
+            // We want Input="Tarun" (words[0]). So currentIndex should be 0.
+            state.currentIndex = 0;
+            animateStep(state);
+          });
+        } else {
+          // Modal: show first word immediately
+          const firstWord = createWordElement(state.words[0], 0, state.targetContainer);
+          state.targetContainer.appendChild(firstWord);
+          setTimeout(() => firstWord.classList.add('visible'), 50);
+          if (state.cursor) state.targetContainer.appendChild(state.cursor);
+
+          if (state.words[0].text.startsWith('**') || state.words[0].text.endsWith('**')) {
+            state.isBoldSection = true;
+            state.boldStartIndex = 0;
+          }
+
+          // Add line break if first word has it
+          if (state.words[0].lineBreak) {
+            state.targetContainer.appendChild(createLineBreak());
+          }
+
+          // Start animation from second word (index 1) which will be processed by animateStep(0)'s nextWord logic
+          if (state.words[1]) {
+            animateFloatingWord(state.words[1].text, origin, state.targets.inputDisplay, () => {
+              animateStep(state);
+            });
+          }
+        }
+      }
+
       function start() {
-        // Animate "Tarun." from header to model, which outputs **
-        animateHeaderToModel(() => {
-          // Add first output word (**) to text side
-          const firstWord = createWordElement(words[1], 1); // words[1] is **
-          generatedText.appendChild(firstWord);
-          setTimeout(() => firstWord.classList.add('visible'), 100);
-
-          // Initialize bold section since first output is **
-          isBoldSection = true;
-          boldStartIndex = 1; // Start at index 1 (**)
-
-          // Move cursor to end
-          if (cursorBlink) {
-            generatedText.appendChild(cursorBlink);
-          }
-
-          // Start the animation loop from index 1
-          currentWordIndex = 1;
-          setTimeout(animateStep, 500 / speedMultiplier);
-        });
+        startAnimation(heroState);
       }
 
-      // Fast-forward button handler
-      if (fastforwardBtn) {
-        fastforwardBtn.addEventListener('click', () => {
-          if (speedMultiplier === 1) {
-            speedMultiplier = 5;
-            fastforwardBtn.classList.add('active');
-            fastforwardBtn.title = 'Normal speed';
-          } else {
-            speedMultiplier = 1;
-            fastforwardBtn.classList.remove('active');
-            fastforwardBtn.title = 'Speed up animation';
-          }
-        });
-      }
+      runGenerationBtn.addEventListener('click', () => {
+        heroState.isRunning = false;
+        startAnimation(modalState);
+      });
+
+      fastforwardBtn.addEventListener('click', () => {
+        speedMultiplier = speedMultiplier === 1 ? 5 : 1;
+        fastforwardBtn.classList.toggle('active');
+        fastforwardBtn.title = speedMultiplier > 1 ? 'Normal speed' : 'Speed up animation';
+      });
 
       return { start };
     })();
