@@ -2661,84 +2661,94 @@
       // Internal state for the generator
       class MarkovGenerator {
         constructor() {
-          this.chain = {};
-          this.startWords = [];
+          this.model = {};  // N-gram transitions: key -> [next_words]
+          this.n = 1;       // Default n-gram size
         }
 
-        train(text) {
-          this.chain = {};
-          this.startWords = [];
+        /**
+         * Builds n-gram transitions from text.
+         * Based on transformers.py build_markov_model()
+         */
+        train(text, n = 1) {
+          this.n = n;
+          this.model = {};
 
-          // Clean up and tokenize
-          // Handle markers ** and punctuation
+          // Tokenize: split by whitespace and filter empty
           const words = text.split(/\s+/).filter(w => w.trim().length > 0);
 
-          for (let i = 0; i < words.length - 1; i++) {
-            const current = words[i];
-            const next = words[i + 1];
+          // Build n-gram model
+          for (let i = 0; i < words.length - n; i++) {
+            // Create key from n consecutive words
+            const key = words.slice(i, i + n).join(' ');
+            const nextWord = words[i + n];
 
-            if (!this.chain[current]) this.chain[current] = [];
-            this.chain[current].push(next);
-
-            // Words that look like names or markers often start a sentence
-            if (current.charAt(0) === current.charAt(0).toUpperCase() || current.startsWith('**')) {
-              this.startWords.push(current);
+            if (!this.model[key]) {
+              this.model[key] = [];
             }
+            this.model[key].push(nextWord);
           }
         }
 
-        generate(seed, length = 30) {
-          let current = seed;
-          // Ensure we start with a valid word from the chain if possible, else random
-          if (!this.chain[current]) {
-            current = this.startWords[Math.floor(Math.random() * this.startWords.length)] || seed;
+        /**
+         * Generates text starting with seed using the Markov model.
+         * Based on transformers.py generate_sentence()
+         * Sets n-gram to number of words in seed.
+         */
+        generate(seed, maxLength = 30) {
+          // Tokenize seed
+          const seedWords = seed.split(/\s+/).filter(w => w.trim().length > 0);
+
+          // Set n to the number of words in seed (matching Python logic)
+          const seedN = seedWords.length;
+
+          // Rebuild model with seed word count as n
+          const currentText = document.getElementById('trainingInput').value;
+          this.train(currentText, seedN);
+
+          // Check if seed has enough words
+          if (seedWords.length < this.n) {
+            // Return seed as-is if not enough words
+            return seedWords.map(word => ({ text: word, class: 'gen-word-body' }));
           }
 
-          const result = [{ text: current }];
-          const history = [current];
+          // Use the full seed in the result, but only the last n words for the state
+          let current = seedWords.slice(-this.n).join(' ');
+          const result = [];
 
-          for (let i = 0; i < length; i++) {
-            let possibleNext = this.chain[current];
+          // Add all seed words to result
+          for (const word of seedWords) {
+            result.push({ text: word, class: 'gen-word-body' });
+          }
 
-            // 1. Dead end check
-            if (!possibleNext || possibleNext.length === 0) {
-              current = this.startWords[Math.floor(Math.random() * this.startWords.length)];
-              possibleNext = this.chain[current];
-              if (!possibleNext) break;
+          // Generate continuation
+          for (let i = 0; i < maxLength; i++) {
+            // Check if current context exists in model
+            if (!this.model[current]) {
+              break; // No continuation available
             }
 
-            // 2. Pick next word
-            let next = possibleNext[Math.floor(Math.random() * possibleNext.length)];
+            // Pick next word randomly from possible continuations
+            const possibleNext = this.model[current];
+            const nextWord = possibleNext[Math.floor(Math.random() * possibleNext.length)];
 
-            // 3. Loop Detection (Simple & Aggressive)
-            // Check if 'next' completes a pattern seen recently
-            // We look at the last 10 words. If 'next' appears too often, we jump.
-            const recent = history.slice(-12);
-            const count = recent.filter(w => w === next).length;
-
-            if (count >= 1) { // Very strict: if we see the same word recently, JUMP.
-              // Too much repetition. Force a random jump to a start word.
-              const jumpWord = this.startWords[Math.floor(Math.random() * this.startWords.length)];
-              if (jumpWord && jumpWord !== next) {
-                next = jumpWord;
-                // Also clear history slightly to allow new pattern
-                history.length = 0;
-              }
-            }
-
-            // 4. Formatting
+            // Determine class for styling
             let className = 'gen-word-body';
-            if (next.startsWith('**') || result[result.length - 1].text === '**') {
+            if (nextWord.startsWith('**') || nextWord.endsWith('**')) {
               className = 'marker';
             }
 
-            result.push({ text: next, class: className });
-            history.push(next);
-            current = next;
+            result.push({ text: nextWord, class: className });
 
-            // 5. Length limit for intro animation
-            if (i > 25 && /[.!?]/.test(next) && !next.startsWith('**')) break;
+            // Update current context: use last n words from all generated words
+            const allWords = result.map(w => w.text);
+            current = allWords.slice(-this.n).join(' ');
+
+            // Optional: stop at sentence boundaries
+            if (i > 10 && /[.!?]$/.test(nextWord) && !nextWord.includes('**')) {
+              break;
+            }
           }
+
           return result;
         }
       }
@@ -2992,14 +3002,13 @@
       function startAnimation(state, seed, wordsCount = 60) {
         if (state === modalState && !state.targetContainer) initModalState();
 
+        // Prevent multiple animations - wait for current to finish
         if (state.isRunning) {
-          state.isRunning = false;
-          setTimeout(() => startAnimation(state, seed, wordsCount), 100);
+          console.log('Animation already running, ignoring new request');
           return;
         }
         state.isRunning = true;
 
-        generator.train(trainingInput.value);
         const actualSeed = seed || seedInput.value.trim() || 'I';
 
         // For HERO: Show static content (no generation)
@@ -3072,28 +3081,33 @@
             animateStep(state);
           });
         } else {
-          // Modal: show first word immediately
-          const firstWord = createWordElement(state.words[0], 0, state.targetContainer);
-          state.targetContainer.appendChild(firstWord);
-          setTimeout(() => firstWord.classList.add('visible'), 50);
+          // Modal: Display all seed words simultaneously in the input, then show them in output
+          const seedWords = actualSeed.split(/\s+/).filter(w => w.trim().length > 0);
+          const seedWordCount = seedWords.length;
+
+          // Show all seed words in input display
+          state.targets.inputWord.textContent = actualSeed;
+          state.targets.inputDisplay.classList.add('active');
+
+          // Add all seed words to output container
+          for (let i = 0; i < seedWordCount && i < state.words.length; i++) {
+            const wordEl = createWordElement(state.words[i], i, state.targetContainer);
+            state.targetContainer.appendChild(wordEl);
+            setTimeout(() => wordEl.classList.add('visible'), 50 + (i * 100));
+          }
+
           if (state.cursor) state.targetContainer.appendChild(state.cursor);
 
-          if (state.words[0].text.startsWith('**') || state.words[0].text.endsWith('**')) {
-            state.isBoldSection = true;
-            state.boldStartIndex = 0;
-          }
-
-          // Add line break if first word has it
-          if (state.words[0].lineBreak) {
-            state.targetContainer.appendChild(createLineBreak());
-          }
-
-          // Start animation from second word (index 1) which will be processed by animateStep(0)'s nextWord logic
-          if (state.words[1]) {
-            animateFloatingWord(state.words[1].text, origin, state.targets.inputDisplay, () => {
-              animateStep(state);
-            });
-          }
+          // Start animation from the word after all seed words
+          setTimeout(() => {
+            state.targets.inputDisplay.classList.remove('active');
+            state.currentIndex = seedWordCount - 1; // Set to last seed word index
+            if (state.words[seedWordCount]) {
+              animateFloatingWord(state.words[seedWordCount].text, origin, state.targets.inputDisplay, () => {
+                animateStep(state);
+              });
+            }
+          }, 800 + (seedWordCount * 100));
         }
       }
 
