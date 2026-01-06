@@ -1010,6 +1010,41 @@
       color: #fff;
     }
 
+    /* Modal Fast Forward Button - specialized styles */
+    .model-modal .modal-ff-btn {
+      margin-top: 0;
+      padding: 8px 14px;
+      height: 40px;
+      background: #fff;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background 0.12s ease-out;
+    }
+
+    .model-modal .modal-ff-btn:hover {
+      background: #fff;
+      color: var(--accent);
+      box-shadow: 0 4px 10px rgba(74, 107, 204, 0.18);
+    }
+
+    .model-modal .modal-ff-btn:active {
+      transform: translateY(2px);
+      box-shadow: inset 0 2px 6px rgba(74, 107, 204, 0.35);
+    }
+
+    .model-modal .modal-ff-btn.active {
+      background: #e8ecf8;
+      transform: translateY(1.5px);
+      box-shadow: inset 0 2px 6px rgba(74, 107, 204, 0.2);
+    }
+
     .model-modal .status {
       display: none;
       /* Hide the status section */
@@ -2602,11 +2637,10 @@
             <path
               d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z" />
           </svg>
-          <!-- Moon Icon (hidden by default) -->
+          <!-- Moon Icon (hidden by default) - Simple crescent -->
           <svg id="iconMoon" viewBox="0 0 24 24"
-            style="width: 14px; height: 14px; fill: var(--text-sub); display: none;">
-            <path
-              d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z" />
+            style="width: 14px; height: 14px; fill: none; stroke: var(--text-sub); stroke-width: 2; display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           </svg>
         </button>
       </div>
@@ -2697,6 +2731,14 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
                         <input value="ai" id="seedInput" type="text" />
                       </div>
                       <button id="runGenerationBtn">RUN ENGINE</button>
+                      <button class="fastforward-btn modal-ff-btn" id="modalFastforwardBtn" title="Speed up animation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+                          stroke-linejoin="round" style="width: 12px; height: 12px; stroke-width: 3px;">
+                          <polyline points="13 18 19 12 13 6"></polyline>
+                          <polyline points="6 18 12 12 6 6"></polyline>
+                        </svg>
+                        <span class="feedback-label">FAST FORWARD</span>
+                      </button>
                     </div>
 
                     <div class="status">
@@ -3183,6 +3225,7 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
       const trainingInput = document.getElementById('trainingInput');
       const seedInput = document.getElementById('seedInput');
       const runGenerationBtn = document.getElementById('runGenerationBtn');
+      const modalFastforwardBtn = document.getElementById('modalFastforwardBtn');
       const corpusSize = document.getElementById('corpusSize');
 
       let currentWords = [];
@@ -3562,6 +3605,17 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
       fastforwardBtn.addEventListener('click', () => {
         speedMultiplier = speedMultiplier === 1 ? 5 : 1;
         fastforwardBtn.classList.toggle('active');
+        modalFastforwardBtn.classList.toggle('active');
+        fastforwardBtn.title = speedMultiplier > 1 ? 'Normal speed' : 'Speed up animation';
+        modalFastforwardBtn.title = speedMultiplier > 1 ? 'Normal speed' : 'Speed up animation';
+      });
+
+      // Modal Fast Forward Button - synced with main fast forward
+      modalFastforwardBtn.addEventListener('click', () => {
+        speedMultiplier = speedMultiplier === 1 ? 5 : 1;
+        modalFastforwardBtn.classList.toggle('active');
+        fastforwardBtn.classList.toggle('active');
+        modalFastforwardBtn.title = speedMultiplier > 1 ? 'Normal speed' : 'Speed up animation';
         fastforwardBtn.title = speedMultiplier > 1 ? 'Normal speed' : 'Speed up animation';
       });
 
