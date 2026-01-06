@@ -12,19 +12,23 @@
     rel="stylesheet">
   <style>
     :root {
-      /* --- THEME COLORS (SCI-FI / TECH) - DEFAULT --- */
-      --bg-body: #0a0a0a;
-      --bg-card: #111111;
-      --text-main: #e0e0e0;
-      --text-sub: #a0a0a0;
-      --text-code: #d0d0d0;
-      --accent: #3b82f6;
-      /* Blue Accent */
-      --accent-soft: rgba(59, 130, 246, 0.2);
-      --border: rgba(255, 255, 255, 0.1);
-      --border-sub: rgba(255, 255, 255, 0.05);
-      --border-nav: rgba(255, 255, 255, 0.1);
-      --grid-line: rgba(255, 255, 255, 0.05);
+      /* --- THEME COLORS (CYBERPUNK / TECH) - DEFAULT DARK MODE --- */
+      --bg-body: #030306;
+      --bg-card: #080810;
+      --bg-card-elevated: #0c0c18;
+      --text-main: #e0e8f0;
+      --text-sub: #7a8a9f;
+      --text-code: #b0c0d8;
+      --accent: #4d9fff;
+      /* Vibrant Electric Blue */
+      --accent-bright: #00d4ff;
+      /* Cyan highlight */
+      --accent-soft: rgba(77, 159, 255, 0.15);
+      --accent-glow: rgba(0, 212, 255, 0.3);
+      --border: rgba(77, 159, 255, 0.35);
+      --border-sub: rgba(77, 159, 255, 0.15);
+      --border-nav: rgba(77, 159, 255, 0.25);
+      --grid-line: rgba(0, 212, 255, 0.06);
 
       /* --- FONTS --- */
       --font-serif: 'EB Garamond', Georgia, serif;
@@ -85,6 +89,7 @@
       background: var(--bg-card);
       z-index: 500;
       border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 20px rgba(0, 212, 255, 0.05);
     }
 
     .header-brand {
@@ -96,6 +101,7 @@
       text-transform: uppercase;
       font-weight: 400;
       line-height: 1;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
     }
 
     .header-status {
@@ -545,10 +551,13 @@
       z-index: 10;
       width: 92%;
       max-width: 1200px;
-      background: #fff;
+      background: var(--bg-card);
       border: 1.5px solid var(--accent);
       padding: 96px;
       box-sizing: border-box;
+      box-shadow:
+        0 0 40px rgba(0, 212, 255, 0.08),
+        0 0 80px rgba(77, 159, 255, 0.04);
     }
 
     [data-theme="light"] .markov-hero-final {
@@ -573,13 +582,16 @@
       justify-content: flex-start;
       gap: 10px;
       padding: 40px;
-      /* Graph paper grid pattern */
-      background-color: #f9faff;
+      /* Graph paper grid pattern - dark mode with glow */
+      background-color: rgba(8, 8, 16, 0.95);
       background-image:
-        linear-gradient(rgba(74, 107, 204, 0.15) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(74, 107, 204, 0.15) 1px, transparent 1px);
+        linear-gradient(rgba(0, 212, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.08) 1px, transparent 1px);
       background-size: 20px 20px;
-      border: 1px solid rgba(74, 107, 204, 0.2);
+      border: 1px solid rgba(77, 159, 255, 0.4);
+      box-shadow:
+        0 0 30px rgba(0, 212, 255, 0.05),
+        inset 0 0 60px rgba(0, 0, 0, 0.3);
       min-width: auto;
       width: 100%;
     }
@@ -606,7 +618,7 @@
       width: auto;
       /* Allow expansion */
       height: 34px;
-      background: #fff;
+      background: var(--bg-card);
       /* Opaque background */
       border: 1.8px solid var(--accent);
       /* Bolder border */
@@ -614,6 +626,7 @@
       font-size: 11px;
       z-index: 2;
       /* Ensure it sits above grid */
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
     }
 
     [data-theme="light"] .input-display {
@@ -676,7 +689,7 @@
       width: 160px;
       height: 140px;
       padding: 0;
-      background: #fff;
+      background: var(--bg-card);
       /* Opaque background */
       border: 1.8px solid var(--accent);
       /* Bolder border */
@@ -685,6 +698,7 @@
       /* Ensure it sits above grid */
       transition: all 0.3s;
       position: relative;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.08);
     }
 
     .model-icon {
@@ -709,7 +723,7 @@
     .model-box.active {
       border-style: solid;
       box-shadow: 0 0 15px var(--accent-soft);
-      background: #fff;
+      background: var(--bg-card);
       /* Keep opaque when active */
     }
 
@@ -1015,7 +1029,7 @@
       margin-top: 0;
       padding: 8px 14px;
       height: 40px;
-      background: #fff;
+      background: var(--bg-card);
       border: 1.5px solid var(--accent);
       color: var(--accent);
       border-radius: 4px;
@@ -1029,9 +1043,9 @@
     }
 
     .model-modal .modal-ff-btn:hover {
-      background: #fff;
+      background: var(--bg-card);
       color: var(--accent);
-      box-shadow: 0 4px 10px rgba(74, 107, 204, 0.18);
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.15);
     }
 
     .model-modal .modal-ff-btn:active {
@@ -1040,9 +1054,11 @@
     }
 
     .model-modal .modal-ff-btn.active {
-      background: #e8ecf8;
+      background: rgba(0, 212, 255, 0.1);
       transform: translateY(1.5px);
-      box-shadow: inset 0 2px 6px rgba(74, 107, 204, 0.2);
+      box-shadow:
+        inset 0 2px 6px rgba(0, 212, 255, 0.2),
+        0 0 15px rgba(0, 212, 255, 0.15);
     }
 
     .model-modal .status {
@@ -1289,7 +1305,7 @@
 
     .fastforward-btn {
       margin-top: 30px;
-      background: #fff;
+      background: var(--bg-card);
       border: 1.5px solid var(--accent);
       color: var(--accent);
       padding: 8px 16px;
@@ -1306,8 +1322,8 @@
       /* raised (not pressed) */
       transform: translateY(0);
       box-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.06),
-        0 0 0 rgba(74, 107, 204, 0);
+        0 2px 4px rgba(0, 0, 0, 0.2),
+        0 0 15px rgba(0, 212, 255, 0.1);
 
       transition:
         transform 0.08s ease-out,
@@ -1329,10 +1345,18 @@
       border-color: var(--accent);
     }
 
+    [data-theme="light"] .fastforward-btn:hover {
+      background: #fff;
+    }
+
+    [data-theme="light"] .fastforward-btn.active {
+      background: #e8ecf8;
+    }
+
     /* ================= HOVER (still raised) ================= */
 
     .fastforward-btn:hover {
-      background: #fff;
+      background: var(--bg-card);
       border-color: var(--accent);
 
       box-shadow:
@@ -1352,7 +1376,7 @@
     /* ================= TOGGLED / ACTIVE (pressed state) ================= */
 
     .fastforward-btn.active {
-      background: #e8ecf8;
+      background: rgba(0, 212, 255, 0.1);
       color: var(--accent);
       border: 1.5px solid var(--accent);
 
@@ -1360,8 +1384,8 @@
       transform: translateY(1.5px);
 
       box-shadow:
-        inset 0 2px 6px rgba(74, 107, 204, 0.2),
-        inset 0 -1px 2px rgba(255, 255, 255, 0.5);
+        inset 0 2px 6px rgba(0, 212, 255, 0.2),
+        0 0 20px rgba(0, 212, 255, 0.15);
     }
 
     /* ================= FEEDBACK LOOP (engaged, vibrating) ================= */
@@ -1414,6 +1438,7 @@
       opacity: 1;
       width: auto;
       display: block;
+      text-shadow: 0 0 15px rgba(0, 212, 255, 0.25);
     }
 
     .text-header-label::before {
@@ -1479,6 +1504,7 @@
       margin-bottom: 10px;
       width: 100%;
       /* Force new line */
+      text-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
     }
 
     /* Subtitle style */
@@ -1493,6 +1519,7 @@
       transform: translateX(-20px);
       transition: all 0.4s ease-out;
       display: inline;
+      text-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
     }
 
     /* First subtitle word creates the line break */
