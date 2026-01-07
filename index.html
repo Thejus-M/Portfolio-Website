@@ -135,7 +135,6 @@
 
     .article-container {
       width: 100%;
-      max-width: 1000px;
       margin: 0 auto;
       padding: 60px 40px 100px;
     }
@@ -1940,137 +1939,706 @@
       letter-spacing: 1px;
     }
 
-    /* --------------------
-       DEV LOGS (BLUE LIST STYLE)
-       -------------------- */
-    :root {
-      --toc-blue: #2c5282;
-      --toc-badge-bg: #ebf8ff;
-      --toc-badge-text: #2c5282;
-    }
-
-    .dev-logs-section {
-      padding: 60px 40px;
-      margin: 0;
-      background: #fafafa;
-      color: #333;
+    /* ===================== DEV LOGS INDEX SECTION ===================== */
+    .dev-logs-index-section {
+      width: 100%;
+      background-color: var(--bg-body);
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 20px 20px;
+      padding: 80px 0;
+      margin-top: 60px;
+      position: relative;
       border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
     }
 
-    .toc-pattern {
+    .dev-logs-index-container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+    }
+
+    .dev-logs-index-header {
+      text-align: center;
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dev-logs-index-title {
       font-family: var(--font-mono-sys);
       font-size: 12px;
-      color: #888;
-      letter-spacing: -2px;
-      /* Reduced spacing to group dots */
-      text-align: center;
-      margin-bottom: 40px;
-      white-space: nowrap;
-      overflow: hidden;
-      user-select: none;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 16px;
     }
 
-    .toc-pattern::before {
-      content: ":⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮ :⋮:⋮";
-      display: block;
+    .dev-logs-index-subtitle {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      color: var(--text-main);
+      line-height: 1.2;
+      opacity: 0.9;
     }
 
-    .toc-header {
+    .dev-logs-index-description {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--text-sub);
+      max-width: 600px;
+      margin: 24px auto 40px;
+      line-height: 1.7;
+    }
+
+    /* Quick Stats */
+    .dev-logs-quick-stats {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
+      justify-content: center;
+      gap: 60px;
+      margin-bottom: 60px;
+      padding: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      text-align: center;
+      min-width: 120px;
+    }
+
+    .stat-box-value {
       font-family: var(--font-mono-sys);
-      font-size: 13px;
+      font-size: 2.5rem;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-box-label {
+      font-family: var(--font-mono-sys);
+      font-size: 9px;
+      color: var(--text-sub);
       text-transform: uppercase;
-      color: #888;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 15px;
-    }
-
-    .toc-title {
-      font-weight: 400;
-      letter-spacing: 1px;
-      font-size: 14px;
-      color: var(--toc-blue);
-      /* Highlight title slightly */
-    }
-
-    .toc-meta {
-      font-size: 11px;
       letter-spacing: 1px;
     }
 
-    .toc-grid {
+    /* Categories Grid */
+    .dev-logs-categories-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      /* 2 Columns as requested */
-      column-gap: 80px;
-      /* Generous gap */
-      row-gap: 50px;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 60px;
     }
 
-    @media (max-width: 800px) {
-      .toc-grid {
-        grid-template-columns: 1fr;
-      }
+    .category-index-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 32px;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      position: relative;
+      overflow: hidden;
     }
 
-    .toc-cat-header {
+    .category-index-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--border);
+      transition: all 0.3s;
+    }
+
+    .category-index-card:hover {
+      border-color: var(--accent);
+      transform: translateX(8px);
+      box-shadow: 0 8px 30px rgba(0, 212, 255, 0.08);
+    }
+
+    .category-index-card:hover::before {
+      background: var(--accent);
+    }
+
+    .category-number {
       font-family: var(--font-mono-sys);
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--toc-blue);
-      text-transform: uppercase;
-      margin-bottom: 25px;
-      letter-spacing: 2px;
+      font-size: 48px;
+      color: var(--accent);
+      opacity: 0.2;
+      line-height: 1;
+      font-weight: 400;
+      margin-bottom: 16px;
     }
 
-    .toc-list {
+    .category-name {
+      font-family: var(--font-mono-sys);
+      font-size: 18px;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .category-description {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--text-sub);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* Topic Preview List */
+    .topic-preview-list {
       list-style: none;
       padding: 0;
       margin: 0;
     }
 
-    .toc-item {
+    .topic-preview-item {
       display: flex;
       align-items: center;
-      margin-bottom: 12px;
-      font-family: "Times New Roman", Times, serif;
-      font-size: 15px;
-      color: #444;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-sub);
+      transition: all 0.2s;
       cursor: pointer;
     }
 
-    .toc-item:hover .toc-text {
-      color: var(--toc-blue);
-      text-decoration: underline;
-      text-decoration-color: var(--toc-blue);
+    .topic-preview-item:last-child {
+      border-bottom: none;
     }
 
-    /* Removed bullets for this style (list layout) */
-    .toc-bullet {
-      display: none;
+    .topic-preview-item:hover {
+      padding-left: 8px;
+      background: var(--accent-soft);
     }
 
-    .toc-text {
-      white-space: normal;
-      /* Allow wrapping if needed */
+    .topic-number {
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      width: 80px;
+      flex-shrink: 0;
+      opacity: 0.7;
     }
 
-    .toc-dots {
-      flex-grow: 1;
-      border-bottom: 2px dotted #aaa;
-      /* Darkened for visibility */
-      margin: 0 10px;
+    .topic-name {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--text-main);
+      flex: 1;
+      line-height: 1.5;
+    }
+
+    .topic-status {
+      font-family: var(--font-mono-sys);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .topic-status.complete {
+      background: rgba(0, 212, 255, 0.15);
+      color: var(--accent);
+    }
+
+    .topic-status.wip {
+      background: rgba(255, 165, 0, 0.15);
+      color: #ffa500;
+    }
+
+    .topic-status.planned {
+      background: var(--border);
+      color: var(--text-sub);
+    }
+
+    /* View All Link */
+    .view-all-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      text-decoration: none;
+      padding: 16px 32px;
+      background: var(--bg-card);
+      border: 1px solid var(--accent);
+      transition: all 0.3s;
+      margin-top: 24px;
+    }
+
+    .view-all-link:hover {
+      background: var(--accent);
+      color: var(--bg-body);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .view-all-link svg {
+      transition: transform 0.3s;
+    }
+
+    .view-all-link:hover svg {
+      transform: translateX(4px);
+    }
+
+    /* Footer CTA Section */
+    .dev-logs-footer-cta {
+      text-align: center;
+      padding: 60px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+
+    .dev-logs-footer-cta p {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    /* Responsive for Dev Logs Index */
+    @media (max-width: 1024px) {
+      .dev-logs-categories-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+
+      .dev-logs-quick-stats {
+        gap: 30px;
+        padding: 24px;
+      }
+
+      .stat-box-value {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dev-logs-categories-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dev-logs-index-subtitle {
+        font-size: 2rem;
+      }
+
+      .category-number {
+        font-size: 36px;
+      }
+
+      .topic-preview-item {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .topic-number {
+        width: auto;
+      }
+
+      .view-all-link {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* ===================== BLOGS SECTION ===================== */
+    .blogs-section {
+      width: 100%;
+      background-color: var(--bg-body);
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 20px 20px;
+      padding: 80px 0;
+      margin-top: 60px;
       position: relative;
-      top: -4px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
     }
 
-    /* Hidden elements as per user request */
-    .toc-extra {
-      display: none;
+    .blogs-container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
     }
+
+    .blogs-header {
+      text-align: center;
+      margin-bottom: 60px;
+      padding: 0 0 40px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .blogs-title {
+      font-family: var(--font-mono-sys);
+      font-size: 12px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 16px;
+    }
+
+    .blogs-subtitle {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      color: var(--text-main);
+      line-height: 1.2;
+      opacity: 0.9;
+      margin-bottom: 16px;
+    }
+
+    .blogs-description {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--text-sub);
+      max-width: 600px;
+      margin: 0 auto 24px;
+      line-height: 1.7;
+    }
+
+    /* Featured Blog */
+    .featured-blog {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 60px;
+      padding: 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--accent);
+    }
+
+    .featured-blog-image {
+      width: 100%;
+      height: 350px;
+      background: var(--bg-body);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.3;
+    }
+
+    .featured-blog-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .featured-blog-tag {
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      background: var(--accent-soft);
+      border-radius: 2px;
+      align-self: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .featured-blog-title {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      color: var(--text-main);
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+
+    .featured-blog-excerpt {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--text-sub);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .featured-blog-meta {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .featured-blog-meta .date {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .featured-blog-meta .read-time {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .read-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      text-decoration: none;
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      transition: all 0.3s;
+      margin-top: 8px;
+      align-self: flex-start;
+    }
+
+    .read-link:hover {
+      background: var(--accent);
+      color: var(--bg-body);
+      transform: translateX(4px);
+    }
+
+    .read-link svg {
+      transition: transform 0.3s;
+    }
+
+    .read-link:hover svg {
+      transform: translateX(2px);
+    }
+
+    /* Blog Posts Grid */
+    .blogs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 32px;
+      margin-bottom: 60px;
+    }
+
+    .blog-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 32px;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .blog-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--border);
+      transition: all 0.3s;
+    }
+
+    .blog-card:hover {
+      border-color: var(--accent);
+      transform: translateX(8px);
+      box-shadow: 0 8px 30px rgba(0, 212, 255, 0.08);
+    }
+
+    .blog-card:hover::before {
+      background: var(--accent);
+    }
+
+    .blog-tag {
+      font-family: var(--font-mono-sys);
+      font-size: 9px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      background: var(--accent-soft);
+      border-radius: 2px;
+      align-self: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .blog-title {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      color: var(--text-main);
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .blog-excerpt {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--text-sub);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .blog-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: auto;
+      margin-bottom: 20px;
+    }
+
+    .blog-meta .date {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .blog-meta .read-time {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .blog-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      text-decoration: none;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+      margin-top: 8px;
+      align-self: flex-start;
+    }
+
+    .blog-link:hover {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--bg-body);
+    }
+
+    .blog-link svg {
+      transition: transform 0.2s;
+    }
+
+    .blog-link:hover svg {
+      transform: translateX(2px);
+    }
+
+    /* Filter Tabs */
+    .blog-filters {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .blog-filter-btn {
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 2px;
+    }
+
+    .blog-filter-btn:hover,
+    .blog-filter-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    /* Blog Stats */
+    .blogs-stats {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      margin-bottom: 40px;
+      padding: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    /* Responsive for Blogs */
+    @media (max-width: 1024px) {
+      .featured-blog {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .featured-blog-image {
+        height: 250px;
+      }
+
+      .blogs-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+
+      .blogs-stats {
+        gap: 30px;
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .blogs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .blogs-subtitle {
+        font-size: 2rem;
+      }
+
+      .featured-blog-title {
+        font-size: 1.6rem;
+      }
+
+      .blog-title {
+        font-size: 1.2rem;
+      }
+    }
+
 
     /* --- GIT GRAPH ANIMATIONS --- */
     @keyframes drawLine {
@@ -2339,6 +2907,10 @@
 
       .article-container {
         padding: 40px 20px;
+      }
+
+      .dev-logs-section {
+        padding: 60px 20px;
       }
 
       .nn-hero {
@@ -2859,55 +3431,6 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
       <div class="article-container">
         <!-- (Original Header Removed) -->
 
-        <div class="divider"></div>
-
-
-
-        <!-- ABOUT -->
-        <section class="content-section" id="about">
-          <h2>01 // About</h2>
-          <p>
-            Highly motivated web developer with a passion for open source contributions.
-            Proven track record in delivering high-quality solutions through teamwork.
-            Eager to apply expertise to tackle real-world challenges and thrive in continuous learning.
-          </p>
-        </section>
-
-        <!-- SKILLS -->
-        <section class="content-section" id="skills">
-          <h2>02 // Technical Skills</h2>
-          <div class="terminal-card">
-
-            <div class="terminal-row">
-              <div class="terminal-label">LANGUAGES</div>
-              <div class="terminal-content mono">Python, JavaScript (JS), SQL</div>
-            </div>
-
-            <div class="terminal-row">
-              <div class="terminal-label">WEB & FRAMEWORKS</div>
-              <div class="terminal-content mono">
-                Django, FastAPI, Flask, Streamlit, REST APIs, HTML, CSS, Bootstrap
-              </div>
-            </div>
-
-            <div class="terminal-row">
-              <div class="terminal-label">AI & ML</div>
-              <div class="terminal-content mono">
-                Supervised/Unsupervised Learning, CNN, DL, NLP, LLM, RAG, Scikit-learn, TensorFlow, PyTorch, Pandas,
-                NumPy, LangChain, LangGraph, Crew.ai
-              </div>
-            </div>
-
-            <div class="terminal-row">
-              <div class="terminal-label">DATA & TOOLS</div>
-              <div class="terminal-content mono">
-                MySQL, PostgreSQL, MongoDB, Redis, SQLite, ChromaDB, Git, GitHub, GitLab, AWS, Docker, Kubernetes
-              </div>
-            </div>
-
-          </div>
-        </section>
-
         <!-- EXPERIENCE VISUALIZATION -->
         <section class="experience-section" id="experience">
           <div class="exp-header">
@@ -3003,103 +3526,159 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
           </div>
         </section>
 
-        <!-- DEV LOGS SECTION -->
-        <section class="dev-logs-section">
-          <!-- Top Pattern -->
-          <!-- Decorative breaker pattern: :⋮:⋮ repeating -->
-          <div class="toc-pattern"></div>
 
-          <div class="toc-header">
-            <!-- <section class="content-section" id="skills"> -->
-            <!-- <h2>02 // Technical Skills</h2> -->
-            <span class="toc-title">DEV LOGS</span>
-            <span class="toc-meta">Sections: 4 &middot; Entries: 12</span>
-          </div>
 
-          <div class="toc-grid">
-            <!-- 1. VIM -->
-            <div class="toc-category">
-              <div class="toc-cat-header">1. VIM</div>
-              <ul class="toc-list">
-                <li class="toc-item">
-                  <span class="toc-text">Getting Started</span>
-                  <div class="toc-dots"></div>
-                </li>
-                <li class="toc-item">
-                  <span class="toc-text">Making Vim Work</span>
-                  <div class="toc-dots"></div>
-                </li>
-                <li class="toc-item">
-                  <span class="toc-text">Vim vs Neovim</span>
-                  <div class="toc-dots"></div>
-                </li>
-              </ul>
+        <!-- ABOUT -->
+        <section class="content-section" id="about">
+          <h2>01 // About</h2>
+          <p>
+            Highly motivated web developer with a passion for open source contributions.
+            Proven track record in delivering high-quality solutions through teamwork.
+            Eager to apply expertise to tackle real-world challenges and thrive in continuous learning.
+          </p>
+        </section>
+
+        <!-- SKILLS -->
+        <section class="content-section" id="skills">
+          <h2>02 // Technical Skills</h2>
+          <div class="terminal-card">
+
+            <div class="terminal-row">
+              <div class="terminal-label">LANGUAGES</div>
+              <div class="terminal-content mono">Python, JavaScript (JS), SQL</div>
             </div>
 
-            <!-- 2. GIT -->
-            <div class="toc-category">
-              <div class="toc-cat-header">2. GIT</div>
-              <ul class="toc-list">
-                <li class="toc-item">
-                  <span class="toc-text">Everyday Workflow</span>
-                  <div class="toc-dots"></div>
-                </li>
-                <li class="toc-item">
-                  <span class="toc-text">Rebase Explained</span>
-                  <div class="toc-dots"></div>
-                </li>
-                <li class="toc-item">
-                  <span class="toc-text">Merge Conflicts</span>
-                  <div class="toc-dots"></div>
-                </li>
-              </ul>
+            <div class="terminal-row">
+              <div class="terminal-label">WEB & FRAMEWORKS</div>
+              <div class="terminal-content mono">
+                Django, FastAPI, Flask, Streamlit, REST APIs, HTML, CSS, Bootstrap
+              </div>
             </div>
 
-            <!-- 3. REDIS -->
-            <div class="toc-category">
-              <div class="toc-cat-header">3. REDIS</div>
-              <ul class="toc-list">
-                <li class="toc-item">
-                  <span class="toc-text">What is Redis?</span>
-                  <div class="toc-dots"></div>
-                </li>
-                <li class="toc-item">
-                  <span class="toc-text">Data Structures</span>
-                  <div class="toc-dots"></div>
-                </li>
-                <li class="toc-item">
-                  <span class="toc-text">Redis + Docker</span>
-                  <div class="toc-dots"></div>
-                </li>
-              </ul>
+            <div class="terminal-row">
+              <div class="terminal-label">AI & ML</div>
+              <div class="terminal-content mono">
+                Supervised/Unsupervised Learning, CNN, DL, NLP, LLM, RAG, Scikit-learn, TensorFlow, PyTorch, Pandas,
+                NumPy, LangChain, LangGraph, Crew.ai
+              </div>
             </div>
 
-            <!-- 4. DOCKER -->
-            <div class="toc-category">
-              <div class="toc-cat-header">4. DOCKER</div>
-              <ul class="toc-list">
-                <li class="toc-item">
-                  <span class="toc-text">Containers 101</span>
-                  <div class="toc-dots"></div>
-                </li>
-                <li class="toc-item">
-                  <span class="toc-text">Managing Logs</span>
-                  <div class="toc-dots"></div>
-                </li>
-                <li class="toc-item">
-                  <span class="toc-text">Docker Compose</span>
-                  <div class="toc-dots"></div>
-                </li>
-              </ul>
+            <div class="terminal-row">
+              <div class="terminal-label">DATA & TOOLS</div>
+              <div class="terminal-content mono">
+                MySQL, PostgreSQL, MongoDB, Redis, SQLite, ChromaDB, Git, GitHub, GitLab, AWS, Docker, Kubernetes
+              </div>
             </div>
-          </div>
 
-          <!-- Bottom Pattern -->
-          <div class="toc-pattern" style="margin-top: 40px; margin-bottom: 0;">
           </div>
         </section>
 
+
+
+      <!-- DEV LOGS INDEX SECTION -->
+      <section class="dev-logs-index-section" id="devLogsIndex">
+        <div class="dev-logs-index-container">
+          <!-- Header -->
+          <div class="dev-logs-index-header">
+            <div class="dev-logs-index-title">// DEV_LOGS_INDEX</div>
+            <h2 class="dev-logs-index-subtitle">Knowledge Base & Documentation</h2>
+            <p class="dev-logs-index-description">
+              A curated collection of technical documentation, tutorials, and reference guides.
+              Covering everything from development tools to distributed systems theory.
+            </p>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="dev-logs-quick-stats">
+            <div class="stat-box">
+              <div class="stat-box-value">11</div>
+              <div class="stat-box-label">Categories</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-value">48</div>
+              <div class="stat-box-label">Topics</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-value">32</div>
+              <div class="stat-box-label">Completed</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-value">67%</div>
+              <div class="stat-box-label">Progress</div>
+            </div>
+          </div>
+
+          <!-- Categories Grid -->
+          <div class="dev-logs-categories-grid" id="categoriesGrid">
+            <!-- Populated by JavaScript -->
+          </div>
+
+          <!-- View All CTA -->
+          <div class="dev-logs-footer-cta" style="text-align: center;">
+            <p>
+              Explore complete documentation with advanced search, filtering, and detailed content.
+            </p>
+            <a href="/dev-logs.html" class="view-all-link">
+              <span>View Full Documentation</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- BLOGS SECTION -->
+      <section class="blogs-section" id="blogs">
+        <div class="blogs-container">
+          <!-- Header -->
+          <div class="blogs-header">
+            <div class="blogs-title">// BLOGS_ARTICLES</div>
+            <h2 class="blogs-subtitle">Thoughts, Stories & Experiences</h2>
+            <p class="blogs-description">
+              Personal reflections, technical insights, and stories from the journey of building
+              intelligent systems and crafting meaningful software.
+            </p>
+          </div>
+
+          <!-- Stats -->
+          <div class="blogs-stats">
+            <div class="stat-box">
+              <div class="stat-box-value">8</div>
+              <div class="stat-box-label">Articles</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-value">24K</div>
+              <div class="stat-box-label">Words Written</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-value">5</div>
+              <div class="stat-box-label">Categories</div>
+            </div>
+          </div>
+
+          <!-- Filter Tabs -->
+          <div class="blog-filters" id="blogFilters">
+            <button class="blog-filter-btn active" data-filter="all">All</button>
+            <button class="blog-filter-btn" data-filter="thoughts">Thoughts</button>
+            <button class="blog-filter-btn" data-filter="technical">Technical</button>
+            <button class="blog-filter-btn" data-filter="stories">Stories</button>
+          </div>
+
+          <!-- Featured Blog -->
+          <div class="featured-blog" id="featuredBlog">
+            <!-- Populated by JavaScript -->
+          </div>
+
+          <!-- Blogs Grid -->
+          <div class="blogs-grid" id="blogsGrid">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
+      </section>
+
       </div>
+
 
       <!-- FOOTER -->
       <div class="nav-footer">
@@ -3110,8 +3689,8 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
       </div>
 
       <div class="page-footer">
-        | MAKING SOFTWARE |<br>
-        A REFERENCE MANUAL FOR PEOPLE WHO DESIGN AND BUILD AI.<br>
+        | Tarun |<br>
+        PORTFOLIO<br>
         © 2025 TARUN • [ SECTION 1990 ]
         <span style="opacity:0.04; margin-left:10px;">attention is all you need</span>
       </div>
@@ -4266,12 +4845,437 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
       };
     }
 
+    // ==========================================
+    // DEV LOGS INDEX DATA
+    // ==========================================
+    const devLogsIndexData = {
+      categories: [
+        {
+          id: 'vim',
+          number: '01',
+          title: 'Vim',
+          description: 'Efficient text editing, navigation, and customization for Vim editor.',
+          topics: [
+            { id: 'vim-01', title: 'Initial Configuration', status: 'complete' },
+            { id: 'vim-02', title: 'The Buffer Workflow', status: 'complete' },
+            { id: 'vim-03', title: 'Plugin Management (LSP)', status: 'complete' },
+            { id: 'vim-04', title: 'Vim vs Neovim Features', status: 'wip' },
+            { id: 'vim-05', title: 'Macros & Registers', status: 'complete' },
+            { id: 'vim-06', title: 'Custom Keybindings', status: 'planned' },
+            { id: 'vim-07', title: 'Text Objects Mastery', status: 'planned' },
+            { id: 'vim-08', title: 'Command Mode Power', status: 'planned' }
+          ]
+        },
+        {
+          id: 'git',
+          number: '02',
+          title: 'Git',
+          description: 'Version control workflows, branching strategies, and advanced Git operations.',
+          topics: [
+            { id: 'git-01', title: 'Everyday Feature Flow', status: 'complete' },
+            { id: 'git-02', title: 'Interactive Rebase Mastery', status: 'complete' },
+            { id: 'git-03', title: 'Resolving Upstream Conflicts', status: 'complete' },
+            { id: 'git-04', title: 'Cherry-picking Strategies', status: 'wip' },
+            { id: 'git-05', title: 'Bisect for Debugging', status: 'planned' },
+            { id: 'git-06', title: 'Git Hooks Automation', status: 'planned' }
+          ]
+        },
+        {
+          id: 'redis',
+          number: '03',
+          title: 'Redis',
+          description: 'In-memory data structures, caching patterns, and pub/sub messaging.',
+          topics: [
+            { id: 'redis-01', title: 'Caching Design Patterns', status: 'complete' },
+            { id: 'redis-02', title: 'Pub/Sub Implementation', status: 'complete' },
+            { id: 'redis-03', title: 'Persistence Strategies', status: 'complete' },
+            { id: 'redis-04', title: 'Redis Cluster Setup', status: 'complete' },
+            { id: 'redis-05', title: 'Lua Scripting', status: 'wip' },
+            { id: 'redis-06', title: 'Redis Streams', status: 'planned' }
+          ]
+        },
+        {
+          id: 'docker',
+          number: '04',
+          title: 'Docker',
+          description: 'Containerization, multi-stage builds, and orchestration fundamentals.',
+          topics: [
+            { id: 'docker-01', title: 'Multi-Stage Builds', status: 'complete' },
+            { id: 'docker-02', title: 'Container Networking', status: 'complete' },
+            { id: 'docker-03', title: 'Layer Optimization', status: 'complete' },
+            { id: 'docker-04', title: 'Docker Compose Pro Tips', status: 'complete' },
+            { id: 'docker-05', title: 'Volumes & Persistence', status: 'complete' },
+            { id: 'docker-06', title: 'Docker Swarm Basics', status: 'wip' },
+            { id: 'docker-07', title: 'Custom Images', status: 'complete' },
+            { id: 'docker-08', title: 'Security Best Practices', status: 'planned' }
+          ]
+        },
+        {
+          id: 'distributed',
+          number: '05',
+          title: 'Distributed Systems',
+          description: 'Theoretical foundations of distributed computing and consensus algorithms.',
+          topics: [
+            { id: 'ds-01', title: 'CAP Theorem Foundations', status: 'complete' },
+            { id: 'ds-02', title: 'Paxos Consensus Algorithm', status: 'complete' },
+            { id: 'ds-03', title: 'The Raft Protocol', status: 'complete' },
+            { id: 'ds-04', title: 'Byzantine Fault Tolerance', status: 'complete' },
+            { id: 'ds-05', title: 'Vector Clocks & Causality', status: 'complete' },
+            { id: 'ds-06', title: 'Consistent Hashing Layers', status: 'complete' },
+            { id: 'ds-07', title: 'Gossip Protocols in Mesh', status: 'complete' },
+            { id: 'ds-08', title: 'Quorum Consistency Models', status: 'complete' },
+            { id: 'ds-09', title: 'Two-Phase Commit Issues', status: 'complete' },
+            { id: 'ds-10', title: 'Distributed Locking ZooKeeper', status: 'wip' },
+            { id: 'ds-11', title: 'Log-Structured Storage', status: 'wip' },
+            { id: 'ds-12', title: 'LSM Trees Performance', status: 'wip' },
+            { id: 'ds-13', title: 'Bloom Filters Optimization', status: 'planned' },
+            { id: 'ds-14', title: 'Write-Ahead Logging (WAL)', status: 'planned' },
+            { id: 'ds-15', title: 'Anti-Entropy Mechanisms', status: 'planned' },
+            { id: 'ds-16', title: 'Sharding & Partitioning', status: 'planned' },
+            { id: 'ds-17', title: 'Availability vs Latency', status: 'planned' },
+            { id: 'ds-18', title: 'CRDT Architecture', status: 'planned' },
+            { id: 'ds-19', title: 'Leaderless Replication', status: 'planned' },
+            { id: 'ds-20', title: 'Eventual Consistency Flow', status: 'planned' }
+          ]
+        },
+        {
+          id: 'k8s',
+          number: '06',
+          title: 'Kubernetes',
+          description: 'Container orchestration, deployment strategies, and cluster management.',
+          topics: [
+            { id: 'k8s-01', title: 'kubectl Debug Plugins', status: 'complete' },
+            { id: 'k8s-02', title: 'Kustomize Overlays', status: 'complete' },
+            { id: 'k8s-03', title: 'Helm Charts v3', status: 'complete' },
+            { id: 'k8s-04', title: 'Resource Limits & Requests', status: 'wip' },
+            { id: 'k8s-05', title: 'Ingress Controllers', status: 'planned' },
+            { id: 'k8s-06', title: 'StatefulSets Deep Dive', status: 'planned' }
+          ]
+        },
+        {
+          id: 'aws',
+          number: '07',
+          title: 'AWS Serverless',
+          description: 'Serverless architecture, event-driven systems, and cloud-native patterns.',
+          topics: [
+            { id: 'aws-01', title: 'AWS Lambda Layers', status: 'complete' },
+            { id: 'aws-02', title: 'EventBridge Bus Flow', status: 'complete' },
+            { id: 'aws-03', title: 'SQS Dead Letter Queues', status: 'complete' },
+            { id: 'aws-04', title: 'API Gateway Patterns', status: 'wip' },
+            { id: 'aws-05', title: 'Step Functions Workflows', status: 'planned' },
+            { id: 'aws-06', title: 'Cognito Integration', status: 'planned' }
+          ]
+        },
+        {
+          id: 'llmops',
+          number: '08',
+          title: 'LLM Ops',
+          description: 'Large Language Model operations, deployment, and optimization.',
+          topics: [
+            { id: 'llmops-01', title: 'Vector Embedding Flow', status: 'complete' },
+            { id: 'llmops-02', title: 'Semantic Search', status: 'complete' },
+            { id: 'llmops-03', title: 'Prompt Versioning', status: 'complete' },
+            { id: 'llmops-04', title: 'RAG Implementation', status: 'wip' },
+            { id: 'llmops-05', title: 'Fine-tuning Strategies', status: 'planned' },
+            { id: 'llmops-06', title: 'Model Serving & Scaling', status: 'planned' }
+          ]
+        },
+        {
+          id: 'linux',
+          number: '09',
+          title: 'Linux Internals',
+          description: 'Linux operating system internals, kernel concepts, and system administration.',
+          topics: [
+            { id: 'linux-01', title: 'BASH Scripting Habits', status: 'complete' },
+            { id: 'linux-02', title: 'Systemd Service Units', status: 'complete' },
+            { id: 'linux-03', title: 'Process Management', status: 'wip' },
+            { id: 'linux-04', title: 'File System Hierarchy', status: 'planned' },
+            { id: 'linux-05', title: 'Network Configuration', status: 'planned' },
+            { id: 'linux-06', title: 'System Monitoring', status: 'planned' }
+          ]
+        },
+        {
+          id: 'python',
+          number: '10',
+          title: 'Python',
+          description: 'Python programming, frameworks, and advanced language features.',
+          topics: [
+            { id: 'python-01', title: 'FastAPI Performance', status: 'complete' },
+            { id: 'python-02', title: 'Generators & Iterators', status: 'complete' },
+            { id: 'python-03', title: 'Async/Await Patterns', status: 'wip' },
+            { id: 'python-04', title: 'Type Hints Best Practices', status: 'planned' },
+            { id: 'python-05', title: 'Decorators Deep Dive', status: 'planned' },
+            { id: 'python-06', title: 'Context Managers', status: 'planned' }
+          ]
+        },
+        {
+          id: 'rust',
+          number: '11',
+          title: 'Rust',
+          description: 'Systems programming with Rust, ownership, and memory safety.',
+          topics: [
+            { id: 'rust-01', title: 'Borrow Checker Internals', status: 'complete' },
+            { id: 'rust-02', title: 'Ownership & Scoping', status: 'complete' },
+            { id: 'rust-03', title: 'Safe Parallelism', status: 'complete' },
+            { id: 'rust-04', title: 'Lifetimes in Depth', status: 'wip' },
+            { id: 'rust-05', title: 'Traits & Generics', status: 'planned' },
+            { id: 'rust-06', title: 'Error Handling Patterns', status: 'planned' },
+            { id: 'rust-07', title: 'Unsafe Rust', status: 'planned' },
+            { id: 'rust-08', title: 'Async Rust with Tokio', status: 'planned' }
+          ]
+        }
+      ]
+    };
+
+    // Render Dev Logs Index
+    function renderDevLogsIndex() {
+      const grid = document.getElementById('categoriesGrid');
+      if (!grid) return;
+
+      grid.innerHTML = devLogsIndexData.categories.map(cat => `
+        <div class="category-index-card">
+          <div class="category-number">${cat.number}</div>
+          <h3 class="category-name">${cat.title}</h3>
+          <p class="category-description">${cat.description}</p>
+
+          <ul class="topic-preview-list">
+            ${cat.topics.slice(0, 4).map((topic, index) => `
+              <li class="topic-preview-item">
+                <span class="topic-number">${cat.number}.${String(index + 1).padStart(2, '0')}</span>
+                <span class="topic-name">${topic.title}</span>
+                <span class="topic-status ${topic.status}">${topic.status}</span>
+              </li>
+            `).join('')}
+            ${cat.topics.length > 4 ? `
+              <li class="topic-preview-item" style="opacity: 0.7;">
+                <span class="topic-number">...</span>
+                <span class="topic-name">+ ${cat.topics.length - 4} more topics</span>
+              </li>
+            ` : ''}
+          </ul>
+        </div>
+      `).join('');
+    }
+
+    // ==========================================
+    // BLOGS DATA
+    // ==========================================
+    const blogsData = {
+      featured: {
+        id: 'blog-featured',
+        title: 'The Future of AI-Powered Development',
+        category: 'Technical',
+        excerpt: 'Exploring how Large Language Models are transforming the way we write, debug, and architect software systems. A deep dive into the next generation of development tools.',
+        date: 'Jan 15, 2025',
+        readTime: '12 min read',
+        image: '/images/blog-featured.png'
+      },
+      categories: [
+        {
+          id: 'thoughts',
+          name: 'Thoughts',
+          count: 3,
+          posts: [
+            {
+              id: 'blog-01',
+              title: 'Why I Stopped Using Traditional IDEs',
+              excerpt: 'After years of fighting with bloated IDEs, I discovered the beauty of minimal, text-based development environments and never looked back.',
+              category: 'Thoughts',
+              date: 'Dec 28, 2024',
+              readTime: '8 min read'
+            },
+            {
+              id: 'blog-02',
+              title: 'The Art of Simple Code',
+              excerpt: 'Complexity is often a sign of poor design. Here are some principles I follow to keep my code maintainable and elegant.',
+              category: 'Thoughts',
+              date: 'Nov 12, 2024',
+              readTime: '6 min read'
+            },
+            {
+              id: 'blog-03',
+              title: 'Learning in Public vs Private',
+              excerpt: 'The benefits of building projects openly: faster feedback, community growth, and unexpected opportunities.',
+              category: 'Thoughts',
+              date: 'Oct 5, 2024',
+              readTime: '10 min read'
+            }
+          ]
+        },
+        {
+          id: 'technical',
+          name: 'Technical',
+          count: 3,
+          posts: [
+            {
+              id: 'blog-04',
+              title: 'Building a Real-Time LLM Chat Interface',
+              excerpt: 'A step-by-step guide to creating a performant, real-time chat application powered by streaming Large Language Model responses.',
+              category: 'Technical',
+              date: 'Jan 8, 2025',
+              readTime: '15 min read'
+            },
+            {
+              id: 'blog-05',
+              title: 'Optimizing Redis Caching Strategies',
+              excerpt: 'Advanced techniques for cache invalidation, memory management, and scaling Redis in production environments.',
+              category: 'Technical',
+              date: 'Dec 20, 2024',
+              readTime: '12 min read'
+            },
+            {
+              id: 'blog-06',
+              title: 'From Monolith to Microservices',
+              excerpt: 'Lessons learned from breaking down a large application into microservices: the good, the bad, and the ugly.',
+              category: 'Technical',
+              date: 'Nov 30, 2024',
+              readTime: '18 min read'
+            }
+          ]
+        },
+        {
+          id: 'stories',
+          name: 'Stories',
+          count: 2,
+          posts: [
+            {
+              id: 'blog-07',
+              title: 'My First Production Incident',
+              excerpt: 'The story of how I accidentally deleted production data, the panic that followed, and the automated backups that saved my reputation.',
+              category: 'Stories',
+              date: 'Sep 15, 2024',
+              readTime: '7 min read'
+            },
+            {
+              id: 'blog-08',
+              title: 'The Conference That Changed My Career',
+              excerpt: 'How attending a small tech conference led to unexpected connections, job offers, and a complete shift in my professional trajectory.',
+              category: 'Stories',
+              date: 'Aug 22, 2024',
+              readTime: '14 min read'
+            }
+          ]
+        }
+      ]
+    };
+
+    // Render Featured Blog
+    function renderFeaturedBlog() {
+      const container = document.getElementById('featuredBlog');
+      if (!container) return;
+
+      const featured = blogsData.featured;
+      container.innerHTML = `
+        <div class="featured-blog-image">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <path d="M8 12h8M12 8v8"/>
+          </svg>
+        </div>
+        <div class="featured-blog-content">
+          <div class="featured-blog-tag">${featured.category}</div>
+          <h3 class="featured-blog-title">${featured.title}</h3>
+          <p class="featured-blog-excerpt">${featured.excerpt}</p>
+          <div class="featured-blog-meta">
+            <div class="date">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="12" y1="6" x2="12" y2="9"/>
+              </svg>
+              <span>${featured.date}</span>
+            </div>
+            <div class="read-time">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span>${featured.readTime}</span>
+            </div>
+          </div>
+          <a href="#blog-${featured.id}" class="read-link">
+            <span>Read Article</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      `;
+    }
+
+    // Render Blogs Grid
+    function renderBlogsGrid(filter = 'all') {
+      const grid = document.getElementById('blogsGrid');
+      if (!grid) return;
+
+      let allPosts = [];
+      if (filter === 'all') {
+        allPosts = blogsData.categories.flatMap(cat => cat.posts);
+      } else {
+        const category = blogsData.categories.find(cat => cat.id === filter);
+        allPosts = category ? category.posts : [];
+      }
+
+      grid.innerHTML = allPosts.map(post => `
+        <div class="blog-card" data-category="${post.category}">
+          <div class="blog-tag">${post.category}</div>
+          <h3 class="blog-title">${post.title}</h3>
+          <p class="blog-excerpt">${post.excerpt}</p>
+          <div class="blog-meta">
+            <div class="date">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="12" y1="6" x2="12" y2="9"/>
+              </svg>
+              <span>${post.date}</span>
+            </div>
+            <div class="read-time">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span>${post.readTime}</span>
+            </div>
+          </div>
+          <a href="#blog-${post.id}" class="blog-link">
+            <span>Read</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      `).join('');
+    }
+
+    // Blog Filter Click Handler
+    function initBlogFilters() {
+      const filters = document.getElementById('blogFilters');
+      if (!filters) return;
+
+      filters.addEventListener('click', (e) => {
+        const btn = e.target.closest('.blog-filter-btn');
+        if (!btn) return;
+        document.querySelectorAll('.blog-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderBlogsGrid(btn.dataset.filter);
+      });
+    }
+
     // Run Init
     window.addEventListener('load', () => {
       if (typeof initRealNN === 'function') initRealNN();
       if (typeof markovAnimation !== 'undefined') markovAnimation.start();
       initExpAnimations();
       initGitAnimations();
+
+      // Render New Sections
+      renderDevLogsIndex();
+      renderFeaturedBlog();
+      renderBlogsGrid();
+      initBlogFilters();
     });
   </script>
 </body>
