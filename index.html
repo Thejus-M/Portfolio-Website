@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tarun — AI Developer Portfolio</title>
+  <title>Thejus — AI Developer Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -55,6 +55,7 @@
       --border-nav: #C0C0B8;
       --grid-line: rgba(74, 107, 204, 0.25);
       --corner-bracket: #4A6BCC;
+      --accent-glow: rgba(74, 107, 204, 0.4);
     }
 
     * {
@@ -90,6 +91,12 @@
       z-index: 500;
       border-bottom: 1px solid var(--border);
       box-shadow: 0 2px 20px rgba(0, 212, 255, 0.05);
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    /* Prevent body scroll when modal is open */
+    body.modal-open {
+      overflow: hidden;
     }
 
     .header-brand {
@@ -256,287 +263,7 @@
       margin-bottom: 4px;
     }
 
-    /* --------------------
-           NEURAL NETWORK HERO
-        -------------------- */
-    .nn-hero {
-      display: flex;
-      flex-wrap: wrap;
-      /* Allow metrics to break to new line */
-      /* align-items: center; REMOVED to allow top alignment */
-      gap: 30px;
-      border: 1px solid var(--accent);
-      background-color: var(--bg-body);
-      background-image:
-        linear-gradient(var(--grid-line) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-      background-size: 20px 20px;
-      padding: 30px;
-      margin-bottom: 40px;
-      position: relative;
-      /* For tooltip positioning */
-    }
 
-    .digit-panel {
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 140px;
-    }
-
-    canvas {
-      background: var(--bg-card);
-      border: 1px dashed var(--accent);
-      cursor: crosshair;
-    }
-
-    .prediction-label {
-      font-family: var(--font-mono-sys);
-      font-size: 14px;
-      color: var(--text-sub);
-      text-align: center;
-      margin-top: 5px;
-    }
-
-    .prediction-value {
-      font-family: var(--font-mono-sys);
-      font-size: 32px;
-      color: var(--accent);
-      font-weight: bold;
-      text-align: center;
-      line-height: 1.2;
-    }
-
-    .btn-small-clear {
-      background: var(--bg-card);
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      font-family: var(--font-mono-sys);
-      font-size: 10px;
-      padding: 6px 12px;
-      cursor: pointer;
-      text-transform: uppercase;
-      width: 100%;
-      transition: all 0.2s;
-    }
-
-    .btn-small-clear:hover {
-      background: var(--accent);
-      color: var(--bg-card);
-    }
-
-    .viz-container {
-      flex: 2;
-      /* Take up more space */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      min-height: 60vh;
-      /* Taller for better centering */
-    }
-
-    #nnSvg {
-      width: 100%;
-      height: 100%;
-      max-width: 800px;
-      /* Allow it to be bigger */
-      max-height: 350px;
-      overflow: visible;
-    }
-
-    .btn-expand {
-      margin-top: 10px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-sub);
-      transition: color 0.2s;
-    }
-
-    .btn-expand:hover {
-      color: var(--accent);
-    }
-
-    .btn-expand svg {
-      width: 20px;
-      height: 20px;
-      fill: currentColor;
-    }
-
-    /* FULLSCREEN HERO MODE */
-    .nn-hero.fullscreen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 9999;
-      margin: 0;
-      background: var(--bg-body);
-      padding: 40px;
-      box-sizing: border-box;
-      display: grid;
-      grid-template-columns: 200px 1fr 300px;
-      /* Canvas, Viz, Metrics */
-      align-items: center;
-      overflow: hidden;
-    }
-
-    .nn-hero.fullscreen .metrics-panel {
-      display: block !important;
-      border: none;
-      margin: 0;
-      padding: 0;
-      background: none;
-    }
-
-    .nn-hero.fullscreen #nnSvg {
-      max-width: none;
-      height: 80vh;
-      /* Bigger viz */
-      width: 100%;
-    }
-
-    .nn-hero.fullscreen .digit-panel {
-      transform: scale(1.5);
-      /* Bigger input */
-    }
-
-    /* METRICS PANEL (Normal) */
-    .metrics-panel {
-      width: 100%;
-      border-top: 1px dashed var(--border);
-      padding-top: 20px;
-      margin-top: 10px;
-      display: none;
-      /* Toggled */
-    }
-
-    .chart-container {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .bar-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: var(--font-mono-sys);
-      font-size: 11px;
-    }
-
-    .bar-label {
-      width: 15px;
-      font-weight: bold;
-    }
-
-    .bar-ui {
-      flex: 1;
-      height: 8px;
-      background: var(--border-sub);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: var(--accent);
-      width: 0%;
-      transition: width 0.3s;
-    }
-
-    .stats-container {
-      font-family: var(--font-mono-sys);
-      font-size: 12px;
-      color: var(--text-sub);
-      margin-top: 20px;
-      line-height: 1.6;
-    }
-
-    .btn-close-fs {
-      display: none;
-      position: absolute;
-      top: 30px;
-      right: 30px;
-      background: none;
-      border: 1px solid var(--accent);
-      padding: 8px 16px;
-      font-family: var(--font-mono-sys);
-      cursor: pointer;
-      color: var(--accent);
-      text-transform: uppercase;
-    }
-
-    .nn-hero.fullscreen .btn-close-fs {
-      display: block;
-    }
-
-    .nn-hero.fullscreen .btn-expand {
-      display: none;
-    }
-
-    /* Fullscreen for INTEGRATED Hero NN */
-    .nn-hero-integrated.fullscreen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 9999;
-      margin: 0;
-      background: var(--bg-body);
-      padding: 60px;
-      box-sizing: border-box;
-      display: grid;
-      grid-template-columns: 180px 1fr 280px;
-      gap: 40px;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      border-radius: 0;
-    }
-
-    .nn-hero-integrated.fullscreen .metrics-panel {
-      display: flex !important;
-      flex-direction: column;
-      gap: 15px;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 20px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-
-    .nn-hero-integrated.fullscreen .chart-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .nn-hero-integrated.fullscreen #nnSvg {
-      width: 100%;
-      height: 70vh;
-      max-width: none;
-    }
-
-    .nn-hero-integrated.fullscreen .digit-panel {
-      transform: scale(1.4);
-      transform-origin: left center;
-    }
-
-    .nn-hero-integrated.fullscreen .btn-close-fs {
-      display: block !important;
-      position: fixed;
-      top: 20px;
-      right: 30px;
-    }
 
     /* ========================================
        MARKOV CHAIN HERO - FINAL HORIZONTAL SPLIT
@@ -813,10 +540,14 @@
     .model-modal {
       position: fixed;
       inset: 0;
+      top: 0;
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
+      z-index: 400;
+      /* Below header (500) */
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     .model-modal.active {
@@ -828,12 +559,15 @@
       content: "";
       position: absolute;
       inset: 0;
+      top: 0;
       background:
         linear-gradient(var(--grid-line) 1px, transparent 1px),
         linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
       background-size: 28px 28px;
-      background-color: var(--bg-main);
-      opacity: 0.98;
+      background-color: var(--bg-body);
+      opacity: 0.99;
+      /* More opaque to fully cover header */
+      z-index: -1;
     }
 
     /* main sheet */
@@ -841,15 +575,34 @@
       position: relative;
       background: var(--bg-card);
       border: 1.5px solid var(--accent);
-      width: 92%;
-      max-width: 1280px;
-      padding: 48px 56px;
-      z-index: 1;
-      height: 85vh;
-      /* Fixed height for consistent layout */
+      width: 94%;
+      max-width: 1400px;
+      max-height: 85vh;
+      /* Reduced to fit on laptop screens */
+      padding: 44px 52px;
+      z-index: 10;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      /* Parent doesn't scroll, children do */
+    }
+
+    /* Medium laptops (1200-1599px) */
+    @media (min-width: 1200px) and (max-width: 1599px) {
+      .spec-sheet {
+        max-height: 84vh;
+        padding: 42px 50px;
+      }
+    }
+
+    /* Larger screens get even more space */
+    @media (min-width: 1600px) {
+      .spec-sheet {
+        max-width: 1600px;
+        padding: 56px 68px;
+        max-height: 88vh;
+      }
     }
 
     [data-theme="light"] .spec-sheet {
@@ -889,8 +642,11 @@
       gap: 64px;
       padding-top: 40px;
       flex: 1;
-      overflow: hidden;
-      /* Prevent body scroll, use inner scroll if needed */
+      overflow-y: auto;
+      /* Allow body to scroll */
+      overflow-x: hidden;
+      min-height: 0;
+      /* Important: allows flex child to shrink */
     }
 
     /* left column */
@@ -898,6 +654,9 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+      overflow-y: auto;
+      /* Allow scrolling if content is tall */
+      padding-right: 10px;
     }
 
     .spec-left p {
@@ -907,6 +666,16 @@
       margin-bottom: 32px;
       color: var(--text-main);
       font-family: var(--font-serif);
+    }
+
+    /* Right column - preview */
+    .spec-right {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      /* Allow scrolling if preview is tall */
+      padding-left: 10px;
+      height: 100%;
     }
 
     .model-modal .label {
@@ -1093,7 +862,7 @@
       border: 1px solid var(--accent);
       padding: 0 24px;
       color: var(--accent);
-      background: #fff;
+      background: var(--bg-card);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1204,24 +973,122 @@
       transform: translateY(0);
     }
 
-    /* responsive */
+    /* Modal responsive at tablet/mobile */
     @media(max-width: 900px) {
+      .model-modal {
+        padding: 16px;
+        padding-top: 62px;
+        /* Mobile header (50px) + 12px margin */
+        align-items: flex-start;
+        overflow-y: auto;
+      }
+
       .spec-sheet {
-        padding: 56px 28px;
-        height: auto;
-        max-height: 90vh;
+        padding: 32px 20px;
+        width: 98%;
+        max-width: none;
+        max-height: calc(95vh - 62px);
+        /* Account for mobile navbar */
         overflow-y: auto;
         display: block;
+        margin-top: 0;
+      }
+
+      .spec-header {
+        font-size: 10px;
+        padding-bottom: 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .spec-header .close {
+        font-size: 24px;
+        padding: 4px;
       }
 
       .spec-body {
         grid-template-columns: 1fr;
-        gap: 40px;
-        padding-bottom: 40px;
+        gap: 28px;
+        padding-bottom: 28px;
+        padding-top: 28px;
+        overflow: visible;
       }
 
       .spec-left {
         height: auto;
+      }
+
+      .spec-left p {
+        font-size: 1rem;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      /* Flow diagram adjustments */
+      .flow {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .flow .box {
+        min-width: 100px;
+        height: 40px;
+        padding: 0 14px;
+        font-size: 9px;
+      }
+
+      .flow .arrow {
+        font-size: 18px;
+      }
+
+      /* Input controls */
+      .input-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+      }
+
+      .seed-group {
+        width: 100%;
+        max-width: none;
+        height: 38px;
+      }
+
+      .model-modal input {
+        font-size: 1rem;
+      }
+
+      .model-modal button {
+        padding: 0 18px;
+        height: 38px;
+        font-size: 10px;
+        width: 100%;
+        max-width: none;
+      }
+
+      .model-modal textarea {
+        min-height: 160px;
+        font-size: 11px;
+        padding: 12px;
+      }
+
+      /* Output text */
+      .modal-output {
+        font-size: 1.5rem;
+        padding-left: 20px;
+        min-height: 70px;
+        line-height: 1.3;
+      }
+
+      .preview-label {
+        font-size: 10px;
+        margin-bottom: 20px;
+      }
+
+      .label {
+        font-size: 9px;
+        margin-bottom: 10px;
       }
     }
 
@@ -1490,7 +1357,7 @@
       transition: all 0.4s ease-out;
     }
 
-    /* Title style - Tarun */
+    /* Title style - Thejus */
     .gen-word-title {
       font-family: var(--font-serif);
       font-size: 3rem;
@@ -1751,38 +1618,65 @@
         -------------------- */
     .experience-section {
       background-color: var(--bg-body);
+      padding: 40px 0;
+      /* Borderless Flow */
+      margin: 0;
+      border: none;
+      position: relative;
+      color: var(--text-main);
+      overflow: hidden;
+    }
+
+    /* Faded Grid Background via Pseudo-element */
+    .experience-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background-image:
         linear-gradient(var(--grid-line) 1px, transparent 1px),
         linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
       background-size: 20px 20px;
-      padding: 80px 0;
-      margin-top: 60px;
-      position: relative;
-      color: var(--text-main);
-      overflow: hidden;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+      pointer-events: none;
+      /* Smooth fade in/out for the grid */
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+      mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+      z-index: 0;
     }
 
     .exp-header {
-      border: 1px solid var(--accent);
-      display: inline-block;
-      padding: 6px 20px;
-      margin-bottom: 30px;
-      margin-left: 40px;
-      background: white;
-      box-shadow: 4px 4px 0px var(--grid-line);
+      text-align: center;
+      margin-bottom: 40px;
+      border: none;
+      background: none;
+      box-shadow: none;
+      padding: 0;
+      margin-left: 0;
     }
 
     .exp-header h2 {
       font-family: var(--font-mono-sys);
-      font-size: 16px;
+      font-size: 14px;
       color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 2px;
-      border: none;
-      margin: 0;
-      padding: 0;
+      letter-spacing: 3px;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 15px;
+    }
+
+    .exp-header h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.5;
     }
 
     .viz-tabs {
@@ -1805,9 +1699,9 @@
     }
 
     .viz-tab.active {
-      background: white;
+      background: var(--accent);
       border-color: var(--accent);
-      color: var(--accent);
+      color: var(--bg-body);
       box-shadow: 2px 2px 0px var(--grid-line);
     }
 
@@ -1840,7 +1734,7 @@
     }
 
     .nn-node {
-      fill: white;
+      fill: var(--bg-body);
       stroke: var(--accent);
       stroke-width: 1;
       transition: all 0.3s;
@@ -1880,86 +1774,189 @@
       letter-spacing: 1px;
     }
 
-    /* Git Graph Styles */
-    .git-branch {
-      stroke-width: 2;
+    /* ───────────────── GIT GRAPH STYLES (from t.html) ───────────────── */
+
+    /* Container - Canvas Grid */
+    #gitViz {
+      position: relative;
+      width: 100%;
+      min-height: 520px;
+      background-color: var(--bg-body);
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 32px 32px;
+      padding: 40px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    [data-theme="light"] #gitViz {
+      background-color: var(--bg-body);
+    }
+
+    /* HUD Labels */
+    .git-hud {
+      position: absolute;
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--text-sub);
+    }
+
+    .git-hud strong {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .git-hud.tl {
+      top: 20px;
+      left: 24px;
+    }
+
+    .git-hud.tr {
+      top: 20px;
+      right: 24px;
+      text-align: right;
+    }
+
+    /* SVG */
+    #gitSvg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Paths - dashed lines */
+    .git-path {
       fill: none;
+      stroke-width: 1.2;
+      stroke-dasharray: 6 6;
       transition: all 0.3s;
     }
 
-    .git-branch.ml {
-      stroke: var(--accent);
+    .git-path:hover {
+      stroke-width: 1.8;
+      filter: drop-shadow(0 0 4px currentColor);
     }
 
-    .git-branch.infra {
-      stroke: var(--winner);
+    /* Nodes - hollow circles with background fill */
+    .git-node {
+      fill: var(--bg-body);
+      stroke-width: 1.4;
+      cursor: pointer;
+      transition: all 0.3s;
     }
 
-    .git-branch.opensource {
-      stroke: #9b59b6;
+    .git-node:hover {
+      filter: drop-shadow(0 0 8px currentColor);
     }
 
+    /* Commit group styling */
     .git-commit {
       cursor: pointer;
       transition: all 0.3s;
     }
 
     .git-commit circle {
-      fill: white;
-      stroke-width: 2;
+      fill: var(--bg-body);
+      stroke-width: 1.4;
       transition: all 0.3s;
     }
 
     .git-commit:hover circle {
-      r: 8;
-      filter: drop-shadow(0 0 4px currentColor);
+      filter: drop-shadow(0 0 8px currentColor);
     }
 
+    [data-theme="light"] .git-commit circle {
+      fill: var(--bg-body);
+    }
+
+    /* Labels */
     .git-label {
       font-family: var(--font-mono-sys);
-      font-size: 13px !important;
+      font-size: 11px;
+      letter-spacing: 0.12em;
       fill: var(--text-main);
       text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 700 !important;
     }
 
-    .git-date {
+    .git-sub {
       font-family: var(--font-mono-sys);
-      font-size: 11px !important;
+      font-size: 10px;
       fill: var(--text-sub);
-      font-weight: 600 !important;
-      letter-spacing: 0.5px;
     }
 
+    /* Timeline axis */
+    .git-axis {
+      stroke: var(--grid-line);
+      stroke-width: 1;
+    }
+
+    .git-axis-label {
+      font-family: var(--font-mono-sys);
+      fill: var(--text-sub);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+    }
+
+    /* Legacy class compatibility */
     .git-legend {
       font-family: var(--font-mono-sys);
       font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.14em;
+      fill: var(--text-sub);
+    }
+
+    .git-anchor {
+      display: none;
+      /* Hide anchor dots for cleaner look */
+    }
+
+    .git-node-sm {
+      display: none;
+      /* Hide small junction dots */
     }
 
     /* ===================== DEV LOGS INDEX SECTION ===================== */
     .dev-logs-index-section {
       width: 100%;
       background-color: var(--bg-body);
+      padding: 40px 0;
+      position: relative;
+      /* Borderless Flow */
+      border: none;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    /* Faded Grid Background via Pseudo-element */
+    .dev-logs-index-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background-image:
         linear-gradient(var(--grid-line) 1px, transparent 1px),
         linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
       background-size: 20px 20px;
-      padding: 80px 0;
-      margin-top: 60px;
-      position: relative;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      overflow: hidden;
+      /* Fixed attachment creates seamless continuity */
+      background-attachment: fixed;
+      pointer-events: none;
+      opacity: 0.6;
+      z-index: 0;
     }
 
     .dev-logs-index-container {
       width: 100%;
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 0 40px 80px;
+      padding: 0 40px 0;
+      /* Removing bottom padding */
+      position: relative;
+      z-index: 1;
+      /* Content above grid */
     }
 
     .dev-logs-index-header {
@@ -2031,7 +2028,7 @@
     /* Categories Grid */
     .dev-logs-categories-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 32px;
       margin-bottom: 60px;
     }
@@ -2183,6 +2180,73 @@
     .view-all-link:hover {
       background: var(--accent);
       color: var(--bg-body);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+
+    /* Scroll Navigation Button */
+    .scroll-nav-btn {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      width: 50px;
+      height: 50px;
+      background: rgba(10, 10, 12, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--accent);
+      cursor: pointer;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+    }
+
+    .scroll-nav-btn.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .scroll-nav-btn:hover {
+      background: var(--accent);
+      color: var(--bg-body);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* Mobile adjust */
+    @media (max-width: 768px) {
+      .scroll-nav-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    /* Light Mode Override for Scroll Nav */
+    [data-theme="light"] .scroll-nav-btn {
+      background: rgba(255, 255, 255, 0.85);
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 4px 12px rgba(74, 107, 204, 0.2);
+    }
+
+    [data-theme="light"] .scroll-nav-btn:hover {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 6px 16px rgba(74, 107, 204, 0.4);
+    }
+
+    .view-all-link:hover {
+      background: var(--accent);
+      color: var(--bg-body);
       box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
       transform: translateY(-2px);
     }
@@ -2259,23 +2323,42 @@
     .blogs-section {
       width: 100%;
       background-color: var(--bg-body);
+      padding: 40px 0;
+      position: relative;
+      /* Borderless Flow */
+      border: none;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    /* Faded Grid Background via Pseudo-element */
+    /* Faded Grid Background via Pseudo-element */
+    .blogs-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background-image:
         linear-gradient(var(--grid-line) 1px, transparent 1px),
         linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
       background-size: 20px 20px;
-      padding: 80px 0;
-      margin-top: 60px;
-      position: relative;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      overflow: hidden;
+      /* Fixed attachment creates seamless continuity */
+      background-attachment: fixed;
+      pointer-events: none;
+      opacity: 0.6;
+      z-index: 0;
     }
 
     .blogs-container {
       width: 100%;
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 0 40px 80px;
+      padding: 0 40px 0;
+      /* Removing bottom padding */
+      position: relative;
+      z-index: 1;
     }
 
     .blogs-header {
@@ -2433,7 +2516,7 @@
     /* Blog Posts Grid */
     .blogs-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 32px;
       margin-bottom: 60px;
     }
@@ -2469,6 +2552,160 @@
 
     .blog-card:hover::before {
       background: var(--accent);
+    }
+
+    /* --------------------
+       OTHER EXPERIENCE SECTION (Refactored to Tech Theme)
+       -------------------- */
+    .sketch-section {
+      width: 100%;
+      padding: 80px 0;
+      position: relative;
+      background-color: var(--bg-body);
+      border-top: 1px solid var(--border-sub);
+    }
+
+    /* Grid Background similar to Model Side */
+    .sketch-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .sketch-counter {
+      width: 100%;
+      text-align: center;
+      font-family: var(--font-mono-sys);
+      font-size: 14px;
+      letter-spacing: 4px;
+      margin-bottom: 40px;
+      opacity: 0.6;
+      color: var(--accent);
+    }
+
+    .sketch-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sketch-header {
+      text-align: left;
+      margin-bottom: 50px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 20px;
+    }
+
+    .sketch-title {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Tech Underline/Decoration */
+    .sketch-title::after {
+      content: '';
+      position: absolute;
+      bottom: -21px;
+      /* Overlap border */
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+    }
+
+    .sketch-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+
+    .sketch-card {
+      background: var(--bg-card);
+      padding: 30px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      position: relative;
+      min-height: 220px;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sketch-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Tech Accents (Left Border) - Uniform Accent */
+    .sketch-card {
+      border-left: 2px solid var(--accent);
+    }
+
+    /* Remove specific color overrides */
+
+    .sketch-card-title {
+      font-family: var(--font-mono-sys);
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .sketch-card-content {
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: auto;
+      /* Push footer down */
+    }
+
+    .sketch-card-icon {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      opacity: 0.8;
+      align-self: flex-start;
+      color: var(--accent);
+    }
+
+    .sketch-card-extra {
+      margin-top: 20px;
+      font-family: var(--font-mono-sys);
+      font-size: 0.8rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      align-self: flex-end;
+    }
+
+    @media (max-width: 768px) {
+      .sketch-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sketch-title {
+        font-size: 2rem;
+      }
     }
 
     .blog-tag {
@@ -2690,7 +2927,7 @@
     /* Shared Info Card */
     .exp-info-card {
       position: absolute;
-      background: white;
+      background: var(--bg-card);
       border: 1px solid var(--accent);
       padding: 24px;
       border-radius: 0;
@@ -2701,6 +2938,7 @@
       transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
       pointer-events: none;
       z-index: 1000;
+      color: var(--text-main);
     }
 
     .exp-info-card.visible {
@@ -2861,41 +3099,637 @@
     /* --------------------
            FOOTER
         -------------------- */
-    .nav-footer {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 40px 0;
+    /* --------------------
+           SIMPLE MINIMAL FOOTER
+        -------------------- */
+    .simple-footer {
+      width: 100%;
       border-top: 1px solid var(--border);
-      margin-top: 60px;
+      background: var(--bg-body);
+      padding: 80px 40px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      position: relative;
     }
 
-    .nav-footer a {
+    .simple-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.5;
+      box-shadow: 0 0 15px var(--accent);
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       font-family: var(--font-mono-sys);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--text-sub);
-      text-decoration: none;
-      padding: 12px 20px;
-      border: 1px solid var(--border);
-      transition: all 0.2s;
-    }
-
-    .nav-footer a:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .page-footer {
-      text-align: center;
-      padding: 40px 0;
-      font-family: var(--font-mono-sys);
-      font-size: 9px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 2px;
       color: var(--text-sub);
+      text-decoration: none;
+      transition: all 0.3s;
+      opacity: 0.7;
     }
+
+    .footer-link svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+      transition: all 0.3s;
+    }
+
+    .footer-link:hover {
+      color: var(--accent);
+      opacity: 1;
+      text-shadow: 0 0 12px rgba(0, 212, 255, 0.5);
+    }
+
+    .footer-link:hover svg {
+      transform: translateY(-3px);
+      filter: drop-shadow(0 0 8px var(--accent));
+      stroke: var(--accent-bright);
+    }
+
+    .footer-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono-sys);
+      font-size: 10px;
+      color: var(--text-sub);
+      opacity: 0.4;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .footer-info span {
+      transition: opacity 0.3s;
+    }
+
+    .footer-info:hover span {
+      opacity: 0.8;
+    }
+
+
+    /* --------------------
+       FOOTER CHASE ANIMATION
+       -------------------- */
+    .simple-footer {
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    [data-theme="light"] .simple-footer {
+      background: linear-gradient(to top, #eef2f5 0%, rgba(245, 245, 240, 0) 100%);
+      border-top: 1px solid var(--border-sub);
+      padding-top: 40px;
+      margin-top: 60px;
+    }
+
+    .footer-chase-wrapper {
+      width: 100%;
+      height: 120px;
+      position: relative;
+      margin-bottom: 20px;
+      overflow: hidden;
+
+      /* Mask for smooth fade in/out of characters */
+      mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    }
+
+    /* REMOVED SCROLLING GROUND */
+
+    .footer-chase-track {
+      display: flex;
+      align-items: flex-end;
+      /* Align bottom */
+      gap: 0;
+      /* Removing gap to control spacing manually */
+      position: absolute;
+      left: 0;
+      width: max-content;
+      /* Run across screen from left to right */
+      animation: chaseRun 20s linear infinite;
+      z-index: 2;
+      bottom: 12px;
+    }
+
+    .footer-chase-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes chaseRun {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      /* Start fully offscreen Left (Ghosts leading) */
+      100% {
+        transform: translateX(100vw);
+      }
+
+      /* End fully offscreen Right (Dino leaving) */
+    }
+
+    /* PACMAN (The Eater) */
+    /* PACMAN (Pixelated Style) */
+    .chase-pacman {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 0;
+      margin-right: 120px;
+      color: var(--accent);
+      background: none;
+      border-radius: 0;
+      position: relative;
+      flex-shrink: 0;
+      z-index: 10;
+      clip-path: none;
+      filter: drop-shadow(0 0 8px var(--accent-glow));
+    }
+
+    /* PAUSE ALL ANIMATIONS ON HOVER */
+    .footer-chase-track:hover * {
+      animation-play-state: paused !important;
+    }
+
+    /* Force Pacman Open on Hover (Override Pause to ensure specific state) */
+    .footer-chase-track:hover .pacman-pixel-open {
+      animation: none !important;
+      opacity: 1 !important;
+    }
+
+    .footer-chase-track:hover .pacman-pixel-closed {
+      animation: none !important;
+      opacity: 0 !important;
+    }
+
+    .chase-pacman::after {
+      content: none;
+    }
+
+    /* Pixel Animation: Toggle Visibility */
+    .pacman-pixel-open {
+      animation: pacmanVisOpen 0.2s steps(1) infinite;
+    }
+
+    .pacman-pixel-closed {
+      animation: pacmanVisClosed 0.2s steps(1) infinite;
+    }
+
+    @keyframes pacmanVisOpen {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes pacmanVisClosed {
+
+      0%,
+      100% {
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+
+
+
+    /* DINO REMOVED */
+    .chase-dino {
+      display: none;
+    }
+
+    .chase-spacer-dino {
+      display: none;
+    }
+
+    /* GHOSTS (The Links) */
+    .chase-ghosts {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    /* Normal Link Shape (Running) */
+    .chase-ghost-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 0;
+      position: relative;
+      background: none;
+      border: none;
+      color: var(--accent) !important;
+      /* Force Single Color */
+      transition: all 0.2s;
+      animation: runBody 0.3s infinite alternate;
+      z-index: 5;
+      filter: drop-shadow(0 0 5px var(--accent-glow));
+    }
+
+    .chase-ghost-link:hover {
+      color: var(--winner) !important;
+      filter: drop-shadow(0 0 8px var(--winner));
+    }
+
+    /* CUSTOM TOOLTIP ON HOVER */
+    .chase-ghost-link:hover::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: 45px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-card);
+      color: var(--accent);
+      padding: 4px 8px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      font-family: var(--font-pixel);
+      font-size: 8px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 100;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      opacity: 1;
+      display: block;
+    }
+
+    [data-theme="light"] .chase-ghost-link:hover::after {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background: #fff;
+      border-color: var(--accent);
+    }
+
+    /* Force Stroke Style for Icons */
+    .chase-ghost-link svg {
+      fill: none !important;
+      stroke: currentColor !important;
+      stroke-width: 1.5px !important;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .chase-ghost-link rect,
+    .chase-ghost-link circle,
+    .chase-ghost-link path,
+    .chase-ghost-link polyline {
+      fill: none !important;
+      stroke: currentColor !important;
+    }
+
+    /* LEGS: Generic Fallback */
+    .chase-ghost-link::before {
+      display: none;
+      /* Hide old text legs if present */
+    }
+
+    /* GITHUB CAT LEGS */
+    .git-leg {
+      transform-origin: top center;
+      animation: gitLegRun 0.2s infinite alternate;
+      stroke-width: 2px !important;
+    }
+
+    .git-leg-l {
+      animation-delay: 0s;
+    }
+
+    .git-leg-r {
+      animation-delay: 0.1s;
+    }
+
+    @keyframes gitLegRun {
+      0% {
+        transform: rotate(-20deg);
+      }
+
+      100% {
+        transform: rotate(20deg);
+      }
+    }
+
+    /* MAIL ENVELOPE RUN (Corner Folding) */
+    .mail-leg {
+      animation-duration: 0.3s;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      animation-timing-function: ease-in-out;
+      fill: none;
+      /* Outline only */
+      stroke: currentColor;
+      stroke-width: 2px;
+      /* Match body */
+    }
+
+    /* Left Corner Fold */
+    .mail-leg-l {
+      transform-origin: 6px 20px;
+      animation-name: mailLegFoldL;
+    }
+
+    /* Right Corner Fold */
+    .mail-leg-r {
+      transform-origin: 18px 20px;
+      animation-name: mailLegFoldR;
+      animation-delay: 0.15s;
+    }
+
+    /* Unfold Left Corner (-90deg makes it point down) */
+    @keyframes mailLegFoldL {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(-90deg);
+      }
+    }
+
+    /* Unfold Right Corner (90deg makes it point down) */
+    @keyframes mailLegFoldR {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(90deg);
+      }
+    }
+
+    /* CUSTOM LEGS ANIMATION (Leetcode & LinkedIn) */
+
+    @keyframes mailLegRunRight {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      /* Closed/Corner */
+      100% {
+        transform: rotate(110deg);
+      }
+
+      /* Open/Leg Down */
+    }
+
+    /* CUSTOM LEGS ANIMATION (Leetcode & LinkedIn) */
+
+    .mail-leg-l {
+      animation-direction: alternate;
+    }
+
+    .mail-leg-r {
+      animation-direction: alternate-reverse;
+    }
+
+    @keyframes mailLegRun {
+      0% {
+        transform: skewX(0deg) translateY(0);
+      }
+
+      50% {
+        transform: skewX(20deg) translateY(-2px);
+      }
+
+      /* Fold up illusion */
+      100% {
+        transform: skewX(0deg) translateY(0);
+      }
+    }
+
+    /* CUSTOM LEGS ANIMATION (Leetcode & LinkedIn) */
+    .code-leg-l {
+      transform-origin: center center;
+      animation: codeLegLeft 0.3s infinite alternate;
+    }
+
+    .code-leg-r {
+      transform-origin: center center;
+      animation: codeLegRight 0.3s infinite alternate;
+    }
+
+    @keyframes codeLegLeft {
+      0% {
+        transform: rotate(-15deg) translateX(-2px);
+      }
+
+      100% {
+        transform: rotate(15deg) translateX(0);
+      }
+    }
+
+    @keyframes codeLegRight {
+      0% {
+        transform: rotate(15deg) translateX(2px);
+      }
+
+      100% {
+        transform: rotate(-15deg) translateX(0);
+      }
+    }
+
+    /* LinkedIn Legs */
+    .ln-leg {
+      transform-origin: top center;
+      animation: lnLegRun 0.3s infinite alternate;
+    }
+
+    .ln-leg-l {
+      animation-delay: 0s;
+    }
+
+    .ln-leg-r {
+      animation-delay: 0.15s;
+    }
+
+    @keyframes lnLegRun {
+      0% {
+        transform: rotate(-10deg);
+      }
+
+      100% {
+        transform: rotate(10deg);
+      }
+    }
+
+    /* Animation Keyframes */
+    @keyframes runBody {
+      0% {
+        transform: translateY(0);
+      }
+
+      100% {
+        transform: translateY(-4px);
+      }
+    }
+
+    @keyframes legRunLeft {
+      0% {
+        transform: rotate(-20deg) translateY(0);
+      }
+
+      100% {
+        transform: rotate(10deg) translateY(-2px);
+      }
+    }
+
+    @keyframes legRunRight {
+      0% {
+        transform: rotate(10deg) translateY(-2px);
+      }
+
+      100% {
+        transform: rotate(-20deg) translateY(0);
+      }
+    }
+
+    .chase-ghost-link:hover {
+      transform: scale(1.1);
+      /* Just scale, no background fill */
+      background: none !important;
+      /* Ensure no black box */
+      opacity: 1;
+    }
+
+    /* Specific Colors */
+    .chase-ghost-link[data-link="mail"] {
+      color: #EA4335;
+      animation-delay: 0s;
+    }
+
+    .chase-ghost-link[data-link="github"] {
+      color: #e0e8f0;
+      animation-delay: 0.2s;
+    }
+
+    .chase-ghost-link[data-link="linkedin"] {
+      color: #0A66C2;
+      animation-delay: 0.4s;
+    }
+
+    .chase-ghost-link[data-link="leetcode"] {
+      color: #FFA116;
+      animation-delay: 0.6s;
+    }
+
+    .chase-ghost-link svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+    }
+
+    @keyframes ghostBob {
+      0% {
+        transform: translateY(0);
+      }
+
+      100% {
+        transform: translateY(-8px);
+      }
+    }
+
+    /* DINO (Apex Predator - Cyber Mecha Style) */
+    .chase-dino {
+      width: 90px;
+      height: 90px;
+      margin-right: 20px;
+      color: var(--text-main);
+      animation: dinoStomp 0.5s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 15px var(--accent));
+      transform-origin: bottom center;
+      position: relative;
+    }
+
+    /* The "Drop" (Pellet Poop) */
+    .chase-dino::before {
+      content: '';
+      position: absolute;
+      bottom: 25px;
+      left: 10px;
+      /* Near the tail/rear */
+      width: 8px;
+      height: 8px;
+      background: #ffb8ae;
+      /* Pellet color */
+      border-radius: 50%;
+      opacity: 0;
+      animation: dinoDrop 2s infinite;
+    }
+
+    @keyframes dinoDrop {
+      0% {
+        opacity: 0;
+        transform: translate(0, -10px);
+      }
+
+      20% {
+        opacity: 1;
+        transform: translate(0, 0);
+      }
+
+      /* Appears/Drops */
+      40% {
+        opacity: 1;
+        transform: translate(-40px, 0);
+      }
+
+      /* Moves away ostensibly (or track moves away) */
+      100% {
+        opacity: 0;
+        transform: translate(-80px, 0);
+      }
+
+      /* Fades behind */
+    }
+
+    .chase-dino svg {
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+    }
+
+    @keyframes dinoStomp {
+      0% {
+        transform: scale(1) rotate(-3deg);
+      }
+
+      100% {
+        transform: scale(1.04) rotate(3deg);
+      }
+    }
+
 
     /* --------------------
            RESPONSIVE
@@ -2911,11 +3745,6 @@
 
       .dev-logs-section {
         padding: 60px 20px;
-      }
-
-      .nn-hero {
-        flex-direction: column;
-        align-items: flex-start;
       }
 
       .terminal-row {
@@ -3006,6 +3835,8 @@
       pointer-events: none;
       z-index: 1;
       opacity: 0.5;
+      display: none;
+      /* Hidden on all screen sizes */
     }
 
     .tech-frame-tl,
@@ -3198,13 +4029,1795 @@
       }
     }
 
+    /* ===================== DSA PORTAL SECTION (INTERFACE MOCKUP) ===================== */
+    .dsa-portal-section {
+      width: 100%;
+      background-color: var(--bg-body);
+      padding: 40px 0;
+      position: relative;
+      /* Borderless Flow */
+      border: none;
+      font-family: var(--font-mono-sys);
+      overflow: hidden;
+    }
+
+    /* Faded Grid Background via Pseudo-element */
+    .dsa-portal-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 40px 40px;
+      /* Fixed attachment creates seamless continuity */
+      background-attachment: fixed;
+      pointer-events: none;
+      opacity: 0.8;
+      z-index: 0;
+    }
+
+    .dsa-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Blogs-Inspired Header */
+    .dsa-header-center {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dsa-tag-center {
+      font-family: var(--font-mono-sys);
+      font-size: 12px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 16px;
+    }
+
+    .dsa-title-center {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      color: var(--text-main);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .dsa-desc-center {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--text-sub);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* INTERFACE PREVIEW CONTAINER */
+    .dsa-interface-container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto 40px;
+      background: var(--bg-body);
+      border: 1px solid var(--border);
+      display: flex;
+      height: 500px;
+      /* Fixed height for preview */
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Left Sidebar */
+    .dsa-sidebar {
+      width: 250px;
+      border-right: 1px solid var(--border);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-card);
+    }
+
+    .dsa-sidebar-header {
+      font-size: 14px;
+      color: var(--accent);
+      margin-bottom: 24px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-sub);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .dsa-nav-item {
+      margin-bottom: 20px;
+    }
+
+    .dsa-nav-title {
+      font-size: 12px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .dsa-nav-link {
+      display: block;
+      font-size: 13px;
+      color: var(--text-main);
+      padding: 6px 10px;
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      opacity: 0.7;
+      transition: all 0.2s;
+      cursor: default;
+      /* It's a preview */
+    }
+
+    .dsa-nav-link.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      opacity: 1;
+      background: rgba(0, 212, 255, 0.05);
+    }
+
+    /* Main Content Area */
+    .dsa-main-preview {
+      flex: 1;
+      padding: 40px;
+      overflow: hidden;
+      position: relative;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(var(--accent-rgb), 0.03) 0%, transparent 70%);
+    }
+
+    .dsa-prob-header {
+      margin-bottom: 30px;
+      border-bottom: 1px dashed var(--border-sub);
+      padding-bottom: 20px;
+    }
+
+    .dsa-prob-title {
+      font-family: var(--font-mono-sys);
+      font-size: 28px;
+      color: var(--text-main);
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .dsa-prob-meta {
+      display: flex;
+      gap: 15px;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .dsa-badge-sm {
+      padding: 2px 6px;
+      border: 1px solid var(--border);
+      color: var(--accent);
+    }
+
+    .dsa-prob-desc {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      color: var(--text-sub);
+      line-height: 1.6;
+      margin-bottom: 30px;
+      max-width: 600px;
+    }
+
+    /* Mock Code Block */
+    /* Mock Code Block */
+    .dsa-code-mock {
+      background: var(--bg-code-mock, #0f1115);
+      border: 1px solid var(--border-sub);
+      padding: 20px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      color: var(--text-code-mock, #a9b7c6);
+      position: relative;
+      opacity: 0.9;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+
+    .dsa-code-line {
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .k {
+      color: var(--code-k, #cc7832);
+    }
+
+    /* keyword */
+    .f {
+      color: var(--code-f, #ffc66d);
+    }
+
+    /* function */
+    .s {
+      color: var(--code-s, #6a8759);
+    }
+
+    /* string/var */
+    .c {
+      color: var(--code-c, #808080);
+    }
+
+    /* comment */
+
+    /* Light Mode Overrides for Code */
+    [data-theme="light"] .dsa-code-mock {
+      --bg-code-mock: #ffffff;
+      --text-code-mock: #2c3e50;
+    }
+
+    [data-theme="light"] .k {
+      --code-k: #0033b3;
+    }
+
+    [data-theme="light"] .f {
+      --code-f: #00627a;
+    }
+
+    [data-theme="light"] .s {
+      --code-s: #067d17;
+    }
+
+    [data-theme="light"] .c {
+      --code-c: #8c8c8c;
+    }
+
+    /* comment */
+
+    /* Overlay Overlay to Click */
+    .dsa-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent 0%, var(--bg-body) 90%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 60px;
+      pointer-events: none;
+      /* Let clicks pass through if needed, but we want the button */
+    }
+
+    /* CTA Button Centered */
+    .dsa-cta-center {
+      pointer-events: auto;
+      text-align: center;
+    }
+
+    .dsa-btn-primary {
+      display: inline-block;
+      padding: 16px 40px;
+      background: #2551a3;
+      color: white;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      border: none;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    [data-theme="light"] .dsa-btn-primary {
+      background: #2551a3;
+    }
+
+    .dsa-btn-primary:hover {
+      background: var(--accent);
+      color: var(--bg-body);
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3);
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
-      .hero-title {
+      .dsa-interface-container {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .dsa-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .dsa-main-preview {
+        padding: 20px;
+        height: 300px;
+      }
+
+      .dsa-overlay {
+        background: linear-gradient(to bottom, transparent 0%, var(--bg-body) 100%);
+      }
+    }
+
+    /* Main Hero Frame (Kept as Featured Feature) */
+    .dsa-hero-frame {
+      position: relative;
+      padding: 60px 40px;
+      text-align: center;
+      margin-bottom: 80px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-sub);
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Corner Brackets */
+    .dsa-bracket {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--accent);
+      border-style: solid;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .dsa-bracket.tl {
+      top: 0;
+      left: 0;
+      border-width: 1px 0 0 1px;
+    }
+
+    .dsa-bracket.tr {
+      top: 0;
+      right: 0;
+      border-width: 1px 1px 0 0;
+    }
+
+    .dsa-bracket.bl {
+      bottom: 0;
+      left: 0;
+      border-width: 0 0 1px 1px;
+    }
+
+    .dsa-bracket.br {
+      bottom: 0;
+      right: 0;
+      border-width: 0 1px 1px 0;
+    }
+
+    .dsa-frame-title {
+      font-family: var(--font-mono-sys);
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--text-main);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .dsa-frame-subtitle {
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+    }
+
+    .dsa-btn-primary {
+      display: inline-block;
+      padding: 16px 40px;
+      background: #2551a3;
+      color: white;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    [data-theme="light"] .dsa-btn-primary {
+      background: #2551a3;
+    }
+
+    .dsa-btn-primary:hover {
+      background: var(--accent);
+      color: var(--bg-body);
+      transform: translateY(-2px);
+    }
+
+    /* Blogs-Inspired Grid for Modules */
+    .dsa-modules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .dsa-module-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 30px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .dsa-module-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+
+    .dsa-card-number {
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--border);
+      margin-bottom: 10px;
+      font-family: var(--font-mono-sys);
+    }
+
+    .dsa-module-card:hover .dsa-card-number {
+      color: var(--accent);
+      opacity: 0.2;
+    }
+
+    .dsa-card-title {
+      font-size: 20px;
+      font-family: var(--font-mono-sys);
+      color: var(--text-main);
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .dsa-card-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .dsa-card-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-sub);
+      padding: 6px 0;
+      border-bottom: 1px dashed var(--border-sub);
+    }
+
+    .dsa-card-item:last-child {
+      border-bottom: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .dsa-modules-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dsa-frame-title {
+        font-size: 36px;
+      }
+    }
+
+    /* OLD STYLES BELOW THIS WILL BE IGNORED OR OVERWRITTEN */
+
+    .dsa-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+      position: relative;
+    }
+
+    /* Header */
+    .dsa-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 80px;
+    }
+
+    .dsa-brand {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+
+    .dsa-meta-right {
+      text-align: right;
+      font-size: 10px;
+      color: var(--text-sub);
+      line-height: 1.5;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Hero Frame Area */
+    .dsa-hero-frame {
+      position: relative;
+      padding: 60px 20px;
+      text-align: center;
+      margin-bottom: 100px;
+      /* Min height to give it presence */
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Corner Brackets for the Frame */
+    .dsa-bracket {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--accent);
+      border-style: solid;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .dsa-bracket.tl {
+      top: 0;
+      left: 0;
+      border-width: 1px 0 0 1px;
+    }
+
+    .dsa-bracket.tr {
+      top: 0;
+      right: 0;
+      border-width: 1px 1px 0 0;
+    }
+
+    .dsa-bracket.bl {
+      bottom: 0;
+      left: 0;
+      border-width: 0 0 1px 1px;
+    }
+
+    .dsa-bracket.br {
+      bottom: 0;
+      right: 0;
+      border-width: 0 1px 1px 0;
+    }
+
+    .dsa-sys-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 40px;
+      text-transform: uppercase;
+      opacity: 0.8;
+      background: var(--bg-card);
+      padding: 4px 12px;
+      border: 1px solid var(--border-sub);
+    }
+
+    .dsa-title-large {
+      font-family: var(--font-mono-sys);
+      font-size: 64px;
+      line-height: 1;
+      font-weight: 700;
+      color: var(--text-main);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      letter-spacing: 2px;
+    }
+
+    .dsa-subtitle-code {
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-bottom: 40px;
+      opacity: 0.7;
+    }
+
+    .dsa-quote-italic {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 16px;
+      color: var(--text-sub);
+      margin-bottom: 60px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .dsa-btn-primary {
+      display: inline-block;
+      padding: 16px 40px;
+      background: #2551a3;
+      /* From reference */
+      color: white;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    [data-theme="light"] .dsa-btn-primary {
+      background: #2551a3;
+    }
+
+    .dsa-btn-primary:hover {
+      background: var(--accent);
+      color: var(--bg-body);
+      box-shadow: 0 0 20px rgba(77, 159, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* Table of Contents Section */
+    .dsa-toc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-sub);
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .dsa-toc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .dsa-chapter {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 20px;
+    }
+
+    .dsa-chapter-num {
+      font-size: 16px;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .dsa-problem-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--border-sub);
+      transition: all 0.2s;
+    }
+
+    .dsa-problem-row:hover {
+      padding-left: 10px;
+      background: var(--accent-soft);
+    }
+
+    .dsa-problem-title {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: var(--text-main);
+    }
+
+    .dsa-badge {
+      font-size: 9px;
+      padding: 4px 8px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .dsa-badge.easy {
+      background: rgba(46, 204, 113, 0.1);
+      color: #2ecc71;
+    }
+
+    .dsa-badge.medium {
+      background: rgba(241, 196, 15, 0.1);
+      color: #f1c40f;
+    }
+
+    .dsa-badge.hard {
+      background: rgba(231, 76, 60, 0.1);
+      color: #e74c3c;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .dsa-title-large {
+        font-size: 40px;
+      }
+
+      .dsa-chapter {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .dsa-problem-row {
+        font-size: 14px;
+      }
+    }
+
+    .dsa-preview-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+      position: relative;
+    }
+
+    .dsa-preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 60px;
+      font-family: var(--font-mono-sys);
+      color: var(--accent);
+    }
+
+    .dsa-logo {
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: -1px;
+      color: var(--accent);
+    }
+
+    .dsa-header-right {
+      text-align: right;
+      font-size: 10px;
+      color: var(--text-sub);
+      line-height: 1.6;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .dsa-hero-card {
+      width: 100%;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-sub);
+      /* Grid Pattern Overlay */
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 40px 40px;
+      padding: 40px;
+    }
+
+    .dsa-card-corners {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+    }
+
+    /* Brackets Effect */
+    .dsa-corner-tl,
+    .dsa-corner-tr,
+    .dsa-corner-bl,
+    .dsa-corner-br {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-color: var(--accent);
+      border-style: solid;
+      opacity: 0.6;
+    }
+
+    .dsa-corner-tl {
+      top: 30px;
+      left: 30px;
+      border-width: 2px 0 0 2px;
+    }
+
+    .dsa-corner-tr {
+      top: 30px;
+      right: 30px;
+      border-width: 2px 2px 0 0;
+    }
+
+    .dsa-corner-bl {
+      bottom: 30px;
+      left: 30px;
+      border-width: 0 0 2px 2px;
+    }
+
+    .dsa-corner-br {
+      bottom: 30px;
+      right: 30px;
+      border-width: 0 2px 2px 0;
+    }
+
+    .dsa-status-label {
+      font-family: var(--font-mono-sys);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-bottom: 60px;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      background: var(--bg-body);
+      text-transform: uppercase;
+    }
+
+    .dsa-main-title {
+      font-family: var(--font-mono-sys);
+      font-size: 72px;
+      line-height: 1.1;
+      font-weight: 700;
+      color: var(--text-main);
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      letter-spacing: 4px;
+    }
+
+    .dsa-sub-text {
+      font-family: var(--font-mono-sys);
+      font-size: 14px;
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-bottom: 40px;
+      opacity: 0.8;
+      text-transform: uppercase;
+    }
+
+    .dsa-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 18px;
+      color: var(--text-sub);
+      margin-bottom: 80px;
+      opacity: 0.7;
+    }
+
+    .dsa-cta-btn {
+      display: inline-block;
+      padding: 18px 48px;
+      background: #2551a3;
+      color: white;
+      font-family: var(--font-mono-sys);
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      transition: all 0.3s;
+      box-shadow: 0 10px 30px rgba(37, 81, 163, 0.3);
+    }
+
+    [data-theme="light"] .dsa-cta-btn {
+      background: #2551a3;
+    }
+
+    .dsa-cta-btn:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(0, 212, 255, 0.4);
+      color: var(--bg-body);
+    }
+
+    .dsa-content-preview {
+      margin-top: 60px;
+      margin-bottom: 60px;
+      padding: 0 40px;
+      text-align: left;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .dsa-module-item {
+      margin-bottom: 40px;
+    }
+
+    .dsa-module-header {
+      font-family: var(--font-mono-sys);
+      font-size: 14px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    .dsa-problem-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .dsa-problem-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--border-sub);
+      font-family: var(--font-serif);
+      font-size: 16px;
+      color: var(--text-main);
+    }
+
+    .dsa-problem-item:last-child {
+      border-bottom: none;
+    }
+
+    .dsa-tag {
+      font-family: var(--font-mono-sys);
+      font-size: 9px;
+      padding: 4px 8px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .dsa-tag.easy {
+      background: rgba(46, 204, 113, 0.1);
+      color: #2ecc71;
+    }
+
+    .dsa-tag.medium {
+      background: rgba(241, 196, 15, 0.1);
+      color: #f1c40f;
+    }
+
+    .dsa-tag.hard {
+      background: rgba(231, 76, 60, 0.1);
+      color: #e74c3c;
+    }
+
+    @media (max-width: 768px) {
+      .dsa-main-title {
+        font-size: 40px;
+      }
+
+      .dsa-preview-header {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .dsa-header-right {
+        text-align: left;
+      }
+
+      .dsa-hero-card {
+        min-height: 400px;
+        padding: 20px;
+      }
+
+      .dsa-status-label {
+        margin-bottom: 30px;
+      }
+    }
+
+    /* ========================================
+       COMPREHENSIVE RESPONSIVE DESIGN
+       ======================================== */
+
+    /* --------------------
+       LARGE DESKTOP (1440px - 1919px)
+    -------------------- */
+    @media (max-width: 1919px) {
+      .markov-hero-final {
+        max-width: 1100px;
+        padding: 80px;
+      }
+
+      .markov-split-final {
+        grid-template-columns: 340px 1fr;
+        gap: 80px;
+      }
+    }
+
+    /* --------------------
+       LAPTOP (1024px - 1439px)
+    -------------------- */
+    @media (max-width: 1439px) {
+      .article-title {
         font-size: 3rem;
       }
 
-      .tech-frame {
+      .markov-hero-final {
+        padding: 64px;
+        max-width: 1000px;
+      }
+
+      .markov-split-final {
+        grid-template-columns: 320px 1fr;
+        gap: 64px;
+      }
+
+      .gen-word-title,
+      .gen-word-subtitle {
+        font-size: 2.5rem;
+      }
+
+      .modal-output {
+        font-size: 1.75rem;
+      }
+    }
+
+    /* --------------------
+       TABLET (768px - 1023px)
+    -------------------- */
+    @media (max-width: 1023px) {
+      .header {
+        padding: 0 24px;
+      }
+
+      .header-brand {
+        font-size: 14px;
+        width: 180px;
+      }
+
+      .header-status {
+        font-size: 10px;
+      }
+
+      .header-statusspan br {
+        display: none;
+      }
+
+      /* HERO SECTION TABLET FIX */
+      .hero-wrapper {
+        min-height: auto;
+        padding-bottom: 50px;
+      }
+
+      .hero-content {
+        padding-bottom: 50px;
+      }
+
+      .markov-hero-final {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 50px auto;
+        padding: 40px;
         width: 90%;
+        max-width: 700px;
+      }
+
+      .markov-split-final {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .model-side {
+        padding: 28px;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+      }
+
+      .text-side {
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .gen-word-title,
+      .gen-word-subtitle {
+        font-size: 2.1rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .gen-word-body {
+        font-size: 1.1rem;
+      }
+
+      .article-title {
+        font-size: 2.5rem;
+      }
+
+      .article-container {
+        padding: 48px 24px;
+      }
+
+      /* Experience Visualizations - Keep horizontal on tablet */
+      .viz-graph-container {
+        flex-direction: row;
+      }
+    }
+
+    /* --------------------
+       LARGE MOBILE (480px - 767px)
+    -------------------- */
+    @media (max-width: 767px) {
+      .header {
+        height: 50px;
+        padding: 0 16px;
+      }
+
+      .header-brand {
+        font-size: 12px;
+        width: 140px;
+      }
+
+      .header-status {
+        font-size: 8px;
+        gap: 8px;
+      }
+
+      #themeToggle {
+        width: 28px !important;
+        height: 28px !important;
+        margin-left: auto !important;
+      }
+
+      .header-status {
+        gap: 8px;
+        flex-shrink: 0;
+      }
+
+      .header-status span {
+        font-size: 7px;
+        line-height: 1.3;
+      }
+
+      /* HERO SECTION MOBILE FIX */
+      .hero-wrapper {
+        min-height: auto;
+        padding-bottom: 30px;
+      }
+
+      .hero-content {
+        padding: 15px 0 30px;
+      }
+
+      .markov-hero-final {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 30px auto 15px;
+        padding: 24px 18px;
+        width: 94%;
+        max-width: none;
+      }
+
+      .markov-split-final {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .model-side {
+        padding: 20px;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+      }
+
+      .text-side {
+        width: 100%;
+      }
+
+      .input-display {
+        min-width: 100px;
+        height: 30px;
+        font-size: 10px;
+        padding: 0 12px;
+      }
+
+      .model-box {
+        width: 140px;
+        height: 120px;
+        gap: 12px;
+      }
+
+      .expand-btn {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+      }
+
+      .gen-word-title,
+      .gen-word-subtitle {
+        font-size: 1.65rem;
+        line-height: 1.2;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .gen-word-body {
+        font-size: 1rem;
+        word-wrap: break-word;
+      }
+
+      .generated-text {
+        gap: 0.3em;
+      }
+
+      .article-title {
+        font-size: 2rem;
+        letter-spacing: -1px;
+      }
+
+      .article-container {
+        padding: 32px 16px;
+      }
+
+      .terminal-row {
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px;
+      }
+
+      .terminal-label {
+        width: 100%;
+        padding-top: 0;
+      }
+
+      .content-section h2 {
+        font-size: 11px;
+      }
+
+      .content-section p {
+        font-size: 1.05rem;
+      }
+
+      /* Footer: Reduce chase animation sizes */
+      .footer-chase {
+        height: 60px;
+        gap: 40px;
+      }
+
+      .chase-links {
+        gap: 30px;
+      }
+
+      .chase-link {
+        font-size: 28px;
+        width: 35px;
+        height: 35px;
+      }
+
+      .chase-pacman {
+        font-size: 50px;
+        width: 60px;
+        height: 60px;
+      }
+
+      .chase-dino {
+        font-size: 60px;
+        width: 70px;
+        height: 70px;
+      }
+
+      /* Modal adjustments */
+      .spec-sheet {
+        padding: 32px 24px;
+        width: 95%;
+      }
+
+      .spec-body {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .modal-output {
+        font-size: 1.5rem;
+        padding-left: 20px;
+      }
+
+      .flow {
+        gap: 16px;
+      }
+
+      .flow .box {
+        min-width: 100px;
+        height: 40px;
+        padding: 0 16px;
+        font-size: 10px;
+      }
+
+      /* Experience Visualizations - Change to vertical on mobile */
+      .viz-graph-container {
+        flex-direction: column !important;
+        gap: 20px;
+      }
+
+      .tron-grid-wrapper,
+      .graph-viz-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      /* Rotate git graph 90 degrees counter-clockwise on small screens */
+      /* Tron now rides upward, branches extend upward */
+      /* APPLY IMMEDIATELY to prevent horizontal flash */
+      #gitSvg {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) rotate(-90deg) !important;
+        transform-origin: center center !important;
+        margin: 0 !important;
+
+        /* Visual Dimensions (Swapped for rotation) */
+        width: 75vh !important;
+        /* Becomes Visual Height */
+        height: 90vw !important;
+        /* Becomes Visual Width */
+
+        max-width: 800px !important;
+        max-height: 1000px !important;
+      }
+
+      /* Rotate ALL text back to horizontal for easy reading */
+      /* Use transform-box to rotate around itself without moving */
+      #gitSvg text {
+        transform: rotate(90deg) !important;
+        transform-box: fill-box !important;
+        transform-origin: center center !important;
+        font-size: 18px !important;
+      }
+
+      /* Specific Label Sizes */
+      #gitSvg .git-label {
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+      }
+
+      #gitSvg .git-axis-label {
+        font-size: 17px !important;
+        font-weight: 500 !important;
+      }
+
+      #gitSvg .git-sub {
+        font-size: 15px !important;
+      }
+
+      /* Thicker lines for visibility */
+      #gitSvg .git-path {
+        stroke-width: 6px !important;
+      }
+
+      /* Larger, more visible nodes */
+      #gitSvg circle {
+        r: 12 !important;
+        stroke-width: 4px !important;
+      }
+
+      .graph-viz-wrapper {
+        position: relative !important;
+        /* Anchor for absolute child */
+        width: 100% !important;
+        height: 85vh !important;
+        /* Reserve visual vertical space */
+        min-height: 700px !important;
+        display: block !important;
+        /* Remove flex to avoid conflicts */
+        overflow: hidden !important;
+        /* Graph is safely centered */
+        padding: 0 !important;
+        margin-bottom: 40px !important;
+      }
+
+      /* Dev Logs */
+      .dev-logs-section {
+        padding: 48px 16px;
+      }
+
+      .dev-logs-index-title {
+        font-size: 2rem;
+      }
+
+      /* DSA Section */
+      .dsa-main-title {
+        font-size: 32px;
+      }
+
+      .dsa-hero-card {
+        min-height: 350px;
+        padding: 24px;
+      }
+    }
+
+    /* --------------------
+       SMALL MOBILE (<480px)
+    -------------------- */
+    @media (max-width: 479px) {
+      .header {
+        height: 48px;
+        padding: 0 12px;
+      }
+
+      .header-brand {
+        font-size: 10px;
+        width: 120px;
+      }
+
+      .header-status {
+        gap: 0;
+      }
+
+      /* Hide only the tagline text, keep theme toggle visible */
+      .header-status span {
+        display: none !important;
+      }
+
+      #themeToggle {
+        width: 24px !important;
+        height: 24px !important;
+        margin-left: 0 !important;
+      }
+
+      .page-wrapper {
+        padding-top: 48px;
+      }
+
+      /* Ensure theme toggle icons scale properly */
+      #themeToggle svg {
+        width: 12px !important;
+        height: 12px !important;
+      }
+
+      /* HERO SECTION SMALL MOBILE FIX */
+      .hero-wrapper {
+        min-height: auto;
+        padding-bottom: 20px;
+      }
+
+      .hero-content {
+        padding: 10px 0 20px;
+      }
+
+      .markov-hero-final {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 20px auto 10px;
+        padding: 18px 14px;
+        width: 96%;
+        max-width: none;
+        border-width: 1px;
+      }
+
+      .markov-split-final {
+        gap: 20px;
+      }
+
+      .model-side {
+        padding: 16px;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        background-size: 15px 15px;
+      }
+
+      .text-side {
+        width: 100%;
+      }
+
+      .input-display {
+        min-width: 80px;
+        height: 26px;
+        font-size: 9px;
+        padding: 0 8px;
+      }
+
+      .model-box {
+        width: 110px;
+        height: 90px;
+        gap: 8px;
+      }
+
+      .model-label {
+        font-size: 8px;
+      }
+
+      .expand-btn {
+        width: 16px;
+        height: 16px;
+        font-size: 8px;
+      }
+
+      .gen-word-title,
+      .gen-word-subtitle {
+        font-size: 1.4rem;
+        line-height: 1.15;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+      }
+
+      .gen-word-body {
+        font-size: 0.95rem;
+        word-wrap: break-word;
+      }
+
+      .generated-text {
+        gap: 0.25em;
+      }
+
+      .article-title {
+        font-size: 1.5rem;
+        letter-spacing: 0;
+      }
+
+      .article-container {
+        padding: 24px 12px;
+      }
+
+      .article-meta {
+        font-size: 9px;
+      }
+
+      .terminal-row {
+        padding: 16px;
+      }
+
+      .terminal-content.mono {
+        font-size: 12px;
+      }
+
+      .terminal-content.serif {
+        font-size: 14px;
+      }
+
+      .content-section h2 {
+        font-size: 10px;
+        letter-spacing: 1.5px;
+      }
+
+      .content-section p {
+        font-size: 1rem;
+      }
+
+      /* Footer: Further minimize on small screens */
+      .footer-chase {
+        height: 50px;
+        gap: 30px;
+      }
+
+      .chase-links {
+        gap: 20px;
+      }
+
+      .chase-link {
+        font-size: 24px;
+        width: 30px;
+        height: 30px;
+      }
+
+      .chase-pacman {
+        font-size: 40px;
+        width: 50px;
+        height: 50px;
+      }
+
+      .chase-dino {
+        font-size: 50px;
+        width: 60px;
+        height: 60px;
+      }
+
+      /* Modal */
+      .spec-sheet {
+        padding: 24px 16px;
+        width: 98%;
+      }
+
+      .spec-header {
+        font-size: 10px;
+        padding-bottom: 16px;
+      }
+
+      .spec-left p {
+        font-size: 1rem;
+      }
+
+      /* Modal on very small screens */
+      .model-modal {
+        padding: 8px;
+        padding-top: 60px !important;
+        /* Ensure it starts below navbar (48px height + 12px margin) */
+      }
+
+      .spec-sheet {
+        padding: 20px 14px;
+        width: 100%;
+        max-height: calc(96vh - 60px);
+        /* Account for navbar */
+        margin-top: 0;
+      }
+
+      .spec-header {
+        font-size: 9px;
+        padding-bottom: 12px;
+      }
+
+      .spec-header .close {
+        font-size: 20px;
+      }
+
+      .spec-body {
+        gap: 20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+
+      .spec-left p {
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+      }
+
+      .model-modal textarea {
+        font-size: 10px;
+        padding: 12px;
+      }
+
+      .seed-group {
+        width: 160px;
+        height: 36px;
+      }
+
+      .model-modal input {
+        font-size: 1rem;
+      }
+
+      .model-modal button {
+        padding: 0 16px;
+        height: 36px;
+        font-size: 10px;
+      }
+
+      .modal-output {
+        font-size: 1.25rem;
+        padding-left: 16px;
+      }
+
+      .flow {
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .flow .box {
+        min-width: 80px;
+        height: 36px;
+        padding: 0 12px;
+        font-size: 9px;
+      }
+
+      .flow .arrow {
+        font-size: 18px;
+      }
+
+      /* Dev Logs */
+      .dev-logs-section {
+        padding: 32px 12px;
+      }
+
+      .dev-logs-index-title {
+        font-size: 1.5rem;
+      }
+
+      .dev-logs-index-subtitle {
+        font-size: 1.5rem;
+      }
+
+      .category-number {
+        font-size: 32px;
+      }
+
+      .category-name {
+        font-size: 16px;
+      }
+
+      .topic-preview-item {
+        padding: 10px 0;
+      }
+
+      .topic-number {
+        font-size: 9px;
+        width: auto;
+      }
+
+      .topic-name {
+        font-size: 0.95rem;
+      }
+
+      .view-all-link {
+        padding: 12px 24px;
+        font-size: 10px;
+      }
+
+      /* DSA Section */
+      .dsa-main-title {
+        font-size: 28px;
+      }
+
+      .dsa-subtitle {
+        font-size: 1rem;
+      }
+
+      .dsa-hero-card {
+        min-height: 300px;
+        padding: 20px;
+      }
+
+      .dsa-problem-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .dsa-tag {
+        font-size: 8px;
+        padding: 3px 6px;
+      }
+
+      /* Scroll nav button */
+      .scroll-nav-btn {
+        width: 36px;
+        height: 36px;
+        bottom: 16px;
+        right: 16px;
+      }
+    }
+
+    /* --------------------
+       LANDSCAPE MOBILE FIXES
+    -------------------- */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .hero-wrapper {
+        min-height: auto;
+      }
+
+      .markov-hero-final {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 25px auto;
+        padding: 24px;
+        max-height: 85vh;
+        overflow-y: auto;
+      }
+
+      .markov-split-final {
+        gap: 24px;
+      }
+
+      .gen-word-title,
+      .gen-word-subtitle {
+        font-size: 1.6rem;
+      }
+
+      .hero-content {
+        padding-bottom: 40px;
       }
     }
   </style>
@@ -3219,7 +5832,7 @@
 
     <!-- Header (Integrated) -->
     <header class="hero-header">
-      <div class="header-brand">Tarun.</div>
+      <div class="header-brand">Thejus.</div>
       <div class="header-status">
         <!-- Tagline -->
         <span
@@ -3321,13 +5934,13 @@
                       TRAINING CORPUS
                       <span id="corpusSize" style="float: right; opacity: 0.7;">118 bytes</span>
                     </div>
-                    <textarea id="trainingInput">Transformers in Machine Learning — GeeksforGeeks
-A Transformer is an AI architecture introduced by Google in 2017...</textarea>
+                    <textarea id="trainingInput"
+                      spellcheck="false">The dominant sequence transduction models are based on complex recurrent or convolutional neural networks. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.</textarea>
 
                     <div class="input-row">
                       <div class="seed-group">
                         <span class="label-seed">SEED</span>
-                        <input value="ai" id="seedInput" type="text" />
+                        <input value="neural" id="seedInput" type="text" />
                       </div>
                       <button id="runGenerationBtn">RUN ENGINE</button>
                       <button class="fastforward-btn modal-ff-btn" id="modalFastforwardBtn" title="Speed up animation">
@@ -3447,253 +6060,475 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
           </div>
 
           <div class="viz-container active" id="gitViz">
-            <svg id="gitSvg" viewBox="0 0 1400 500" preserveAspectRatio="xMidYMid meet">
-              <g id="gitZoomGroup">
-                <!-- Main timeline: Open Source (Moved to bottom y=400) -->
-                <line class="git-path" id="path-0" x1="100" y1="400" x2="1350" y2="400" stroke="#9CA3AF"
-                  stroke-width="3" />
 
-                <!-- Open Source commit (y=400) -->
-                <g class="git-commit git-node" id="node-0" onclick="showExpInfo(0)">
-                  <circle cx="150" cy="400" r="14" fill="#e8e8e8" stroke="#9CA3AF" stroke-width="3" />
-                  <text class="git-label" x="150" y="445" text-anchor="middle" fill="var(--text-sub)">Open Source</text>
-                </g>
+            <svg id="gitSvg" viewBox="0 0 1000 400">
 
-                <!-- Branch point for UST -->
-                <circle class="git-node-sm" cx="500" cy="400" r="6" fill="var(--border)" />
+              <!-- Timeline Axis -->
+              <line x1="50" y1="360" x2="950" y2="360" class="git-axis" />
+              <text x="80" y="385" class="git-axis-label">2021</text>
+              <text x="250" y="385" class="git-axis-label">2022</text>
+              <text x="400" y="385" class="git-axis-label">2023</text>
+              <text x="520" y="385" class="git-axis-label">Jul 2024</text>
+              <text x="900" y="385" class="git-axis-label">Present</text>
 
-                <!-- Smooth S-curve UP for UST branch (400 -> 220) -->
-                <path class="git-path" id="path-1"
-                  d="M 500,400 C 550,400 580,320 610,270 C 630,240 640,220 660,220 L 1350,220" stroke="var(--accent)"
-                  stroke-width="3" fill="none" />
+              <!-- MAIN BRANCH (Open Source baseline) -->
+              <path d="M50 320 L950 320" class="git-path" stroke="var(--accent)" stroke-width="3" />
 
-                <!-- UST Global commit -->
-                <g class="git-commit git-node" id="node-1" onclick="showExpInfo(1)">
-                  <circle cx="700" cy="220" r="16" fill="var(--accent)" stroke="var(--accent)" stroke-width="3" />
-                  <text class="git-label" x="700" y="185" text-anchor="middle" fill="var(--accent)">UST GLOBAL</text>
-                  <text class="git-date" x="700" y="165" text-anchor="middle">Jul 2024</text>
-                </g>
+              <!-- Open Source Node -->
+              <g class="git-commit" id="node-0" onclick="showExpInfo(0)">
+                <circle cx="100" cy="320" r="6" class="git-node" stroke="var(--accent)" />
+              </g>
+              <text x="100" y="345" class="git-label">OPEN SOURCE</text>
 
-                <!-- Project 1: InfraOps AI (y=100) -->
-                <circle class="git-node-sm" cx="800" cy="220" r="5" fill="var(--accent)" />
-                <path class="git-path" id="path-2"
-                  d="M 800,220 C 840,220 870,180 900,150 C 920,120 935,110 955,100 L 1350,100" stroke="#2ecc71"
-                  stroke-width="2.5" fill="none" />
-                <g class="git-commit git-node" id="node-2" onclick="showExpInfo(2)">
-                  <circle cx="1000" cy="100" r="13" fill="#2ecc71" stroke="#2ecc71" stroke-width="3" />
-                  <text class="git-label" x="1000" y="65" text-anchor="middle" fill="#2ecc71">INFRAOPS AI</text>
-                </g>
-
-                <!-- Project 2: Insight Gen (y=150) -->
-                <circle class="git-node-sm" cx="950" cy="220" r="5" fill="var(--accent)" />
-                <path class="git-path" id="path-3"
-                  d="M 950,220 C 990,220 1020,200 1050,170 C 1070,160 1085,150 1105,150 L 1350,150" stroke="#9b59b6"
-                  stroke-width="2.5" fill="none" />
-                <g class="git-commit git-node" id="node-3" onclick="showExpInfo(3)">
-                  <circle cx="1180" cy="150" r="13" fill="#9b59b6" stroke="#9b59b6" stroke-width="3" />
-                  <text class="git-label" x="1180" y="124" text-anchor="middle" fill="#9b59b6">INSIGHT GEN</text>
-                </g>
-
-                <!-- Project 4: AI Monitor (y=280) -->
-                <circle class="git-node-sm" cx="1280" cy="220" r="5" fill="var(--accent)" />
-                <path class="git-path" id="path-4"
-                  d="M 1280,220 C 1300,220 1310,240 1320,260 C 1325,275 1330,280 1335,280 L 1350,280" stroke="#f39c12"
-                  stroke-width="2.5" fill="none" />
-                <g class="git-commit git-node" id="node-4" onclick="showExpInfo(5)">
-                  <circle cx="1347" cy="280" r="13" fill="#f39c12" stroke="#f39c12" stroke-width="3" />
-                  <text class="git-label" x="1347" y="315" text-anchor="middle" fill="#f39c12">AI MONITOR</text>
-                </g>
-
-                <!-- Project 3: Validation (y=340) -->
-                <circle class="git-node-sm" cx="1100" cy="220" r="5" fill="var(--accent)" />
-                <path class="git-path" id="path-5"
-                  d="M 1100,220 C 1140,220 1170,280 1200,320 C 1220,335 1235,340 1255,340 L 1350,340" stroke="#e74c3c"
-                  stroke-width="2.5" fill="none" />
-                <g class="git-commit git-node" id="node-5" onclick="showExpInfo(4)">
-                  <circle cx="1305" cy="340" r="13" fill="#e74c3c" stroke="#e74c3c" stroke-width="3" />
-                  <text class="git-label" x="1305" y="375" text-anchor="middle" fill="#e74c3c">VALIDATION</text>
-                </g>
+              <!-- Branch point on main -->
+              <g class="git-commit" onclick="showExpInfo(0)">
+                <circle cx="330" cy="320" r="5" class="git-node" stroke="var(--accent)" />
               </g>
 
-              <!-- Timeline markers -->
-              <line x1="50" y1="460" x2="1350" y2="460" stroke="var(--border)" stroke-width="0.5" />
-              <text x="150" y="490" class="git-date" text-anchor="middle">2021</text>
-              <text x="350" y="490" class="git-date" text-anchor="middle">2022</text>
-              <text x="450" y="490" class="git-date" text-anchor="middle">2023</text>
-              <text x="500" y="490" class="git-date" text-anchor="middle">Jul 2024</text>
-              <text x="1200" y="490" class="git-date" text-anchor="middle">Present</text>
+              <!-- UST GLOBAL BRANCH -->
+              <path d="M330 320 C380 320 420 180 480 150 C520 130 560 130 600 130 L950 130" class="git-path"
+                stroke="var(--accent-bright)" />
+
+              <!-- UST Global Node -->
+              <g class="git-commit" id="node-1" onclick="showExpInfo(1)">
+                <circle cx="600" cy="130" r="6" class="git-node" stroke="var(--accent-bright)" />
+              </g>
+              <text x="600" y="110" class="git-label">UST GLOBAL</text>
+              <text x="600" y="95" class="git-sub">Jul 2024</text>
+
+              <!-- BRANCH POINTS on UST Line -->
+              <!-- 1. InfraOps (Up High) -->
+              <g class="git-commit">
+                <circle cx="660" cy="130" r="4" class="git-node" stroke="var(--accent-bright)" />
+              </g>
+              <!-- 2. Validation (Down Deep) -->
+              <g class="git-commit">
+                <circle cx="720" cy="130" r="4" class="git-node" stroke="var(--accent-bright)" />
+              </g>
+              <!-- 3. Insight Gen (Up Shallow) -->
+              <g class="git-commit">
+                <circle cx="780" cy="130" r="4" class="git-node" stroke="var(--accent-bright)" />
+              </g>
+              <!-- 4. AI Monitor (Down Shallow) -->
+              <g class="git-commit">
+                <circle cx="840" cy="130" r="4" class="git-node" stroke="var(--accent-bright)" />
+              </g>
+
+              <!-- 1. INFRAOPS AI (Start 660, End 20) - OUTER UP -->
+              <path d="M660 130 C680 130 700 70 740 40 C770 20 800 20 950 20" class="git-path"
+                stroke="rgba(46, 204, 113, 0.8)" />
+              <g class="git-commit" id="node-2" onclick="showExpInfo(2)">
+                <circle cx="880" cy="20" r="5" class="git-node" stroke="rgba(46, 204, 113, 0.8)" />
+              </g>
+              <text x="880" y="10" class="git-label">INFRAOPS AI</text>
+
+              <!-- 2. VALIDATION (Start 720, End 260) - OUTER DOWN -->
+              <path d="M720 130 C740 130 760 200 800 230 C830 260 860 260 950 260" class="git-path"
+                stroke="rgba(231, 76, 60, 0.8)" />
+              <g class="git-commit" id="node-5" onclick="showExpInfo(4)">
+                <circle cx="920" cy="260" r="5" class="git-node" stroke="rgba(231, 76, 60, 0.8)" />
+              </g>
+              <text x="920" y="280" class="git-label">VALIDATION</text>
+
+              <!-- 3. INSIGHT GEN (Start 780, End 70) - INNER UP -->
+              <path d="M780 130 C800 130 820 90 850 80 C870 70 890 70 950 70" class="git-path"
+                stroke="rgba(155, 89, 182, 0.8)" />
+              <g class="git-commit" id="node-3" onclick="showExpInfo(3)">
+                <circle cx="920" cy="70" r="5" class="git-node" stroke="rgba(155, 89, 182, 0.8)" />
+              </g>
+              <text x="920" y="58" class="git-label">INSIGHT GEN</text>
+
+              <!-- 4. AI MONITOR (Start 840, End 200) - INNER DOWN -->
+              <path d="M840 130 C860 130 880 170 900 190 C920 200 930 200 950 200" class="git-path"
+                stroke="rgba(243, 156, 18, 0.8)" />
+              <g class="git-commit" id="node-4" onclick="showExpInfo(5)">
+                <circle cx="940" cy="200" r="5" class="git-node" stroke="rgba(243, 156, 18, 0.8)" />
+              </g>
+              <text x="940" y="222" class="git-label">AI MONITOR</text>
+
             </svg>
           </div>
         </section>
 
 
 
-        <!-- ABOUT -->
-        <section class="content-section" id="about">
-          <h2>01 // About</h2>
-          <p>
-            Highly motivated web developer with a passion for open source contributions.
-            Proven track record in delivering high-quality solutions through teamwork.
-            Eager to apply expertise to tackle real-world challenges and thrive in continuous learning.
-          </p>
+
+
+
+        <!-- OTHER EXPERIENCE SECTION (Sketch Style) -->
+        <section class="sketch-section">
+          <div class="sketch-counter">0 0 0 0 0 0</div>
+          <div class="sketch-container">
+            <div class="sketch-header">
+              <h2 class="sketch-title">OTHER EXPERIENCE</h2>
+            </div>
+
+            <div class="sketch-grid">
+              <!-- Card 1: Open Source -->
+              <div class="sketch-card">
+                <h3 class="sketch-card-title">Open Source Contributions</h3>
+                <p class="sketch-card-content">
+                  Active contributor to various open-source projects, including React.js ecosystem and Python data
+                  science
+                  libraries.
+                </p>
+                <div class="sketch-card-icon">★★★★★</div>
+              </div>
+
+              <!-- Card 2: Technical Writing -->
+              <div class="sketch-card">
+                <h3 class="sketch-card-title">Technical Writing</h3>
+                <p class="sketch-card-content">
+                  Author of technical blog posts and tutorials on web development, machine learning, and cloud
+                  computing.
+                </p>
+              </div>
+
+              <!-- Card 3: Hackathons -->
+              <div class="sketch-card">
+                <h3 class="sketch-card-title">Hackathons & Competitions</h3>
+                <p class="sketch-card-content">
+                  Participated and won in several hackathons, developing innovative solutions for real-world problems.
+                </p>
+                <div class="sketch-card-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                    <path d="M4 22h16" />
+                    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+                    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+                    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Card 4: Volunteer Work -->
+              <div class="sketch-card">
+                <h3 class="sketch-card-title">Volunteer Work</h3>
+                <p class="sketch-card-content">
+                  Volunteered as a coding instructor for underprivileged students, teaching programming fundamentals.
+                </p>
+                <div class="sketch-card-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
-        <!-- SKILLS -->
-        <section class="content-section" id="skills">
-          <h2>02 // Technical Skills</h2>
-          <div class="terminal-card">
+        <!-- DSA PORTAL SECTION -->
+        <section class="dsa-portal-section" id="dsaPortal">
+          <div class="dsa-container">
 
-            <div class="terminal-row">
-              <div class="terminal-label">LANGUAGES</div>
-              <div class="terminal-content mono">Python, JavaScript (JS), SQL</div>
+            <!-- Header (Blogs Style) -->
+            <div class="dsa-header-center">
+              <div class="dsa-tag-center">// DSA_KNOWLEDGE_BASE</div>
+              <h2 class="dsa-title-center">Algorithmic Mastery</h2>
+              <p class="dsa-desc-center">
+                A structured approach to understanding data structures and algorithms.
+                Optimize your problem-solving process.
+              </p>
             </div>
 
-            <div class="terminal-row">
-              <div class="terminal-label">WEB & FRAMEWORKS</div>
-              <div class="terminal-content mono">
-                Django, FastAPI, Flask, Streamlit, REST APIs, HTML, CSS, Bootstrap
+            <!-- INTERFACE PREVIEW CONTAINER -->
+            <div class="dsa-interface-container">
+
+              <!-- Left Sidebar -->
+              <aside class="dsa-sidebar">
+                <div class="dsa-sidebar-header">DSA EXPLORER</div>
+
+                <div class="dsa-nav-item">
+                  <div class="dsa-nav-title">CORE MODULES</div>
+                  <nav id="dsaNav">
+                    <a href="#" class="dsa-nav-link" onclick="updateDsaPreview('arrays', this); return false;">Arrays &
+                      Hashing</a>
+                    <a href="#" class="dsa-nav-link" onclick="updateDsaPreview('two-pointers', this); return false;">Two
+                      Pointers</a>
+                    <a href="#" class="dsa-nav-link"
+                      onclick="updateDsaPreview('sliding-window', this); return false;">Sliding Window</a>
+                    <a href="#" class="dsa-nav-link active"
+                      onclick="updateDsaPreview('trees', this); return false;">Trees</a>
+                    <a href="#" class="dsa-nav-link" onclick="updateDsaPreview('dp', this); return false;">Dynamic
+                      Programming</a>
+                  </nav>
+                </div>
+              </aside>
+
+              <!-- Main Preview Area -->
+              <div class="dsa-main-preview">
+                <!-- Mock Problem View -->
+                <div class="dsa-prob-header">
+                  <div class="dsa-prob-title" id="dsaProbTitle">Balanced Binary Tree</div>
+                  <div class="dsa-prob-meta" id="dsaProbMeta">
+                    <span class="dsa-badge-sm">EASY</span>
+                    <span class="dsa-badge-sm">TREES</span>
+                    <span>DFS</span>
+                  </div>
+                </div>
+
+                <div class="dsa-prob-desc" id="dsaProbDesc">
+                  Given a binary tree, determine if it is height-balanced.
+                  A height-balanced binary tree is defined as a binary tree in which the left and right subtrees of
+                  every node differ in height by no more than 1.
+                </div>
+
+                <!-- Mock Code Representation -->
+                <div class="dsa-code-mock" id="dsaCodeMock">
+                  <span class="dsa-code-line"><span class="k">class</span> Solution:</span>
+                  <span class="dsa-code-line"> <span class="k">def</span> <span class="f">isBalanced</span>(<span
+                      class="s">self</span>, root: Optional[TreeNode]) -> bool:</span>
+                  <span class="dsa-code-line"> <span class="k">def</span> <span class="f">dfs</span>(root):</span>
+                  <span class="dsa-code-line"> <span class="c"># Base case: empty tree is balanced</span></span>
+                  <span class="dsa-code-line"> <span class="k">if not</span> root: <span class="k">return</span> [True,
+                    0]</span>
+                  <span class="dsa-code-line"> <span class="c"># ... implementation hidden</span></span>
+                </div>
+
+                <!-- Overlay Gradient -->
+                <div class="dsa-overlay"></div>
               </div>
+
             </div>
 
-            <div class="terminal-row">
-              <div class="terminal-label">AI & ML</div>
-              <div class="terminal-content mono">
-                Supervised/Unsupervised Learning, CNN, DL, NLP, LLM, RAG, Scikit-learn, TensorFlow, PyTorch, Pandas,
-                NumPy, LangChain, LangGraph, Crew.ai
-              </div>
-            </div>
-
-            <div class="terminal-row">
-              <div class="terminal-label">DATA & TOOLS</div>
-              <div class="terminal-content mono">
-                MySQL, PostgreSQL, MongoDB, Redis, SQLite, ChromaDB, Git, GitHub, GitLab, AWS, Docker, Kubernetes
-              </div>
+            <!-- CTA Button Below Interface -->
+            <div class="dsa-cta-center">
+              <a href="https://thejus-m.github.io/DSA."
+                class="dsa-btn-primary">INITIALIZE EXPLORER</a>
             </div>
 
           </div>
         </section>
 
-
-
-      <!-- DEV LOGS INDEX SECTION -->
-      <section class="dev-logs-index-section" id="devLogsIndex">
-        <div class="dev-logs-index-container">
-          <!-- Header -->
-          <div class="dev-logs-index-header">
-            <div class="dev-logs-index-title">// DEV_LOGS_INDEX</div>
-            <h2 class="dev-logs-index-subtitle">Knowledge Base & Documentation</h2>
-            <p class="dev-logs-index-description">
-              A curated collection of technical documentation, tutorials, and reference guides.
-              Covering everything from development tools to distributed systems theory.
-            </p>
-          </div>
-
-          <!-- Quick Stats -->
-          <div class="dev-logs-quick-stats">
-            <div class="stat-box">
-              <div class="stat-box-value">11</div>
-              <div class="stat-box-label">Categories</div>
+        <!-- DEV LOGS INDEX SECTION -->
+        <section class="dev-logs-index-section" id="devLogsIndex">
+          <div class="dev-logs-index-container">
+            <!-- Header -->
+            <div class="dev-logs-index-header">
+              <div class="dev-logs-index-title">// DEV_LOGS_INDEX</div>
+              <h2 class="dev-logs-index-subtitle">Knowledge Base & Documentation</h2>
+              <p class="dev-logs-index-description">
+                A curated collection of technical documentation, tutorials, and reference guides.
+                Covering everything from development tools to distributed systems theory.
+              </p>
             </div>
-            <div class="stat-box">
-              <div class="stat-box-value">48</div>
-              <div class="stat-box-label">Topics</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-box-value">32</div>
-              <div class="stat-box-label">Completed</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-box-value">67%</div>
-              <div class="stat-box-label">Progress</div>
-            </div>
-          </div>
 
-          <!-- Categories Grid -->
-          <div class="dev-logs-categories-grid" id="categoriesGrid">
-            <!-- Populated by JavaScript -->
-          </div>
+            <!-- Quick Stats -->
+            <div class="dev-logs-quick-stats">
+              <div class="stat-box">
+                <div class="stat-box-value">11</div>
+                <div class="stat-box-label">Categories</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-box-value">48</div>
+                <div class="stat-box-label">Topics</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-box-value">32</div>
+                <div class="stat-box-label">Completed</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-box-value">67%</div>
+                <div class="stat-box-label">Progress</div>
+              </div>
+            </div>
 
-          <!-- View All CTA -->
-          <div class="dev-logs-footer-cta" style="text-align: center;">
-            <p>
-              Explore complete documentation with advanced search, filtering, and detailed content.
-            </p>
-            <a href="/dev-logs.html" class="view-all-link">
-              <span>View Full Documentation</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </a>
+            <!-- Categories Grid -->
+            <div class="dev-logs-categories-grid" id="categoriesGrid">
+              <!-- Populated by JavaScript -->
+            </div>
+
+            <!-- View All CTA -->
+            <div class="dev-logs-footer-cta" style="text-align: center;">
+              <p>
+                Explore complete documentation with advanced search, filtering, and detailed content.
+              </p>
+              <a href="/dev-logs.html" class="view-all-link">
+                <span>View Full Documentation</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
           </div>
+        </section>
+
+        <!-- BLOGS SECTION -->
+        <section class="blogs-section" id="blogs">
+          <div class="blogs-container">
+            <!-- Header -->
+            <div class="blogs-header">
+              <div class="blogs-title">// BLOGS_ARTICLES</div>
+              <h2 class="blogs-subtitle">Thoughts, Stories & Experiences</h2>
+              <p class="blogs-description">
+                Personal reflections, technical insights, and stories from the journey of building
+                intelligent systems and crafting meaningful software.
+              </p>
+            </div>
+
+            <!-- Stats -->
+            <div class="blogs-stats">
+              <div class="stat-box">
+                <div class="stat-box-value">8</div>
+                <div class="stat-box-label">Articles</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-box-value">24K</div>
+                <div class="stat-box-label">Words Written</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-box-value">5</div>
+                <div class="stat-box-label">Categories</div>
+              </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="blog-filters" id="blogFilters">
+              <button class="blog-filter-btn active" data-filter="all">All</button>
+              <button class="blog-filter-btn" data-filter="thoughts">Thoughts</button>
+              <button class="blog-filter-btn" data-filter="technical">Technical</button>
+              <button class="blog-filter-btn" data-filter="stories">Stories</button>
+            </div>
+
+            <!-- Featured Blog -->
+            <div class="featured-blog" id="featuredBlog">
+              <!-- Populated by JavaScript -->
+            </div>
+
+            <!-- Blogs Grid -->
+            <div class="blogs-grid" id="blogsGrid">
+              <!-- Populated by JavaScript -->
+            </div>
+
+            <!-- View All Blogs CTA -->
+            <div class="dev-logs-footer-cta" style="text-align: center; margin-top: 40px;">
+              <p>
+                Browse the complete archive of articles, essays, and technical deep-dives.
+              </p>
+              <a href="/blogs.html" class="view-all-link">
+                <span>View Full Blog Archive</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Scroll Navigation Button -->
+        <div id="scrollNavBtn" class="scroll-nav-btn">
+          <svg id="scrollIconUp" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+          <svg id="scrollIconDown" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
         </div>
-      </section>
 
-      <!-- BLOGS SECTION -->
-      <section class="blogs-section" id="blogs">
-        <div class="blogs-container">
-          <!-- Header -->
-          <div class="blogs-header">
-            <div class="blogs-title">// BLOGS_ARTICLES</div>
-            <h2 class="blogs-subtitle">Thoughts, Stories & Experiences</h2>
-            <p class="blogs-description">
-              Personal reflections, technical insights, and stories from the journey of building
-              intelligent systems and crafting meaningful software.
-            </p>
-          </div>
 
-          <!-- Stats -->
-          <div class="blogs-stats">
-            <div class="stat-box">
-              <div class="stat-box-value">8</div>
-              <div class="stat-box-label">Articles</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-box-value">24K</div>
-              <div class="stat-box-label">Words Written</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-box-value">5</div>
-              <div class="stat-box-label">Categories</div>
-            </div>
-          </div>
 
-          <!-- Filter Tabs -->
-          <div class="blog-filters" id="blogFilters">
-            <button class="blog-filter-btn active" data-filter="all">All</button>
-            <button class="blog-filter-btn" data-filter="thoughts">Thoughts</button>
-            <button class="blog-filter-btn" data-filter="technical">Technical</button>
-            <button class="blog-filter-btn" data-filter="stories">Stories</button>
-          </div>
+      </div>
 
-          <!-- Featured Blog -->
-          <div class="featured-blog" id="featuredBlog">
-            <!-- Populated by JavaScript -->
-          </div>
 
-          <!-- Blogs Grid -->
-          <div class="blogs-grid" id="blogsGrid">
-            <!-- Populated by JavaScript -->
-          </div>
+  </div>
+
+
+
+
+
+  <!-- FOOTER -->
+  <!-- FOOTER -->
+  <footer class="simple-footer">
+    <div class="footer-chase-wrapper">
+      <div class="footer-chase-track">
+
+        <!-- PACMAN (Middle - Pixelated Style) -->
+        <svg class="chase-pacman" width="40" height="40" viewBox="0 0 16 16" fill="currentColor" stroke="none"
+          shape-rendering="crispEdges" fill-rule="evenodd">
+          <!-- Frame 1: Open Mouth (Solid with Eye Hole) -->
+          <path class="pacman-pixel-open"
+            d="M5 2 H11 V3 H13 V5 H14 V6 H10 V7 H8 V9 H10 V10 H14 V11 H13 V13 H11 V14 H5 V13 H3 V11 H2 V5 H3 V3 H5 V2 Z M6 4 H8 V6 H6 V4 Z" />
+          <!-- Frame 2: Closed Mouth (Solid with Eye Hole) -->
+          <path class="pacman-pixel-closed"
+            d="M5 2 H11 V3 H13 V5 H14 V11 H13 V13 H11 V14 H5 V13 H3 V11 H2 V5 H3 V3 H5 V2 Z M6 4 H8 V6 H6 V4 Z" />
+        </svg>
+
+        <!-- GHOSTS (The Social Links - Leading the way) -->
+        <div class="chase-ghosts">
+          <!-- MAIL (Corner Legs) -->
+          <!-- MAIL (Corner Legs) -->
+          <a href="#" class="chase-ghost-link" data-link="mail" data-label="MAIL">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <!-- Main Envelope Body -->
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+
+              <!-- Folding Corners (Legs) -->
+              <!-- Left Leg (Corner Triangle) -->
+              <path class="mail-leg mail-leg-l" d="M2 16 L2 20 L6 20 Z" />
+              <!-- Right Leg (Corner Triangle) -->
+              <path class="mail-leg mail-leg-r" d="M22 16 L22 20 L18 20 Z" />
+            </svg>
+          </a>
+          <!-- GITHUB (Cat Legs) -->
+          <a href="#" class="chase-ghost-link" data-link="github" data-label="GITHUB">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <!-- Octocat Body (Trimmed V22 to V19) -->
+              <path
+                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V19">
+              </path>
+
+              <!-- Animated Cat Tentacles/Legs that match the body -->
+              <!-- Left Tentacle -->
+              <path class="git-leg git-leg-l" d="M9 19 Q 6 24 4 22" stroke-width="2.5" stroke-linecap="round" />
+              <!-- Right Tentacle -->
+              <path class="git-leg git-leg-r" d="M15 19 Q 18 24 20 22" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+          </a>
+
+
+          <!-- LINKEDIN (Custom 'n' Legs) -->
+          <a href="#" class="chase-ghost-link" data-link="linkedin" data-label="LINKEDIN">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <!-- 'i' part -->
+              <rect x="2" y="9" width="4" height="12"></rect>
+              <circle cx="4" cy="4" r="2"></circle>
+
+              <!-- 'n' body (Arch) -->
+              <path d="M16 8a6 6 0 0 1 6 6h-4a2 2 0 0 0-2-2 2 2 0 0 0-2 2h-4a6 6 0 0 1 6-6z" fill="currentColor"
+                stroke="none"></path>
+
+              <!-- 'n' Legs (Animated) -->
+              <rect class="ln-leg ln-leg-l" x="10" y="14" width="4" height="7" fill="currentColor" stroke="none">
+              </rect>
+              <rect class="ln-leg ln-leg-r" x="18" y="14" width="4" height="7" fill="currentColor" stroke="none">
+              </rect>
+            </svg>
+          </a>
+
+          <!-- LEETCODE (Custom < > Legs) -->
+          <a href="#" class="chase-ghost-link" data-link="leetcode" data-label="LEETCODE">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <!-- Greater Than (> Leg) -->
+              <polyline class="code-leg-r" points="16 18 22 12 16 6"></polyline>
+              <!-- Less Than (< Leg) -->
+              <polyline class="code-leg-l" points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </a>
         </div>
-      </section>
-
       </div>
+    </div>
 
-
-      <!-- FOOTER -->
-      <div class="nav-footer">
-        <a href="#">Mail</a>
-        <a href="#">Github</a>
-        <a href="#">Linkedin</a>
-        <a href="#">Leetcode</a>
-      </div>
-
-      <div class="page-footer">
-        | Tarun |<br>
-        PORTFOLIO<br>
-        © 2025 TARUN • [ SECTION 1990 ]
-        <span style="opacity:0.04; margin-left:10px;">attention is all you need</span>
-      </div>
+    <div class="footer-info">
+      <span>© 2025 TARUN • [ SECTION 1990 ]</span>
+      <span>BUILT WITH PRECISION • POWERED BY INNOVATION</span>
+    </div>
+  </footer>
   </div>
   </main>
   </div>
@@ -3850,20 +6685,23 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
       updateSizeLabel(); // Initialize on load
       updateSizeLabel();
 
-      // Modal Toggle
+      // Open modal
       expandModelBtn.addEventListener('click', () => {
         modelModal.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent scroll
+        document.body.classList.add('modal-open'); // Hide navbar
       });
 
+      // Close modal
       closeModalBtn.addEventListener('click', () => {
         modelModal.classList.remove('active');
-        document.body.style.overflow = '';
+        document.body.classList.remove('modal-open'); // Show navbar
       });
 
       // Close on backdrop click
       modelModal.addEventListener('click', (e) => {
-        if (e.target === modelModal) closeModalBtn.click();
+        if (e.target === modelModal) {
+          closeModalBtn.click();
+        }
       });
 
       // Info Icon Click
@@ -4073,11 +6911,11 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
 
         if (state === heroState) {
           // Static content for hero section
-          // "Tarun" is the SEED (Input) that generates "**Product"
-          // So "Tarun" must be words[0], but it is NOT added to the display container
-          seedWord = "Tarun";
+          // "Thejus" is the SEED (Input) that generates "**Product"
+          // So "Thejus" must be words[0], but it is NOT added to the display container
+          seedWord = "Thejus";
           allWords = [
-            { text: "Tarun", class: "seed-word" }, // Index 0: Input for first step
+            { text: "Thejus", class: "seed-word" }, // Index 0: Input for first step
             { text: "**Product", class: "marker" }, // Index 1: Output of first step
             { text: "Engineer", class: "gen-word-body" },
             { text: "&", class: "gen-word-body" },
@@ -4124,14 +6962,14 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
 
         const origin = (state === heroState) ? headerBrand : expandModelBtn;
 
-        // For hero: animate "Tarun" as seed but don't show it
+        // For hero: animate "Thejus" as seed but don't show it
         // For modal: show first word immediately
         if (state === heroState && seedWord) {
-          // Animate "Tarun" from header brand to Input
+          // Animate "Thejus" from header brand to Input
           animateFloatingWord(seedWord, origin, state.targets.inputDisplay, () => {
             // Start processing loop. 
             // animateStep uses words[currentIndex] as Input.
-            // We want Input="Tarun" (words[0]). So currentIndex should be 0.
+            // We want Input="Thejus" (words[0]). So currentIndex should be 0.
             state.currentIndex = 0;
             animateStep(state);
           });
@@ -4641,6 +7479,45 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
     }
 
     // ==========================================
+    // SCROLL NAVIGATION LOGIC
+    // ==========================================
+    const scrollNavBtn = document.getElementById('scrollNavBtn');
+    const scrollIconUp = document.getElementById('scrollIconUp');
+    const scrollIconDown = document.getElementById('scrollIconDown');
+
+    if (scrollNavBtn) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          // Show Up Arrow
+          scrollNavBtn.classList.add('visible');
+          scrollNavBtn.classList.remove('down-mode');
+          if (scrollIconUp) scrollIconUp.style.display = 'block';
+          if (scrollIconDown) scrollIconDown.style.display = 'none';
+        } else {
+          // Show Down Arrow (at top)
+          scrollNavBtn.classList.add('visible');
+          scrollNavBtn.classList.add('down-mode');
+          if (scrollIconUp) scrollIconUp.style.display = 'none';
+          if (scrollIconDown) scrollIconDown.style.display = 'block';
+        }
+      });
+
+      scrollNavBtn.addEventListener('click', () => {
+        if (window.scrollY > 300) {
+          // Go to Top
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          // Go to Experience Section (or next main section)
+          const expSection = document.getElementById('experience');
+          if (expSection) {
+            expSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    }
+
+    // ==========================================
+
     // EXPERIENCE VISUALIZATION FUNCTIONS
     // ==========================================
 
@@ -4767,8 +7644,8 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
 
     function initGitAnimations() {
       const svg = document.getElementById('gitSvg');
-      const zoomGroup = document.getElementById('gitZoomGroup');
-      if (!svg || !zoomGroup) return;
+      const container = document.getElementById('gitViz');
+      if (!svg || !container) return;
 
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -4779,71 +7656,547 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
         });
       }, { threshold: 0.3 });
 
-      const container = document.getElementById('gitViz');
-      if (container) observer.observe(container);
+      observer.observe(container);
     }
 
     function startGitAnimation() {
-      const svg = document.getElementById('gitSvg');
-      svg.classList.add('zooming');
+      try {
+        const svg = document.getElementById('gitSvg');
+        if (!svg) return;
 
-      const sequence = [
-        { id: 'path-0', delay: 500 },
-        { id: 'path-1', delay: 1500 },
-        { id: 'path-2', delay: 2500 },
-        { id: 'path-3', delay: 2800 },
-        { id: 'path-4', delay: 3100 },
-        { id: 'path-5', delay: 3400 }
-      ];
+        // --- 1. SET INITIAL HIDDEN STATE ---
+        const elementsToHide = svg.querySelectorAll('.git-path, .git-node, .git-label, .git-sub, .git-axis-label, .git-commit, .git-commit circle');
+        elementsToHide.forEach(el => el.classList.add('git-anim-hidden'));
 
-      sequence.forEach(item => {
-        const p = document.getElementById(item.id);
-        if (p) {
-          const len = p.getTotalLength();
-          p.style.strokeDasharray = len;
-          p.style.strokeDashoffset = len;
+        const paths = Array.from(svg.querySelectorAll('.git-path'));
+        const commits = Array.from(svg.querySelectorAll('.git-commit'));
+        const speed = 0.095; // pixel per ms (very slow - ~28 seconds for 1000px)
 
-          setTimeout(() => {
-            p.classList.add('git-path-anim');
+        // --- 2. SET INITIAL ZOOM (Start at 2015 - x=100 area) ---
+        // Center on Open Source node (100, 320) with zoom
+        svg.style.transformOrigin = '0 0'; // Transform from top-left
+        // Calculate translate to center Open Source node
+        // At scale 2.5, we want node at (100,320) to appear in center of viewBox (500, 200)
+        const targetX = 100; // Open Source X position
+        const targetY = 320; // Open Source Y position
+        const centerX = 500; // Center of viewBox width (1000/2)
+        const centerY = 200; // Center of viewBox height (400/2)
+        const initialScale = 2.5;
 
-            const nodeId = item.id.replace('path', 'node');
-            const node = document.getElementById(nodeId);
-            if (node) {
-              setTimeout(() => {
-                node.classList.add('git-node-anim');
-              }, 1000);
-            }
-          }, item.delay);
+        // Calculate translation needed
+        const translateX = centerX - (targetX * initialScale);
+        const translateY = centerY - (targetY * initialScale);
+
+        svg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${initialScale})`;
+        svg.style.transition = 'none'; // No transition initially
+
+
+        // Helper to create SVG element
+        function createSVG(tag, attrs) {
+          const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+          for (let k in attrs) el.setAttribute(k, attrs[k]);
+          return el;
         }
-      });
 
-      // Initial Open Source node
-      const node0 = document.getElementById('node-0');
-      if (node0) {
-        node0.style.opacity = 0;
-        setTimeout(() => node0.classList.add('git-node-anim'), 500);
+        // PREPARE ANIMATION (Mask + Head)
+        function prepareAnimation(pathEl, idSuffix) {
+          // Calculate length
+          let length = 0;
+          try {
+            if (typeof pathEl.getTotalLength === 'function') {
+              length = pathEl.getTotalLength();
+            } else {
+              const x1 = parseFloat(pathEl.getAttribute('x1'));
+              const y1 = parseFloat(pathEl.getAttribute('y1'));
+              const x2 = parseFloat(pathEl.getAttribute('x2'));
+              const y2 = parseFloat(pathEl.getAttribute('y2'));
+              length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+            }
+          } catch (e) {
+            console.error('Length calc error', e);
+            // Fallback for straight horizontal lines if 0
+            if (length === 0 && pathEl.tagName === 'path') {
+              // Assuming main line geometry if detection fails
+              length = 900;
+            } else {
+              length = 100;
+            }
+          }
+
+          // Create Mask
+          const maskId = `mask-${idSuffix}-${Math.random().toString(36).substr(2, 9)}`;
+          let defs = svg.querySelector('defs');
+          if (!defs) {
+            defs = createSVG('defs', {});
+            svg.insertBefore(defs, svg.firstChild);
+          }
+          const mask = createSVG('mask', { id: maskId });
+
+          // CRITICAL FIX: The Main (Open Source) line is horizontal (height=0).
+          // Default maskUnits='objectBoundingBox' clips it to 0 height, making it invisible.
+          // We force 'userSpaceOnUse' ONLY for this branch to ensure the full canvas is used for masking.
+          if (idSuffix === 'main') {
+            mask.setAttribute('maskUnits', 'userSpaceOnUse');
+            mask.setAttribute('x', 0);
+            mask.setAttribute('y', 0);
+            mask.setAttribute('width', 1000);
+            mask.setAttribute('height', 400);
+          }
+
+          // Clone path for mask
+          let maskPath;
+          const strokeWidth = parseFloat(window.getComputedStyle(pathEl).strokeWidth) || 2;
+
+          if (pathEl.tagName.toLowerCase() === 'line') {
+            maskPath = createSVG('line', {
+              x1: pathEl.getAttribute('x1'),
+              y1: pathEl.getAttribute('y1'),
+              x2: pathEl.getAttribute('x2'),
+              y2: pathEl.getAttribute('y2'),
+              'class': 'tron-mask-path',
+              'stroke-width': strokeWidth + 4 // Thicker for better visibility
+            });
+          } else {
+            maskPath = createSVG('path', {
+              d: pathEl.getAttribute('d'),
+              'class': 'tron-mask-path',
+              'stroke-width': strokeWidth + 4
+            });
+          }
+
+          // Set initial dash state (hidden)
+          maskPath.style.strokeDasharray = length + ' ' + length;
+          maskPath.style.strokeDashoffset = length;
+
+          // Add black background to mask (hides everything)
+          const maskBg = createSVG('rect', {
+            x: '0',
+            y: '0',
+            width: '1000',
+            height: '400',
+            fill: 'black'
+          });
+          mask.appendChild(maskBg);
+          mask.appendChild(maskPath);
+          defs.appendChild(mask);
+          pathEl.setAttribute('mask', `url(#${maskId})`);
+          // 4. Create Tron Head (Using Image)
+          let head = createSVG('g', { 'class': 'tron-head git-anim-hidden' });
+
+          // Detect theme and use appropriate Tron image
+          const isLightMode = document.documentElement.getAttribute('data-theme') === 'light';
+          const cycleImageSrc = isLightMode ? 'tron_cycle_light.png' : 'tron_cycle.png';
+
+          const cycleImage = createSVG('image', {
+            href: cycleImageSrc,
+            x: '-25',
+            y: '-10',
+            width: '55',
+            height: '20'
+          });
+
+          head.appendChild(cycleImage);
+
+
+
+
+
+
+
+
+          // Set offset-path
+          let dVal = '';
+          if (pathEl.tagName.toLowerCase() === 'path') {
+            dVal = pathEl.getAttribute('d');
+          } else {
+            dVal = `M${pathEl.getAttribute('x1')} ${pathEl.getAttribute('y1')} L${pathEl.getAttribute('x2')} ${pathEl.getAttribute('y2')}`;
+          }
+          head.style.offsetPath = `path('${dVal}')`;
+          head.style.offsetRotate = "auto"; // Ensure it turns along the path
+
+          // Append head to SVG (on top)
+          svg.appendChild(head);
+
+          return { pathEl, maskPath, head, length };
+        }
+
+        // RUN ANIMATION
+        function runAnim(animObj, delay, onStart, onFinish) {
+          const duration = animObj.length / speed;
+
+          // Mask Animation
+          const maskAnim = animObj.maskPath.animate([
+            { strokeDashoffset: animObj.length },
+            { strokeDashoffset: 0 }
+          ], {
+            duration: duration,
+            delay: delay,
+            fill: 'forwards',
+            easing: 'linear'
+          });
+
+          // Head Animation
+          const headAnim = animObj.head.animate([
+            { offsetDistance: '0%' },
+            { offsetDistance: '100%' }
+          ], {
+            duration: duration,
+            delay: delay,
+            fill: 'forwards',
+            easing: 'linear'
+          });
+
+          // Visibility Logic
+          setTimeout(() => {
+            animObj.pathEl.classList.add('revealed');
+            animObj.pathEl.classList.remove('git-anim-hidden'); // Remove hidden class
+            animObj.head.classList.remove('git-anim-hidden'); // Show Tron head
+            animObj.head.classList.add('active');
+            if (onStart) onStart();
+          }, delay);
+
+          headAnim.onfinish = () => {
+            animObj.head.classList.remove('active');
+            // Remove mask so line stays visible
+            animObj.pathEl.removeAttribute('mask');
+            if (onFinish) onFinish();
+          };
+        }
+
+        // --- INITIALIZE ---
+        // Ensure paths exist
+        if (paths.length < 6) throw new Error("Not enough paths found");
+
+        const mainAnim = prepareAnimation(paths[0], 'main');
+        const ustAnim = prepareAnimation(paths[1], 'ust');
+        const subs = [
+          { anim: prepareAnimation(paths[2], 'infra'), startX: 660 },
+          { anim: prepareAnimation(paths[3], 'valid'), startX: 720 },
+          { anim: prepareAnimation(paths[4], 'insight'), startX: 780 },
+          { anim: prepareAnimation(paths[5], 'monitor'), startX: 840 }
+        ];
+
+        // --- SEQUENCE TIMING ---
+        const START_DELAY = 100;
+        const MAIN_START = START_DELAY;
+
+        // Helper to reveal node
+        function revealNode(el) {
+          if (!el) return;
+          el.classList.remove('git-anim-hidden');
+          el.classList.add('revealed');
+          // Try to find text siblings
+          let next = el.nextElementSibling;
+          while (next && (next.tagName === 'text' || next.classList.contains('git-label') || next.classList.contains('git-sub'))) {
+            next.classList.remove('git-anim-hidden');
+            next.classList.add('revealed');
+            next = next.nextElementSibling;
+          }
+          // Also checking children circles
+          const circles = el.querySelectorAll('circle');
+          circles.forEach(c => {
+            c.classList.remove('git-anim-hidden');
+            c.classList.add('revealed');
+          });
+        }
+
+        // Calculate total animation duration for zoom sync
+        // Main line: ~900px at 0.1 px/ms = 9000ms
+        // UST branch: starts at +2800ms (280px / 0.1), length ~500px = 5000ms
+        // Sub branches: start around +6000ms onwards, each ~250-300px = 2500-3000ms each
+        // Latest finishing branch would be around: 9000 + 5000 + 3000 + delays = ~18000ms minimum
+        // Let's calculate actual:
+        const mainDuration = mainAnim.length / speed;
+        const ustDelay = 280 / speed; // Time to reach UST branch point
+        const ustDuration = ustAnim.length / speed;
+
+        // Sub branches start staggered from UST, latest starts at x=840 (510px from UST start)
+        const latestSubDelay = ustDelay + (510 / speed);
+        // Longest sub branch is probably ~400px
+        const longestSubDuration = 400 / speed;
+
+        const totalAnimationTime = MAIN_START + latestSubDelay + longestSubDuration + 1000; // +1s buffer
+
+        console.log(`Total animation time: ${totalAnimationTime}ms (~${(totalAnimationTime / 1000).toFixed(1)}s)`);
+
+        // --- ZOOM OUT ANIMATION ---
+        // Faster zoom/pan (8 seconds) while Tron moves slowly
+        setTimeout(() => {
+          svg.style.transition = 'transform 8000ms ease-in-out'; // Fast 8s zoom
+          svg.style.transform = 'translate(0, 0) scale(1)'; // Pan back and zoom out to normal
+        }, START_DELAY + 200);
+
+        // 1. Open Source Node (Wait for Tron to reach x=100 from x=50. Dist=50. Speed=0.095. Time~526ms)
+        setTimeout(() => {
+          if (commits[0]) revealNode(commits[0]);
+        }, START_DELAY + 550);
+
+        // 2. Main Line (MAIN_START already defined above)
+        runAnim(mainAnim, MAIN_START);
+
+        // --- REVEAL TIMELINE LABELS as Tron passes ---
+        // Main line starts at x=50
+        // Timeline labels at: 80 (2021), 250 (2022), 400 (2023), 520 (Jul 2024), 900 (Present)
+        const timelineLabels = [
+          { x: 80, selector: 'text:nth-of-type(1).git-axis-label' }, // 2021
+          { x: 250, selector: 'text:nth-of-type(2).git-axis-label' }, // 2022
+          { x: 400, selector: 'text:nth-of-type(3).git-axis-label' }, // 2023
+          { x: 520, selector: 'text:nth-of-type(4).git-axis-label' }, // Jul 2024
+          { x: 900, selector: 'text:nth-of-type(5).git-axis-label' }  // Present
+        ];
+
+        // Reveal "2021" at start since we start at x=100
+        setTimeout(() => {
+          const label2021 = Array.from(svg.querySelectorAll('.git-axis-label'))[0];
+          if (label2021) {
+            label2021.classList.remove('git-anim-hidden');
+            label2021.classList.add('revealed');
+          }
+        }, MAIN_START);
+
+        // Reveal other labels as Tron reaches them
+        timelineLabels.slice(1).forEach(({ x, selector }) => {
+          const distFromStart = x - 50; // Distance from main line start (x=50)
+          const timeToReach = (distFromStart / speed);
+          setTimeout(() => {
+            const labels = Array.from(svg.querySelectorAll('.git-axis-label'));
+            const idx = timelineLabels.findIndex(l => l.x === x);
+            if (labels[idx]) {
+              labels[idx].classList.remove('git-anim-hidden');
+              labels[idx].classList.add('revealed');
+            }
+          }, MAIN_START + timeToReach);
+        });
+
+        // 3. UST Branch
+        // Main Line Length check
+        // Main line x: 50 -> 950. Length 900.
+        // UST starts at x=330. Dist = 280.
+        const timeToUST = 280 / speed;
+        const UST_START = MAIN_START + timeToUST;
+
+        setTimeout(() => {
+          // Reveal branch point on main (commits[1] approx)
+          if (commits[1]) revealNode(commits[1]);
+        }, UST_START);
+
+        runAnim(ustAnim, UST_START);
+
+        // Reveal UST Node (Node 1) at end of curve (approx x=600)
+        // UST Path: M330... -> x=600. Dist ~ 270 + curve
+        // Let's assume curve adds ~10%
+        const timeToUSTNode = (300 / speed);
+        setTimeout(() => {
+          const n = document.getElementById('node-1');
+          revealNode(n);
+        }, UST_START + timeToUSTNode);
+
+        // 4. Sub Branches - only start when UST Tron reaches their intersection
+        subs.forEach(sub => {
+          // UST line starts at x=330 and goes to x=600 (node), then continues to x=950
+          // Sub branches are at x=660, 720, 780, 840 along the UST horizontal line
+          // We need to calculate when the UST Tron reaches each of these points
+
+          // Distance from UST start (x=330) to this sub-branch intersection
+          const distFromUSTStart = sub.startX - 330;
+
+          // But first, UST Tron needs to travel the curve from x=330 to x=600
+          // The curve is about 270px horizontal + some vertical = ~350px actual path length
+          // Then from x=600 to sub.startX is straight horizontal
+
+          // Approximate: UST curve takes time to reach x=600, then straight line to intersection
+          const curveLength = 350; // Approximate curve length
+          const timeToCurveEnd = curveLength / speed; // Time to reach x=600
+
+          // After curve, calculate straight distance from x=600 to intersection
+          let distAfterCurve = 0;
+          if (sub.startX > 600) {
+            distAfterCurve = sub.startX - 600;
+          }
+
+          const timeToIntersection = timeToCurveEnd + (distAfterCurve / speed);
+          const delay = UST_START + timeToIntersection;
+
+          // Reveal junction on UST when Tron reaches it
+          setTimeout(() => {
+            // Find generic junction by proximity
+            const dot = commits.find(c => {
+              const circle = c.querySelector('circle');
+              if (!circle) return false;
+              const cx = parseFloat(circle.getAttribute('cx'));
+              return Math.abs(cx - sub.startX) < 10 && Math.abs(parseFloat(circle.getAttribute('cy')) - 130) < 10;
+            });
+            revealNode(dot);
+          }, delay);
+
+          runAnim(sub.anim, delay, null, () => {
+            // Finish - reveal end node
+            let nodeId = '';
+            const pEl = sub.anim.pathEl;
+            if (pEl === paths[2]) nodeId = 'node-2';     // Infra
+            else if (pEl === paths[3]) nodeId = 'node-5'; // Validation
+            else if (pEl === paths[4]) nodeId = 'node-3'; // Insight
+            else if (pEl === paths[5]) nodeId = 'node-4'; // Monitor
+
+            revealNode(document.getElementById(nodeId));
+          });
+        });
+
+      } catch (e) {
+        console.error("Git Animation Error:", e);
+        // Fallback: Show everything if error
+        const hidden = document.querySelectorAll('.git-anim-hidden');
+        hidden.forEach(el => el.classList.remove('git-anim-hidden'));
       }
     }
-
     // THEME TOGGLE
     const themeBtn = document.getElementById('themeToggle');
-    if (themeBtn) {
-      themeBtn.onclick = () => {
-        const current = document.documentElement.getAttribute('data-theme');
-        const iconSun = document.getElementById('iconSun');
-        const iconMoon = document.getElementById('iconMoon');
+    themeBtn.onclick = () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const iconSun = document.getElementById('iconSun');
+      const iconMoon = document.getElementById('iconMoon');
 
-        if (current === 'light') {
-          document.documentElement.removeAttribute('data-theme');
-          iconSun.style.display = 'block';
-          iconMoon.style.display = 'none';
-        } else {
-          document.documentElement.setAttribute('data-theme', 'light');
-          iconSun.style.display = 'none';
-          iconMoon.style.display = 'block';
-        }
-      };
+      if (current === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        iconSun.style.display = 'block';
+        iconMoon.style.display = 'none';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        iconSun.style.display = 'none';
+        iconMoon.style.display = 'block';
+      }
+    };
+
+
+    // ==========================================
+    // DSA INTERFACE PREVIEW LOGIC
+    // ==========================================
+    const dsaPreviewData = {
+      'arrays': {
+        title: 'Find Minimum in Rotated Sorted Array',
+        badges: [
+          { text: 'MEDIUM', class: 'dsa-badge-sm' },
+          { text: 'ARRAYS', class: 'dsa-badge-sm' },
+          { text: 'BINARY SEARCH', class: '' } // plain text
+        ],
+        desc: 'Suppose an array of length n sorted in ascending order is rotated between 1 and n times. Find the minimum element in the array.',
+        code: `
+<span class="dsa-code-line"><span class="k">class</span> Solution:</span>
+<span class="dsa-code-line">  <span class="k">def</span> <span class="f">findMin</span>(<span class="s">self</span>, nums: List[int]) -> int:</span>
+<span class="dsa-code-line">    <span class="s">l</span>, <span class="s">r</span> = 0, len(nums) - 1</span>
+<span class="dsa-code-line">    <span class="k">while</span> l &lt; r:</span>
+<span class="dsa-code-line">      <span class="s">mid</span> = (l + r) // 2</span>
+<span class="dsa-code-line">      <span class="k">if</span> nums[mid] > nums[r]:</span>
+<span class="dsa-code-line">        l = mid + 1</span>
+<span class="dsa-code-line">      <span class="k">else</span>:</span>
+<span class="dsa-code-line">        r = mid</span>
+<span class="dsa-code-line">    <span class="k">return</span> nums[l]</span>`
+      },
+      'two-pointers': {
+        title: 'Container With Most Water',
+        badges: [
+          { text: 'MEDIUM', class: 'dsa-badge-sm' },
+          { text: 'TWO POINTERS', class: 'dsa-badge-sm' },
+          { text: 'GREEDY', class: '' }
+        ],
+        desc: 'You are given an integer array height of length n. Find two lines that together with the x-axis form a container, such that the container contains the most water.',
+        code: `
+<span class="dsa-code-line"><span class="k">class</span> Solution:</span>
+<span class="dsa-code-line">  <span class="k">def</span> <span class="f">maxArea</span>(<span class="s">self</span>, height: List[int]) -> int:</span>
+<span class="dsa-code-line">    <span class="s">l</span>, <span class="s">r</span> = 0, len(height) - 1</span>
+<span class="dsa-code-line">    <span class="s">res</span> = 0</span>
+<span class="dsa-code-line">    <span class="k">while</span> l &lt; r:</span>
+<span class="dsa-code-line">      <span class="s">area</span> = (r - l) * min(height[l], height[r])</span>
+<span class="dsa-code-line">      res = max(res, area)</span>
+<span class="dsa-code-line">      <span class="k">if</span> height[l] &lt; height[r]:</span>
+<span class="dsa-code-line">        l += 1</span>
+<span class="dsa-code-line">      <span class="k">else</span>:</span>
+<span class="dsa-code-line">        r -= 1</span>
+<span class="dsa-code-line">    <span class="k">return</span> res</span>`
+      },
+      'sliding-window': {
+        title: 'Longest Substring Without Repeating Characters',
+        badges: [
+          { text: 'MEDIUM', class: 'dsa-badge-sm' },
+          { text: 'SLIDING WINDOW', class: 'dsa-badge-sm' },
+          { text: 'HASH SET', class: '' }
+        ],
+        desc: 'Given a string s, find the length of the longest substring without repeating characters.',
+        code: `
+<span class="dsa-code-line"><span class="k">class</span> Solution:</span>
+<span class="dsa-code-line">  <span class="k">def</span> <span class="f">lengthOfLongestSubstring</span>(<span class="s">self</span>, s: str) -> int:</span>
+<span class="dsa-code-line">    <span class="s">charSet</span> = set()</span>
+<span class="dsa-code-line">    <span class="s">l</span> = 0</span>
+<span class="dsa-code-line">    <span class="s">res</span> = 0</span>
+<span class="dsa-code-line">    <span class="k">for</span> r <span class="k">in</span> range(len(s)):</span>
+<span class="dsa-code-line">      <span class="k">while</span> s[r] <span class="k">in</span> charSet:</span>
+<span class="dsa-code-line">        charSet.remove(s[l])</span>
+<span class="dsa-code-line">        l += 1</span>
+<span class="dsa-code-line">      charSet.add(s[r])</span>
+<span class="dsa-code-line">      res = max(res, r - l + 1)</span>
+<span class="dsa-code-line">    <span class="k">return</span> res</span>`
+      },
+      'trees': {
+        title: 'Balanced Binary Tree',
+        badges: [
+          { text: 'EASY', class: 'dsa-badge-sm' },
+          { text: 'TREES', class: 'dsa-badge-sm' },
+          { text: 'DFS', class: '' }
+        ],
+        desc: 'Given a binary tree, determine if it is height-balanced. A height-balanced binary tree is defined as a binary tree in which the left and right subtrees of every node differ in height by no more than 1.',
+        code: `
+<span class="dsa-code-line"><span class="k">class</span> Solution:</span>
+<span class="dsa-code-line">  <span class="k">def</span> <span class="f">isBalanced</span>(<span class="s">self</span>, root: Optional[TreeNode]) -> bool:</span>
+<span class="dsa-code-line">    <span class="k">def</span> <span class="f">dfs</span>(root):</span>
+<span class="dsa-code-line">       <span class="c"># Base case: empty tree is balanced</span></span>
+<span class="dsa-code-line">       <span class="k">if not</span> root: <span class="k">return</span> [True, 0]</span>
+<span class="dsa-code-line">       <span class="s">left</span>, <span class="s">right</span> = dfs(root.left), dfs(root.right)</span>
+<span class="dsa-code-line">       <span class="s">balanced</span> = left[0] <span class="k">and</span> right[0] <span class="k">and</span> abs(left[1] - right[1]) &lt;= 1</span>
+<span class="dsa-code-line">       <span class="k">return</span> [balanced, 1 + max(left[1], right[1])]</span>
+<span class="dsa-code-line">    <span class="k">return</span> dfs(root)[0]</span>`
+      },
+      'dp': {
+        title: 'Climbing Stairs',
+        badges: [
+          { text: 'EASY', class: 'dsa-badge-sm' },
+          { text: 'DP', class: 'dsa-badge-sm' },
+          { text: 'MEMOIZATION', class: '' }
+        ],
+        desc: 'You are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?',
+        code: `
+<span class="dsa-code-line"><span class="k">class</span> Solution:</span>
+<span class="dsa-code-line">  <span class="k">def</span> <span class="f">climbStairs</span>(<span class="s">self</span>, n: int) -> int:</span>
+<span class="dsa-code-line">    <span class="s">one</span>, <span class="s">two</span> = 1, 1</span>
+<span class="dsa-code-line">    <span class="k">for</span> i <span class="k">in</span> range(n - 1):</span>
+<span class="dsa-code-line">        <span class="s">temp</span> = one</span>
+<span class="dsa-code-line">        one = one + two</span>
+<span class="dsa-code-line">        two = temp</span>
+<span class="dsa-code-line">    <span class="k">return</span> one</span>`
+      }
+    };
+
+    function updateDsaPreview(key, el) {
+      const data = dsaPreviewData[key];
+      if (!data) return;
+
+      // Update Nav Active State
+      if (el) {
+        document.querySelectorAll('#dsaNav .dsa-nav-link').forEach(link => link.classList.remove('active'));
+        el.classList.add('active');
+      }
+
+      // Update Content
+      document.getElementById('dsaProbTitle').textContent = data.title;
+      document.getElementById('dsaProbDesc').textContent = data.desc;
+      document.getElementById('dsaCodeMock').innerHTML = data.code;
+
+      // Update Meta Badges
+      const metaContainer = document.getElementById('dsaProbMeta');
+      metaContainer.innerHTML = data.badges.map(b =>
+        b.class ? `<span class="${b.class}">${b.text}</span>` : `<span>${b.text}</span>`
+      ).join('');
     }
+
 
     // ==========================================
     // DEV LOGS INDEX DATA
@@ -5278,6 +8631,65 @@ A Transformer is an AI architecture introduced by Google in 2017...</textarea>
       initBlogFilters();
     });
   </script>
+
+  <style>
+    /* Tron Animation Styles */
+    /* Tron Animation Styles */
+    /* Default visible to prevent invisible graph on JS error */
+    .git-path,
+    .git-node,
+    .git-label,
+    .git-sub,
+    .git-axis-label,
+    .git-commit circle {
+      opacity: 1;
+    }
+
+    /* Only hide if JS successfully adds this class */
+    .git-anim-hidden {
+      opacity: 0 !important;
+    }
+
+    .git-path.revealed,
+    .git-node.revealed,
+    .git-label.revealed,
+    .git-sub.revealed,
+    .git-axis-label.revealed,
+    .git-commit.revealed circle {
+      opacity: 1 !important;
+      transition: opacity 0.3s ease;
+    }
+
+    .tron-mask-path {
+      fill: none;
+      stroke: white;
+      stroke-linecap: round;
+    }
+
+    .tron-head {
+      fill: #00d4ff;
+      filter: drop-shadow(0 0 12px #00d4ff) drop-shadow(0 0 24px #00d4ff) drop-shadow(0 0 36px rgba(0, 212, 255, 0.8));
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .tron-head.active {
+      opacity: 1;
+      animation: tron-pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes tron-pulse {
+
+      0%,
+      100% {
+        filter: drop-shadow(0 0 12px #00d4ff) drop-shadow(0 0 24px #00d4ff) drop-shadow(0 0 36px rgba(0, 212, 255, 0.8));
+      }
+
+      50% {
+        filter: drop-shadow(0 0 16px #00d4ff) drop-shadow(0 0 32px #00d4ff) drop-shadow(0 0 48px rgba(0, 212, 255, 1));
+      }
+    }
+  </style>
 </body>
 
 </html>
