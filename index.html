@@ -45,6 +45,7 @@
     [data-theme="light"] {
       --bg-body: #F5F5F0;
       --bg-card: #FAFAF8;
+      --bg-card-elevated: #EFEFEA;
       --text-main: #1a1a1a;
       --text-sub: #505050;
       --text-code: #2a2a2a;
@@ -287,7 +288,7 @@
     }
 
     [data-theme="light"] .markov-hero-final {
-      background: #fff;
+      background: #F5F5F0;
       border: 1.5px solid var(--accent);
     }
 
@@ -323,7 +324,7 @@
     }
 
     [data-theme="light"] .model-side {
-      background-color: #fbfdff;
+      background-color: #F5F5F0;
       background-image:
         linear-gradient(rgba(74, 107, 204, 0.12) 1px, transparent 1px),
         linear-gradient(90deg, rgba(74, 107, 204, 0.12) 1px, transparent 1px);
@@ -356,7 +357,7 @@
     }
 
     [data-theme="light"] .input-display {
-      background: #fff;
+      background: #F5F5F0;
       border: 1.8px solid var(--accent);
     }
 
@@ -441,7 +442,7 @@
     }
 
     [data-theme="light"] .model-box {
-      background: #fff;
+      background: #F5F5F0;
       border: 1.8px solid var(--accent);
       /* Bolder border to match input */
     }
@@ -474,16 +475,17 @@
     }
 
     .expand-btn {
-      position: static;
-      /* Let it flow in flex container */
+      position: relative;
+      /* Changed to relative for pseudo-element positioning */
       width: 24px;
       height: 24px;
       border-radius: 50%;
       background: transparent;
-      border: 1px solid var(--accent);
+      border: 2px solid var(--accent);
       color: var(--accent);
       font-family: var(--font-mono-sys);
       font-size: 12px;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -495,6 +497,35 @@
       transform: none;
     }
 
+    /* Pulsating Ring Effect */
+    .expand-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      animation: pulseRing 2s infinite;
+      z-index: -1;
+    }
+
+    @keyframes pulseRing {
+      0% {
+        width: 100%;
+        height: 100%;
+        opacity: 0.8;
+      }
+
+      100% {
+        width: 200%;
+        height: 200%;
+        opacity: 0;
+      }
+    }
+
     [data-theme="light"] .expand-btn {
       background: transparent;
       border: 1px solid var(--accent);
@@ -503,7 +534,7 @@
 
     .expand-btn:hover {
       background: var(--accent);
-      color: #fff;
+      color: #F5F5F0;
       transform: scale(1.1);
     }
 
@@ -606,7 +637,7 @@
     }
 
     [data-theme="light"] .spec-sheet {
-      background: #fff;
+      background: #F5F5F0;
     }
 
     /* header */
@@ -707,7 +738,7 @@
     }
 
     [data-theme="light"] .model-modal textarea {
-      background: #fff;
+      background: #F5F5F0;
       border: 1px solid #e0e0e0;
     }
 
@@ -735,7 +766,7 @@
 
     [data-theme="light"] .seed-group {
       border: 1px solid #e0e0e0;
-      background: #fff;
+      background: #F5F5F0;
     }
 
     .seed-group .label-seed {
@@ -789,7 +820,7 @@
 
     .model-modal button:hover {
       background: var(--accent);
-      color: #fff;
+      color: #F5F5F0;
     }
 
     /* Modal Fast Forward Button - specialized styles */
@@ -880,7 +911,7 @@
     /* When input/processing is active */
     .flow .box.active {
       background: var(--accent);
-      color: #fff;
+      color: #F5F5F0;
       border-color: var(--accent);
     }
 
@@ -906,7 +937,7 @@
     .processing-dot.active {
       animation: blinkAction 0.5s infinite;
       opacity: 1 !important;
-      background: #fff !important;
+      background: #F5F5F0 !important;
       /* White dot on blue bg */
     }
 
@@ -1207,12 +1238,12 @@
 
     /* Light theme safety */
     [data-theme="light"] .fastforward-btn {
-      background: #fff;
+      background: #F5F5F0;
       border-color: var(--accent);
     }
 
     [data-theme="light"] .fastforward-btn:hover {
-      background: #fff;
+      background: #F5F5F0;
     }
 
     [data-theme="light"] .fastforward-btn.active {
@@ -2409,7 +2440,7 @@
     .featured-blog-image {
       width: 100%;
       height: 350px;
-      background: var(--bg-body);
+      background: var(--bg-card-elevated);
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -2444,7 +2475,7 @@
     .featured-blog-title {
       font-family: var(--font-serif);
       font-size: 2rem;
-      color: var(--text-main);
+      color: var(--accent);
       line-height: 1.3;
       margin-bottom: 16px;
     }
@@ -2724,7 +2755,7 @@
     .blog-title {
       font-family: var(--font-serif);
       font-size: 1.4rem;
-      color: var(--text-main);
+      color: var(--accent);
       line-height: 1.4;
       margin-bottom: 12px;
     }
@@ -3387,7 +3418,7 @@
 
     [data-theme="light"] .chase-ghost-link:hover::after {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      background: #fff;
+      background: #F5F5F0;
       border-color: var(--accent);
     }
 
@@ -3811,6 +3842,7 @@
       align-items: center;
       z-index: 10;
       position: relative;
+      border-bottom: 1px solid var(--border);
     }
 
     .hero-content {
@@ -4113,7 +4145,9 @@
       height: 500px;
       /* Fixed height for preview */
       position: relative;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      overflow: hidden;
     }
 
     /* Left Sidebar */
@@ -4257,7 +4291,7 @@
 
     /* Light Mode Overrides for Code */
     [data-theme="light"] .dsa-code-mock {
-      --bg-code-mock: #ffffff;
+      --bg-code-mock: #F5F5F0fff;
       --text-code-mock: #2c3e50;
     }
 
@@ -4326,22 +4360,136 @@
       box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3);
     }
 
+
+    /* ===================== OTHER EXPERIENCE GRID ===================== */
+    .other-exp-section {
+      width: 100%;
+      background-color: var(--bg-body);
+      padding: 0 0 80px;
+      position: relative;
+    }
+
+    .other-exp-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-attachment: fixed;
+      pointer-events: none;
+      opacity: 0.8;
+      z-index: 0;
+    }
+
+    .other-exp-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+      /* Ensure content stays above grid */
+      position: relative;
+      z-index: 1;
+    }
+    
+    .exp-card-h3 {
+      font-family: var(--font-mono-sys);
+      font-size: 16px;
+      margin-bottom: 12px;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .exp-card-p {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .other-exp-grid {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+      }
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .dsa-interface-container {
         flex-direction: column;
         height: auto;
+        min-height: 550px;
+        margin-bottom: 30px;
+        border-radius: 4px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
       }
 
       .dsa-sidebar {
         width: 100%;
         border-right: none;
         border-bottom: 1px solid var(--border);
+        padding: 12px;
+      }
+
+      .dsa-sidebar-header,
+      .dsa-nav-title {
+        display: none;
+      }
+
+      #dsaNav {
+        display: flex;
+        overflow-x: auto;
+        gap: 8px;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+        /* Firefox */
+      }
+
+      #dsaNav::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari */
+      }
+
+      .dsa-nav-link {
+        border-left: none;
+        border: 1px solid var(--border-sub);
+        padding: 6px 14px;
+        background: rgba(0, 212, 255, 0.05);
+        white-space: nowrap;
+        font-size: 11px;
+      }
+
+      .dsa-nav-link.active {
+        border-color: var(--accent);
+        background: var(--accent-soft);
       }
 
       .dsa-main-preview {
         padding: 20px;
-        height: 300px;
+        height: auto;
+        min-height: 350px;
+      }
+
+      .dsa-prob-title {
+        font-size: 20px;
+      }
+
+      .dsa-prob-desc {
+        font-size: 13px;
+        margin-bottom: 20px;
+      }
+
+      .dsa-code-mock {
+        padding: 12px;
+        font-size: 11px;
       }
 
       .dsa-overlay {
@@ -5139,8 +5287,16 @@
         font-size: 2.5rem;
       }
 
-      .article-container {
+      .article-container,
+      .dev-logs-index-container,
+      .blogs-container {
         padding: 48px 24px;
+      }
+
+      .category-index-card,
+      .blog-card,
+      .featured-blog {
+        padding: 24px;
       }
 
       /* Experience Visualizations - Keep horizontal on tablet */
@@ -5262,8 +5418,23 @@
         letter-spacing: -1px;
       }
 
-      .article-container {
-        padding: 32px 16px;
+      .article-container,
+      .dev-logs-index-container,
+      .blogs-container,
+      .dsa-container {
+        padding: 32px 12px;
+      }
+
+      .category-index-card,
+      .blog-card,
+      .featured-blog {
+        padding: 24px 16px;
+      }
+
+      .blogs-stats,
+      .dev-logs-quick-stats {
+        gap: 16px;
+        padding: 16px 8px;
       }
 
       .terminal-row {
@@ -5567,8 +5738,17 @@
         letter-spacing: 0;
       }
 
-      .article-container {
-        padding: 24px 12px;
+      .article-container,
+      .dev-logs-index-container,
+      .blogs-container,
+      .dsa-container {
+        padding: 24px 8px;
+      }
+
+      .category-index-card,
+      .blog-card,
+      .featured-blog {
+        padding: 20px 12px;
       }
 
       .article-meta {
@@ -5976,7 +6156,7 @@
                       <div class="box" id="modalModelBox" style="flex: 1; min-width: 180px;">
                         PROCESSING
                         <div id="modalProcessingDot" class="processing-dot"
-                          style="position: absolute; width: 6px; height: 6px; background: #fff; border-radius: 50%; opacity: 0; top: 8px; right: 8px;">
+                          style="position: absolute; width: 6px; height: 6px; background: #F5F5F0; border-radius: 50%; opacity: 0; top: 8px; right: 8px;">
                         </div>
                       </div>
                     </div>
@@ -6155,64 +6335,86 @@
 
 
 
-        <!-- OTHER EXPERIENCE SECTION (Sketch Style) -->
-        <section class="sketch-section">
-          <div class="sketch-counter">0 0 0 0 0 0</div>
-          <div class="sketch-container">
-            <div class="sketch-header">
-              <h2 class="sketch-title">OTHER EXPERIENCE</h2>
+        <!-- OTHER EXPERIENCE SECTION (Refined) -->
+        <section class="other-exp-section" id="otherExperience">
+          <div class="dsa-container">
+            <!-- Header -->
+            <div class="dsa-header-center">
+              <div class="dsa-tag-center">// MISC_MODULES</div>
+              <h2 class="dsa-title-center">Other Experience</h2>
+              <p class="dsa-desc-center">
+                Active contributions to the developer ecosystem through open source,
+                technical writing, and community engagement.
+              </p>
             </div>
 
-            <div class="sketch-grid">
+            <div class="other-exp-grid">
               <!-- Card 1: Open Source -->
-              <div class="sketch-card">
-                <h3 class="sketch-card-title">Open Source Contributions</h3>
-                <p class="sketch-card-content">
-                  Active contributor to various open-source projects, including React.js ecosystem and Python data
-                  science
-                  libraries.
-                </p>
-                <div class="sketch-card-icon">★★★★★</div>
+              <div class="terminal-card" style="margin-bottom: 0; display: flex; flex-direction: column; height: 100%;">
+                <div class="terminal-row" style="padding: 16px 24px; border-bottom: 1px solid var(--border);">
+                  <div class="terminal-label" style="width: auto; color: var(--accent);">OPEN_SOURCE</div>
+                  <div class="header-status" style="margin-left: auto; font-size: 10px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" style="opacity: 0.8;">
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="terminal-row" style="border: none; flex: 1; padding: 24px;">
+                  <div class="terminal-content">
+                    <h3 class="exp-card-h3">Open Source Contributions</h3>
+                    <p class="exp-card-p">
+                      Active contributor to various open-source projects, focusing on React.js ecosystem,
+                      performance optimization tools, and Python data science libraries.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <!-- Card 2: Technical Writing -->
-              <div class="sketch-card">
-                <h3 class="sketch-card-title">Technical Writing</h3>
-                <p class="sketch-card-content">
-                  Author of technical blog posts and tutorials on web development, machine learning, and cloud
-                  computing.
-                </p>
+              <div class="terminal-card" style="margin-bottom: 0; display: flex; flex-direction: column; height: 100%;">
+                <div class="terminal-row" style="padding: 16px 24px; border-bottom: 1px solid var(--border);">
+                  <div class="terminal-label" style="width: auto; color: var(--accent);">PUBLICATIONS</div>
+                </div>
+                <div class="terminal-row" style="border: none; flex: 1; padding: 24px;">
+                  <div class="terminal-content">
+                    <h3 class="exp-card-h3">Technical Writing</h3>
+                    <p class="exp-card-p">
+                      Author of deep-dive technical blog posts and tutorials covering web development patterns,
+                      distributed systems, and machine learning concepts.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <!-- Card 3: Hackathons -->
-              <div class="sketch-card">
-                <h3 class="sketch-card-title">Hackathons & Competitions</h3>
-                <p class="sketch-card-content">
-                  Participated and won in several hackathons, developing innovative solutions for real-world problems.
-                </p>
-                <div class="sketch-card-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-                    <path d="M4 22h16" />
-                    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-                    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-                    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
-                  </svg>
+              <div class="terminal-card" style="margin-bottom: 0; display: flex; flex-direction: column; height: 100%;">
+                <div class="terminal-row" style="padding: 16px 24px; border-bottom: 1px solid var(--border);">
+                  <div class="terminal-label" style="width: auto; color: var(--accent);">COMPETITIONS</div>
+                </div>
+                <div class="terminal-row" style="border: none; flex: 1; padding: 24px;">
+                  <div class="terminal-content">
+                    <h3 class="exp-card-h3">Hackathons & Awards</h3>
+                    <p class="exp-card-p">
+                      Participated in and won multiple hackathons by developing innovative solutions
+                      solving real-world problems under tight constraints.
+                    </p>
+                  </div>
                 </div>
               </div>
 
               <!-- Card 4: Volunteer Work -->
-              <div class="sketch-card">
-                <h3 class="sketch-card-title">Volunteer Work</h3>
-                <p class="sketch-card-content">
-                  Volunteered as a coding instructor for underprivileged students, teaching programming fundamentals.
-                </p>
-                <div class="sketch-card-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path
-                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                  </svg>
+              <div class="terminal-card" style="margin-bottom: 0; display: flex; flex-direction: column; height: 100%;">
+                <div class="terminal-row" style="padding: 16px 24px; border-bottom: 1px solid var(--border);">
+                  <div class="terminal-label" style="width: auto; color: var(--accent);">COMMUNITY</div>
+                </div>
+                <div class="terminal-row" style="border: none; flex: 1; padding: 24px;">
+                  <div class="terminal-content">
+                    <h3 class="exp-card-h3">Volunteer Work</h3>
+                    <p class="exp-card-p">
+                      Mentored underprivileged students in programming fundamentals and computational thinking
+                      to bridge the digital divide.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -6360,7 +6562,7 @@
           <div class="blogs-container">
             <!-- Header -->
             <div class="blogs-header">
-              <div class="blogs-title">// BLOGS_ARTICLES</div>
+              <div class="blogs-title">// BIT_BY_BIT</div>
               <h2 class="blogs-subtitle">Thoughts, Stories & Experiences</h2>
               <p class="blogs-description">
                 Personal reflections, technical insights, and stories from the journey of building
@@ -6525,7 +6727,7 @@
     </div>
 
     <div class="footer-info">
-      <span>© 2025 TARUN • [ SECTION 1990 ]</span>
+      <span>© 2025 Thejus • [ SECTION 1990 ]</span>
       <span>BUILT WITH PRECISION • POWERED BY INNOVATION</span>
     </div>
   </footer>
@@ -6536,6 +6738,7 @@
 
 
   <!-- SCRIPTS -->
+  <script src="theme-image.js"></script>
   <script>
     // ==========================================
     // MARKOV CHAIN TEXT GENERATION ANIMATION - FINAL
@@ -6689,6 +6892,17 @@
       expandModelBtn.addEventListener('click', () => {
         modelModal.classList.add('active');
         document.body.classList.add('modal-open'); // Hide navbar
+        
+        // Focus on seed input to show blinking cursor
+        setTimeout(() => {
+           const seedInput = document.getElementById('seedInput');
+           if (seedInput) {
+             seedInput.focus();
+             // Move cursor to the end
+             const len = seedInput.value.length;
+             seedInput.setSelectionRange(len, len);
+           }
+        }, 100);
       });
 
       // Close modal
@@ -8410,123 +8624,55 @@
       `).join('');
     }
 
-    // ==========================================
-    // BLOGS DATA
-    // ==========================================
-    const blogsData = {
-      featured: {
-        id: 'blog-featured',
-        title: 'The Future of AI-Powered Development',
-        category: 'Technical',
-        excerpt: 'Exploring how Large Language Models are transforming the way we write, debug, and architect software systems. A deep dive into the next generation of development tools.',
-        date: 'Jan 15, 2025',
-        readTime: '12 min read',
-        image: '/images/blog-featured.png'
-      },
-      categories: [
-        {
-          id: 'thoughts',
-          name: 'Thoughts',
-          count: 3,
-          posts: [
-            {
-              id: 'blog-01',
-              title: 'Why I Stopped Using Traditional IDEs',
-              excerpt: 'After years of fighting with bloated IDEs, I discovered the beauty of minimal, text-based development environments and never looked back.',
-              category: 'Thoughts',
-              date: 'Dec 28, 2024',
-              readTime: '8 min read'
-            },
-            {
-              id: 'blog-02',
-              title: 'The Art of Simple Code',
-              excerpt: 'Complexity is often a sign of poor design. Here are some principles I follow to keep my code maintainable and elegant.',
-              category: 'Thoughts',
-              date: 'Nov 12, 2024',
-              readTime: '6 min read'
-            },
-            {
-              id: 'blog-03',
-              title: 'Learning in Public vs Private',
-              excerpt: 'The benefits of building projects openly: faster feedback, community growth, and unexpected opportunities.',
-              category: 'Thoughts',
-              date: 'Oct 5, 2024',
-              readTime: '10 min read'
-            }
-          ]
-        },
-        {
-          id: 'technical',
-          name: 'Technical',
-          count: 3,
-          posts: [
-            {
-              id: 'blog-04',
-              title: 'Building a Real-Time LLM Chat Interface',
-              excerpt: 'A step-by-step guide to creating a performant, real-time chat application powered by streaming Large Language Model responses.',
-              category: 'Technical',
-              date: 'Jan 8, 2025',
-              readTime: '15 min read'
-            },
-            {
-              id: 'blog-05',
-              title: 'Optimizing Redis Caching Strategies',
-              excerpt: 'Advanced techniques for cache invalidation, memory management, and scaling Redis in production environments.',
-              category: 'Technical',
-              date: 'Dec 20, 2024',
-              readTime: '12 min read'
-            },
-            {
-              id: 'blog-06',
-              title: 'From Monolith to Microservices',
-              excerpt: 'Lessons learned from breaking down a large application into microservices: the good, the bad, and the ugly.',
-              category: 'Technical',
-              date: 'Nov 30, 2024',
-              readTime: '18 min read'
-            }
-          ]
-        },
-        {
-          id: 'stories',
-          name: 'Stories',
-          count: 2,
-          posts: [
-            {
-              id: 'blog-07',
-              title: 'My First Production Incident',
-              excerpt: 'The story of how I accidentally deleted production data, the panic that followed, and the automated backups that saved my reputation.',
-              category: 'Stories',
-              date: 'Sep 15, 2024',
-              readTime: '7 min read'
-            },
-            {
-              id: 'blog-08',
-              title: 'The Conference That Changed My Career',
-              excerpt: 'How attending a small tech conference led to unexpected connections, job offers, and a complete shift in my professional trajectory.',
-              category: 'Stories',
-              date: 'Aug 22, 2024',
-              readTime: '14 min read'
-            }
-          ]
+    // Dynamic blog syncing from Bit by Bit repo
+    const BIT_BY_BIT_REPO = 'https://raw.githubusercontent.com/Thejus-M/BitbyBit/main/';
+    
+    async function syncBlogs() {
+      try {
+        const response = await fetch(BIT_BY_BIT_REPO + 'assets/js/blog-data.js');
+        const text = await response.text();
+        const start = text.indexOf('[');
+        const end = text.lastIndexOf(']');
+        if (start !== -1 && end !== -1) {
+          const arrayStr = text.substring(start, end + 1);
+          window.BLOG_DATA = new Function('return ' + arrayStr)();
+          renderFeaturedBlog();
+          renderBlogsGrid();
+          if (window.refreshThemeImages) window.refreshThemeImages();
         }
-      ]
-    };
+      } catch (e) {
+        console.error('Blog sync failed:', e);
+      }
+    }
+
+    function getBlogsData() {
+      return (window.BLOG_DATA) ? window.BLOG_DATA : [];
+    }
 
     // Render Featured Blog
     function renderFeaturedBlog() {
       const container = document.getElementById('featuredBlog');
       if (!container) return;
 
-      const featured = blogsData.featured;
+      const data = getBlogsData();
+      const featured = data[0]; // First item is newest
+      if (!featured) return;
+
       container.innerHTML = `
-        <div class="featured-blog-image">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-            <path d="M8 12h8M12 8v8"/>
-          </svg>
+        <div class="featured-blog-image" style="opacity: 1; background-color: var(--bg-card-elevated); position: relative; overflow: hidden;">
+          ${featured.image ? `
+            <img data-theme-src="${BIT_BY_BIT_REPO + featured.image}" 
+                 alt="${featured.title}" 
+                 style="width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0;">
+          ` : `
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <path d="M8 12h8M12 8v8"/>
+            </svg>
+          `}
         </div>
         <div class="featured-blog-content">
-          <div class="featured-blog-tag">${featured.category}</div>
+          <div class="featured-blog-tag">${featured.tags[0] || 'FEATURED'}</div>
           <h3 class="featured-blog-title">${featured.title}</h3>
           <p class="featured-blog-excerpt">${featured.excerpt}</p>
           <div class="featured-blog-meta">
@@ -8547,7 +8693,7 @@
               <span>${featured.readTime}</span>
             </div>
           </div>
-          <a href="#blog-${featured.id}" class="read-link">
+          <a href="${featured.link}" class="read-link">
             <span>Read Article</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -8562,17 +8708,22 @@
       const grid = document.getElementById('blogsGrid');
       if (!grid) return;
 
-      let allPosts = [];
-      if (filter === 'all') {
-        allPosts = blogsData.categories.flatMap(cat => cat.posts);
-      } else {
-        const category = blogsData.categories.find(cat => cat.id === filter);
-        allPosts = category ? category.posts : [];
+      const data = getBlogsData();
+      let allPosts = data.slice(1); // Exclude first item as it is featured
+      if (filter !== 'all') {
+        allPosts = allPosts.filter(post => post.tags.some(tag => tag.toLowerCase() === filter.toLowerCase()));
       }
 
       grid.innerHTML = allPosts.map(post => `
-        <div class="blog-card" data-category="${post.category}">
-          <div class="blog-tag">${post.category}</div>
+        <div class="blog-card">
+          ${post.image ? `
+          <div class="blog-card-image" style="height: 120px; margin: -24px -16px 20px; border-bottom: 1px solid var(--border-sub); opacity: 1; background-color: var(--bg-card-elevated); position: relative; overflow: hidden;">
+            <img data-theme-src="${BIT_BY_BIT_REPO + post.image}" 
+                 alt="${post.title}" 
+                 style="width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0;">
+          </div>
+          ` : ''}
+          <div class="blog-tag">${post.tags[0] || 'ARTICLE'}</div>
           <h3 class="blog-title">${post.title}</h3>
           <p class="blog-excerpt">${post.excerpt}</p>
           <div class="blog-meta">
@@ -8593,7 +8744,7 @@
               <span>${post.readTime}</span>
             </div>
           </div>
-          <a href="#blog-${post.id}" class="blog-link">
+          <a href="${post.link}" class="blog-link">
             <span>Read</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -8626,8 +8777,7 @@
 
       // Render New Sections
       renderDevLogsIndex();
-      renderFeaturedBlog();
-      renderBlogsGrid();
+      syncBlogs();
       initBlogFilters();
     });
   </script>
