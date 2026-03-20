@@ -1889,7 +1889,7 @@
     }
 
     .git-commit circle {
-      fill: var(--bg-body);
+      /* fill: var(--bg-body); */
       stroke-width: 1.4;
       transition: all 0.3s;
     }
@@ -5587,6 +5587,7 @@
         transform: translate(-50%, -50%) rotate(-90deg) !important;
         transform-origin: center center !important;
         margin: 0 !important;
+        overflow: visible !important;
 
         /* Visual Dimensions (Swapped for rotation) */
         width: 75vh !important;
@@ -5609,32 +5610,32 @@
 
       /* Specific Label Sizes */
       #gitSvg .git-label {
-        font-size: 20px !important;
+        font-size: 11px !important;
         font-weight: 700 !important;
         letter-spacing: 1px !important;
       }
 
       #gitSvg .git-axis-label {
-        font-size: 17px !important;
+        font-size: 10px !important;
         font-weight: 500 !important;
       }
 
       #gitSvg .git-sub {
-        font-size: 15px !important;
+        font-size: 9px !important;
       }
 
       /* Thicker lines for visibility */
       #gitSvg .git-path {
-        stroke-width: 6px !important;
+        stroke-width: 4px !important;
       }
 
       /* Larger, more visible nodes */
       #gitSvg circle {
-        r: 12 !important;
-        stroke-width: 4px !important;
+        r: 8 !important;
+        stroke-width: 3px !important;
       }
 
-      .graph-viz-wrapper {
+      #gitViz {
         position: relative !important;
         /* Anchor for absolute child */
         width: 100% !important;
@@ -5947,6 +5948,18 @@
 
       .flow .arrow {
         font-size: 18px;
+      }
+
+      /* Experience Info Card */
+      .exp-info-card {
+        width: 90vw !important;
+        position: fixed !important;
+        top: auto !important;
+        bottom: 30px !important;
+        left: 5vw !important;
+        padding: 20px !important;
+        z-index: 9999 !important;
+        box-shadow: 4px 4px 0px var(--grid-line) !important;
       }
 
       /* Dev Logs */
@@ -8069,6 +8082,9 @@
     }
 
     function showExpInfo(idx) {
+      // Prevent immediate closure from document click listener
+      if (window.event) { window.event.stopPropagation(); }
+      
       const card = document.getElementById('expInfoCard');
       const title = document.getElementById('expInfoTitle');
       const meta = document.getElementById('expInfoMeta');
@@ -8079,7 +8095,7 @@
       meta.innerText = exp.meta;
       desc.innerText = exp.desc;
 
-      // Position card near click
+      // Position card near click (desktop behavior, safely overriden via CSS on mobile)
       const event = window.event;
       if (event) {
         const section = document.querySelector('.experience-section');
@@ -8098,6 +8114,20 @@
         card.dataset.activeIdx = idx;
       }
     }
+
+    // Dismissal Logic for Experience Card
+    document.addEventListener('click', (e) => {
+      const card = document.getElementById('expInfoCard');
+      if (card && card.classList.contains('visible')) {
+        const isClickOnCard = card.contains(e.target);
+        const isClickOnNode = e.target.closest('.git-commit') || e.target.closest('.nn-node');
+        
+        if (!isClickOnCard && !isClickOnNode) {
+          card.classList.remove('visible');
+          card.dataset.activeIdx = -1;
+        }
+      }
+    });
 
     function initExpAnimations() {
       const observer = new IntersectionObserver((entries) => {
@@ -8152,6 +8182,22 @@
           }
         });
       }, { threshold: 0.3 });
+
+      // Dynamically inject invisible touch targets to massively increase hit area
+      const svgNodes = svg.querySelectorAll('.git-commit');
+      svgNodes.forEach(group => {
+        const circle = group.querySelector('circle');
+        if (circle) {
+          const hitArea = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          hitArea.setAttribute('cx', circle.getAttribute('cx'));
+          hitArea.setAttribute('cy', circle.getAttribute('cy'));
+          hitArea.setAttribute('r', '40'); // Massive 40px hit radius
+          hitArea.setAttribute('fill', 'transparent');
+          hitArea.style.cursor = 'pointer';
+          hitArea.style.pointerEvents = 'all';
+          group.appendChild(hitArea);
+        }
+      });
 
       observer.observe(container);
     }
