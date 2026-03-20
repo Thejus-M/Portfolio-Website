@@ -1898,10 +1898,6 @@
       filter: drop-shadow(0 0 8px currentColor);
     }
 
-    [data-theme="light"] .git-commit circle {
-      fill: var(--bg-body);
-    }
-
     /* Labels */
     .git-label {
       font-family: var(--font-mono-sys);
@@ -6408,7 +6404,7 @@
             <div class="dsa-header-center">
               <div class="dsa-tag-center">// MISC_MODULES</div>
               <h2 class="dsa-title-center">Other Experience</h2>
-              <p class="dsa-desc-center">
+              <p class="blogs-description">
                 Active contributions to the developer ecosystem through open source,
                 technical writing, and community engagement.
               </p>
@@ -6429,7 +6425,7 @@
                   <div class="terminal-content">
                     <h3 class="exp-card-h3">Open Source Contributions</h3>
                     <p class="exp-card-p">
-                      Active contributor to various open-source projects, focusing on React.js ecosystem,
+                      Active contributor to various open-source projects,
                       performance optimization tools, and Python data science libraries.
                     </p>
                   </div>
@@ -6445,7 +6441,7 @@
                   <div class="terminal-content">
                     <h3 class="exp-card-h3">Technical Writing</h3>
                     <p class="exp-card-p">
-                      Author of deep-dive technical blog posts and tutorials covering web development patterns,
+                      Author of technical blog posts and tutorials covering web development patterns,
                       distributed systems, and machine learning concepts.
                     </p>
                   </div>
@@ -6477,7 +6473,7 @@
                   <div class="terminal-content">
                     <h3 class="exp-card-h3">Volunteer Work</h3>
                     <p class="exp-card-p">
-                      Mentored underprivileged students in programming fundamentals and computational thinking
+                      Mentored students in programming fundamentals and computational thinking
                       to bridge the digital divide.
                     </p>
                   </div>
@@ -6495,9 +6491,9 @@
             <div class="dsa-header-center">
               <div class="dsa-tag-center">// DSA_KNOWLEDGE_BASE</div>
               <h2 class="dsa-title-center">Algorithmic Mastery</h2>
-              <p class="dsa-desc-center">
+              <p class="blogs-description">
                 A structured approach to understanding data structures and algorithms.
-                Optimize your problem-solving process.
+                Optimize your problem solving process.
               </p>
             </div>
 
@@ -6562,9 +6558,13 @@
             </div>
 
             <!-- CTA Button Below Interface -->
-            <div class="dsa-cta-center">
-              <a href="https://thejus-m.github.io/DSA."
-                class="dsa-btn-primary">INITIALIZE EXPLORER</a>
+            <div class="" style="text-align: center; margin-top: 40px; position: relative;">
+              <a href="https://thejus-m.github.io/DSA." class="view-all-link" style="display: inline-flex; align-items: center; text-decoration: none; color: inherit;">
+                <span>DSA Library</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
             </div>
 
           </div>
@@ -6849,6 +6849,18 @@
               </div>
             </div>
 
+            <!-- View All Dev Logs CTA -->
+            <!-- <div class="dev-logs-footer-cta" style="text-align: center; margin-top: 40px; position: relative; animation: content-corrupt 8s infinite steps(1);"> -->
+            <div class="" style="display: flex; justify-content: center; position: relative; animation: content-corrupt 8s infinite steps(1);">
+              <a href="#" class="view-all-link" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                <span>Explore the Knowledge Base</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+            <!-- </div> -->
+
           </div>
         </section>
 
@@ -6959,7 +6971,7 @@
         <div class="chase-ghosts">
           <!-- MAIL (Corner Legs) -->
           <!-- MAIL (Corner Legs) -->
-          <a href="#" class="chase-ghost-link" data-link="mail" data-label="MAIL">
+          <a href="mailto:hi.thejus@gmail.com" class="chase-ghost-link" data-link="mail" data-label="MAIL">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <!-- Main Envelope Body -->
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -6973,7 +6985,7 @@
             </svg>
           </a>
           <!-- GITHUB (Cat Legs) -->
-          <a href="#" class="chase-ghost-link" data-link="github" data-label="GITHUB">
+          <a href="https://github.com/Thejus-M" class="chase-ghost-link" data-link="github" data-label="GITHUB">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <!-- Octocat Body (Trimmed V22 to V19) -->
               <path
@@ -6990,7 +7002,7 @@
 
 
           <!-- LINKEDIN (Custom 'n' Legs) -->
-          <a href="#" class="chase-ghost-link" data-link="linkedin" data-label="LINKEDIN">
+          <a href="https://www.linkedin.com/in/thejus-m-872276227" class="chase-ghost-link" data-link="linkedin" data-label="LINKEDIN">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <!-- 'i' part -->
               <rect x="2" y="9" width="4" height="12"></rect>
@@ -7009,7 +7021,7 @@
           </a>
 
           <!-- LEETCODE (Custom < > Legs) -->
-          <a href="#" class="chase-ghost-link" data-link="leetcode" data-label="LEETCODE">
+          <a href="https://leetcode.com/u/iamfoss/" class="chase-ghost-link" data-link="leetcode" data-label="LEETCODE">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <!-- Greater Than (> Leg) -->
               <polyline class="code-leg-r" points="16 18 22 12 16 6"></polyline>
