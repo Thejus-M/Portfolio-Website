@@ -4423,11 +4423,29 @@
 
     /* Responsive */
     @media (max-width: 768px) {
+      .dsa-header-center {
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: none;
+      }
+
+      .dsa-title-center {
+        font-size: 24px;
+        margin-bottom: 8px;
+        line-height: 1.1;
+      }
+
+      .dsa-desc-center {
+        font-size: 11px; /* Small text instead of none */
+        margin-bottom: 12px;
+        line-height: 1.4;
+      }
+
       .dsa-interface-container {
         flex-direction: column;
-        height: auto;
-        min-height: 550px;
-        margin-bottom: 30px;
+        height: 400px; /* Fixed height forces clipping */
+        min-height: unset;
+        margin-bottom: 20px;
         border-radius: 4px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
       }
@@ -4436,7 +4454,7 @@
         width: 100%;
         border-right: none;
         border-bottom: 1px solid var(--border);
-        padding: 12px;
+        padding: 8px;
       }
 
       .dsa-sidebar-header,
@@ -4447,7 +4465,7 @@
       #dsaNav {
         display: flex;
         overflow-x: auto;
-        gap: 8px;
+        gap: 6px;
         padding-bottom: 4px;
         scrollbar-width: none;
         /* Firefox */
@@ -4461,10 +4479,10 @@
       .dsa-nav-link {
         border-left: none;
         border: 1px solid var(--border-sub);
-        padding: 6px 14px;
+        padding: 6px 10px;
         background: rgba(0, 212, 255, 0.05);
         white-space: nowrap;
-        font-size: 11px;
+        font-size: 10px;
       }
 
       .dsa-nav-link.active {
@@ -4473,27 +4491,33 @@
       }
 
       .dsa-main-preview {
-        padding: 20px;
-        height: auto;
-        min-height: 350px;
+        padding: 16px;
+        /* Let parent's 240px height do the clipping */
       }
 
       .dsa-prob-title {
-        font-size: 20px;
+        font-size: 16px;
+        margin-bottom: 4px;
       }
 
       .dsa-prob-desc {
-        font-size: 13px;
-        margin-bottom: 20px;
+        font-size: 11px;
+        margin-bottom: 12px;
+        line-height: 1.3;
       }
 
       .dsa-code-mock {
-        padding: 12px;
-        font-size: 11px;
+        padding: 10px;
+        font-size: 10px;
       }
 
       .dsa-overlay {
         background: linear-gradient(to bottom, transparent 0%, var(--bg-body) 100%);
+      }
+
+      .dsa-cta-btn {
+        padding: 12px 30px;
+        font-size: 11px;
       }
     }
 
@@ -4657,10 +4681,29 @@
     @media (max-width: 900px) {
       .dsa-modules-grid {
         grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .dsa-module-card {
+        padding: 10px 14px;
+        min-height: 80px; /* Reduced from auto if auto wasn't enough */
+      }
+
+      .dsa-card-number {
+        display: none;
+      }
+
+      .dsa-card-title {
+        font-size: 14px;
+        margin-bottom: 0;
+      }
+
+      .dsa-card-list {
+        display: none;
       }
 
       .dsa-frame-title {
-        font-size: 36px;
+        font-size: 32px;
       }
     }
 
@@ -5428,7 +5471,18 @@
       .category-index-card,
       .blog-card,
       .featured-blog {
-        padding: 24px 16px;
+        padding: 4px 10px;
+      }
+
+      .category-name {
+        font-size: 14px;
+        margin-bottom: 0;
+      }
+
+      .category-description,
+      .category-number,
+      .topic-preview-list {
+        display: none;
       }
 
       .blogs-stats,
@@ -7971,7 +8025,7 @@
         desc: "Actively contributing to various open source projects, improving code quality, fixing bugs, and adding new features. Focus on LLM tooling, LangChain adapters, and web performance optimization."
       },
       {
-        title: "Product Engineer Associate I - UST",
+        title: "Product Engineer - UST",
         meta: "JULY 2024-PRESENT",
         desc: "Leading AI initiatives and developing enterprise-grade solutions for Fortune 500 clients. Managing multiple AI/ML projects focused on infrastructure automation, data insights, and intelligent monitoring systems."
       },
