@@ -6508,52 +6508,281 @@
         <section class="dev-logs-index-section" id="devLogsIndex">
           <div class="dev-logs-index-container">
             <!-- Header -->
-            <div class="dev-logs-index-header">
+            <div class="dev-logs-index-header" style="animation: content-corrupt 8s infinite steps(1);">
               <div class="dev-logs-index-title">// DEV_LOGS_INDEX</div>
-              <h2 class="dev-logs-index-subtitle">Knowledge Base & Documentation</h2>
-              <p class="dev-logs-index-description">
-                A curated collection of technical documentation, tutorials, and reference guides.
-                Covering everything from development tools to distributed systems theory.
-              </p>
             </div>
 
-            <!-- Quick Stats -->
-            <div class="dev-logs-quick-stats">
-              <div class="stat-box">
-                <div class="stat-box-value">11</div>
-                <div class="stat-box-label">Categories</div>
+            <!-- Stats and Grid Wrapper for Overlay -->
+            <div id="devLogsPreviewWrapper" style="position: relative; overflow: hidden;">
+              <!-- Content Container (starts clear, then glitches) -->
+              <div class="dev-logs-blur-content" style="pointer-events: none; user-select: none;">
+
+                <!-- Categories Grid -->
+                <div class="dev-logs-categories-grid" id="categoriesGrid">
+                  <!-- Populated by JavaScript -->
+                </div>
               </div>
-              <div class="stat-box">
-                <div class="stat-box-value">48</div>
-                <div class="stat-box-label">Topics</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-box-value">32</div>
-                <div class="stat-box-label">Completed</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-box-value">67%</div>
-                <div class="stat-box-label">Progress</div>
+
+              <!-- Coming Soon Overlay (Multi-Directional Cinematic Glitch) -->
+              <style>
+                @media (max-width: 768px) {
+                  #categoriesGrid .category-index-card:nth-child(n+2) {
+                    display: none !important;
+                  }
+                  .glitch-text {
+                    font-size: 24px !important;
+                    padding: 12px !important;
+                  }
+                  .glitch-text::before,
+                  .glitch-text::after {
+                    padding: 12px !important;
+                  }
+                }
+                
+                /* ===== PHASE 1: Content starts clear, then corrupts ===== */
+
+                .dev-logs-blur-content {
+                  animation: content-corrupt 8s infinite steps(1);
+                }
+
+                @keyframes content-corrupt {
+                  0%   { filter: blur(3px); opacity: 0.6; transform: none; }
+                  20%  { filter: blur(3px); opacity: 0.6; transform: none; }
+                  /* Phase 2: Glitch bursts hit from multiple directions */
+                  21%  { filter: blur(1px) brightness(1.3); opacity: 0.9; transform: translate(-5px, 2px) skewX(2deg); }
+                  22%  { filter: blur(4px) brightness(0.7); opacity: 0.5; transform: translate(4px, -3px) skewY(-1deg); }
+                  23%  { filter: blur(2px) brightness(1.5); opacity: 1; transform: translate(0, 5px) skewX(-3deg) scaleX(1.02); }
+                  24%  { filter: none; opacity: 1; transform: translate(-1px, 1px); } /* GLIMPSE */
+                  25%  { filter: none; opacity: 1; transform: none; } /* GLIMPSE */
+                  26%  { filter: blur(3px); opacity: 0.5; transform: translate(-2px, 4px) skewX(4deg) scaleY(1.01); }
+                  27%  { filter: blur(1px); opacity: 0.8; transform: translate(0, -3px); }
+                  /* Phase 3: Content stays hidden/blurred while Coming Soon shows */
+                  28%  { filter: blur(3px); opacity: 0.6; transform: none; }
+                  /* Periodic glitch twitches while blurred */
+                  55%  { filter: blur(3px); opacity: 0.6; transform: none; }
+                  56%  { filter: none; opacity: 1; transform: translate(2px, -1px) brightness(1.2); } /* GLIMPSE */
+                  57%  { filter: none; opacity: 1; transform: none; } /* GLIMPSE */
+                  58%  { filter: blur(3px); opacity: 0.6; transform: none; }
+                  75%  { filter: blur(3px); opacity: 0.6; transform: none; }
+                  76%  { filter: blur(1px); opacity: 0.9; transform: translate(2px, -4px) rotate(-0.3deg); }
+                  77%  { filter: blur(5px); opacity: 0.3; transform: translate(-5px, 2px) skewX(3deg) skewY(-1deg); }
+                  78%  { filter: blur(3px); opacity: 0.6; transform: none; }
+                  /* Brief clarity before loop restart */
+                  92%  { filter: blur(3px); opacity: 0.6; transform: none; }
+                  93%  { filter: blur(1px); opacity: 0.5; transform: translate(-2px, 1px); }
+                  94%  { filter: none; opacity: 1; transform: translate(1px, -1px); } /* GLIMPSE */
+                  95%  { filter: blur(3px); opacity: 0.6; transform: none; }
+                  100% { filter: blur(3px); opacity: 0.6; transform: none; }
+                }
+
+                /* ===== COMING SOON OVERLAY - fades in after glitch ===== */
+                .coming-soon-overlay {
+                  animation: overlay-reveal 8s infinite steps(1);
+                }
+
+                @keyframes overlay-reveal {
+                  0%   { opacity: 1; pointer-events: auto; }
+                  20%  { opacity: 1; pointer-events: auto; }
+                  /* Flicker out during the glitch */
+                  21%  { opacity: 0.1; }
+                  22%  { opacity: 0.8; }
+                  23%  { opacity: 0.2; }
+                  24%  { opacity: 0; pointer-events: none; } /* GLIMPSE */
+                  25%  { opacity: 0; pointer-events: none; } /* GLIMPSE */
+                  26%  { opacity: 0.6; pointer-events: auto; }
+                  27%  { opacity: 0.3; }
+                  28%  { opacity: 1; pointer-events: auto; }
+                  /* Stay visible */
+                  55%  { opacity: 1; pointer-events: auto; }
+                  56%  { opacity: 0; pointer-events: none; } /* GLIMPSE */
+                  57%  { opacity: 0; pointer-events: none; } /* GLIMPSE */
+                  58%  { opacity: 1; pointer-events: auto; }
+                  
+                  75%  { opacity: 1; pointer-events: auto; }
+                  76%  { opacity: 0.4; }
+                  77%  { opacity: 0.9; }
+                  78%  { opacity: 1; pointer-events: auto; }
+                  
+                  92%  { opacity: 1; pointer-events: auto; }
+                  93%  { opacity: 0.2; }
+                  94%  { opacity: 0; pointer-events: none; } /* GLIMPSE */
+                  95%  { opacity: 1; pointer-events: auto; }
+                  100% { opacity: 1; pointer-events: auto; }
+                }
+
+                /* Scanline overlay */
+                .coming-soon-overlay::after {
+                  content: '';
+                  position: absolute;
+                  top: 0; left: 0;
+                  width: 100%; height: 100%;
+                  background: repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.03) 2px,
+                    rgba(0, 0, 0, 0.03) 4px
+                  );
+                  pointer-events: none;
+                  z-index: 2;
+                  animation: overlay-reveal 8s infinite steps(1);
+                }
+
+                .glitch-wrapper {
+                  position: sticky;
+                  top: 20vh;
+                  transform: translateY(-50%);
+                  text-align: center;
+                  width: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                  padding: 40px 0;
+                }
+
+                /* ===== GLITCH TEXT - multi-directional ===== */
+                .glitch-text {
+                  position: relative;
+                  display: inline-block;
+                  font-family: var(--font-serif, serif);
+                  font-size: clamp(36px, 7vw, 64px);
+                  color: #fff;
+                  letter-spacing: 0.15em;
+                  font-weight: 700;
+                  text-transform: uppercase;
+                  padding: 20px;
+                  animation: text-multi-glitch 3s infinite steps(1);
+                }
+
+                /* Main text glitches in MULTIPLE directions */
+                @keyframes text-multi-glitch {
+                  0%, 100% { transform: none; text-shadow: none; }
+                  /* Horizontal burst */
+                  5%  { transform: translateX(5px) skewX(3deg); text-shadow: 4px 0 var(--accent-bright, #00d4ff), -4px 0 var(--accent, #4d9fff); }
+                  6%  { transform: translateX(-3px); text-shadow: -3px 0 var(--accent, #4d9fff), 3px 0 var(--accent-bright, #00d4ff); }
+                  7%  { transform: none; text-shadow: none; }
+                  /* Vertical burst */
+                  25% { transform: translateY(-4px) skewY(2deg); text-shadow: 0 3px var(--accent-bright, #00d4ff), 0 -3px var(--accent, #4d9fff); }
+                  26% { transform: translateY(3px) skewY(-1deg); text-shadow: 0 -2px var(--accent, #4d9fff), 0 2px var(--accent-bright, #00d4ff); }
+                  27% { transform: none; text-shadow: none; }
+                  /* Diagonal burst */
+                  50% { transform: translate(4px, -3px) rotate(1deg) scale(1.02); text-shadow: 3px 3px var(--accent-bright, #00d4ff), -3px -3px var(--accent, #4d9fff); }
+                  51% { transform: translate(-3px, 2px) rotate(-0.5deg) scale(0.98); text-shadow: -2px 2px var(--accent, #4d9fff), 2px -2px var(--accent-bright, #00d4ff); }
+                  52% { transform: none; text-shadow: none; }
+                  /* Multi-axis burst */
+                  75% { transform: translateX(-6px) skewX(-4deg) skewY(1deg); text-shadow: -5px 2px var(--accent-bright, #00d4ff), 5px -2px var(--accent, #4d9fff); }
+                  76% { transform: translate(4px, 3px) skewX(2deg) scaleX(1.03); text-shadow: 3px -3px var(--accent, #4d9fff); }
+                  77% { transform: translate(-2px, -1px) rotate(-0.7deg); text-shadow: -2px 0 var(--accent-bright, #00d4ff); }
+                  78% { transform: none; text-shadow: none; }
+                }
+
+                .glitch-text::before,
+                .glitch-text::after {
+                  content: attr(data-text);
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  padding: 20px;
+                  overflow: hidden;
+                  background: transparent;
+                }
+
+                /* Cyan layer - horizontal + vertical displacement */
+                .glitch-text::before {
+                  color: var(--accent-bright, #00d4ff);
+                  z-index: -1;
+                  animation: glitch-dir-1 3s infinite steps(1);
+                }
+
+                /* Blue layer - diagonal + scale displacement */
+                .glitch-text::after {
+                  color: var(--accent, #4d9fff);
+                  z-index: -2;
+                  animation: glitch-dir-2 3s infinite steps(1);
+                }
+
+                @keyframes glitch-dir-1 {
+                  0%, 100% { clip: rect(0, 9999px, 0, 0); transform: none; opacity: 0; }
+                  /* Horizontal */
+                  5%   { clip: rect(10px, 9999px, 40px, 0); transform: translate(7px, 0); opacity: 1; }
+                  6%   { clip: rect(50px, 9999px, 80px, 0); transform: translate(-9px, 0); opacity: 1; }
+                  7%   { clip: rect(0, 9999px, 0, 0); transform: none; opacity: 0; }
+                  /* Vertical */
+                  25%  { clip: rect(0px, 9999px, 100px, 0); transform: translate(0, -5px); opacity: 1; }
+                  26%  { clip: rect(20px, 9999px, 60px, 0); transform: translate(0, 6px); opacity: 1; }
+                  27%  { clip: rect(0, 9999px, 0, 0); transform: none; opacity: 0; }
+                  /* Diagonal */
+                  50%  { clip: rect(15px, 9999px, 45px, 0); transform: translate(5px, -4px) rotate(1deg); opacity: 1; }
+                  51%  { clip: rect(40px, 9999px, 70px, 0); transform: translate(-6px, 3px) rotate(-0.5deg); opacity: 1; }
+                  52%  { clip: rect(0, 9999px, 0, 0); transform: none; opacity: 0; }
+                  /* Multi-axis */
+                  75%  { clip: rect(5px, 9999px, 50px, 0); transform: translate(-8px, 2px) skewX(2deg); opacity: 1; }
+                  76%  { clip: rect(30px, 9999px, 90px, 0); transform: translate(6px, -5px) skewY(-1deg); opacity: 1; }
+                  77%  { clip: rect(60px, 9999px, 80px, 0); transform: translate(-4px, 3px) scale(1.02); opacity: 1; }
+                  78%  { clip: rect(0, 9999px, 0, 0); transform: none; opacity: 0; }
+                }
+
+                @keyframes glitch-dir-2 {
+                  0%, 100% { clip: rect(0, 9999px, 0, 0); transform: none; opacity: 0; }
+                  /* Horizontal - opposite */
+                  5%   { clip: rect(30px, 9999px, 65px, 0); transform: translate(-6px, 0); opacity: 1; }
+                  6%   { clip: rect(5px, 9999px, 35px, 0); transform: translate(8px, 0); opacity: 1; }
+                  7%   { clip: rect(0, 9999px, 0, 0); transform: none; opacity: 0; }
+                  /* Vertical - opposite */
+                  25%  { clip: rect(30px, 9999px, 70px, 0); transform: translate(0, 4px); opacity: 1; }
+                  26%  { clip: rect(5px, 9999px, 40px, 0); transform: translate(0, -7px); opacity: 1; }
+                  27%  { clip: rect(0, 9999px, 0, 0); transform: none; opacity: 0; }
+                  /* Diagonal - opposite */
+                  50%  { clip: rect(45px, 9999px, 75px, 0); transform: translate(-4px, 5px) rotate(-1deg); opacity: 1; }
+                  51%  { clip: rect(10px, 9999px, 35px, 0); transform: translate(7px, -3px) rotate(0.7deg); opacity: 1; }
+                  52%  { clip: rect(0, 9999px, 0, 0); transform: none; opacity: 0; }
+                  /* Multi-axis - opposite */
+                  75%  { clip: rect(25px, 9999px, 70px, 0); transform: translate(7px, -3px) skewX(-3deg); opacity: 1; }
+                  76%  { clip: rect(50px, 9999px, 85px, 0); transform: translate(-5px, 4px) skewY(2deg); opacity: 1; }
+                  77%  { clip: rect(10px, 9999px, 40px, 0); transform: translate(3px, -2px) scale(0.98); opacity: 1; }
+                  78%  { clip: rect(0, 9999px, 0, 0); transform: none; opacity: 0; }
+                }
+
+                .glitch-sub {
+                  margin: 12px 0 0;
+                  font-family: var(--font-mono-sys, 'Share Tech Mono', monospace);
+                  font-size: clamp(11px, 1.5vw, 15px);
+                  letter-spacing: 0.5em;
+                  color: var(--accent-bright, #00d4ff);
+                  text-transform: uppercase;
+                  padding-left: 0.5em;
+                  opacity: 0.8;
+                  animation: sub-multi-glitch 3s infinite steps(1);
+                }
+
+                @keyframes sub-multi-glitch {
+                  0%, 100% { opacity: 0.8; transform: none; }
+                  5%  { opacity: 0; transform: translateX(4px); }
+                  6%  { opacity: 1; transform: translateX(-3px) translateY(2px); }
+                  7%  { opacity: 0.8; transform: none; }
+                  25% { opacity: 0.2; transform: translateY(-3px); }
+                  26% { opacity: 1; transform: translateY(2px) skewX(2deg); }
+                  27% { opacity: 0.8; transform: none; }
+                  50% { opacity: 0; transform: translate(3px, -2px); }
+                  51% { opacity: 1; transform: translate(-2px, 1px); }
+                  52% { opacity: 0.8; transform: none; }
+                  75% { opacity: 0.3; transform: translateX(-5px) skewX(-2deg); }
+                  76% { opacity: 0; }
+                  77% { opacity: 1; transform: translateX(3px) skewX(1deg); }
+                  78% { opacity: 0.8; transform: none; }
+                }
+              </style>
+              <div class="coming-soon-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; background: rgba(0,0,0,0.15);">
+                <div class="glitch-wrapper">
+                  <h3 class="glitch-text" data-text="COMING SOON">COMING SOON</h3>
+                  <p class="glitch-sub">// DEV_LOGS</p>
+                </div>
               </div>
             </div>
 
-            <!-- Categories Grid -->
-            <div class="dev-logs-categories-grid" id="categoriesGrid">
-              <!-- Populated by JavaScript -->
-            </div>
-
-            <!-- View All CTA -->
-            <div class="dev-logs-footer-cta" style="text-align: center;">
-              <p>
-                Explore complete documentation with advanced search, filtering, and detailed content.
-              </p>
-              <a href="/dev-logs.html" class="view-all-link">
-                <span>View Full Documentation</span>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </a>
-            </div>
           </div>
         </section>
 
@@ -8423,11 +8652,11 @@
           title: 'Vim',
           description: 'Efficient text editing, navigation, and customization for Vim editor.',
           topics: [
-            { id: 'vim-01', title: 'Initial Configuration', status: 'complete' },
-            { id: 'vim-02', title: 'The Buffer Workflow', status: 'complete' },
-            { id: 'vim-03', title: 'Plugin Management (LSP)', status: 'complete' },
+            { id: 'vim-01', title: 'Initial Configuration', status: 'wip' },
+            { id: 'vim-02', title: 'The Buffer Workflow', status: 'wip' },
+            { id: 'vim-03', title: 'Plugin Management (LSP)', status: 'wip' },
             { id: 'vim-04', title: 'Vim vs Neovim Features', status: 'wip' },
-            { id: 'vim-05', title: 'Macros & Registers', status: 'complete' },
+            { id: 'vim-05', title: 'Macros & Registers', status: 'wip' },
             { id: 'vim-06', title: 'Custom Keybindings', status: 'planned' },
             { id: 'vim-07', title: 'Text Objects Mastery', status: 'planned' },
             { id: 'vim-08', title: 'Command Mode Power', status: 'planned' }
@@ -8439,9 +8668,9 @@
           title: 'Git',
           description: 'Version control workflows, branching strategies, and advanced Git operations.',
           topics: [
-            { id: 'git-01', title: 'Everyday Feature Flow', status: 'complete' },
-            { id: 'git-02', title: 'Interactive Rebase Mastery', status: 'complete' },
-            { id: 'git-03', title: 'Resolving Upstream Conflicts', status: 'complete' },
+            { id: 'git-01', title: 'Everyday Feature Flow', status: 'wip' },
+            { id: 'git-02', title: 'Interactive Rebase Mastery', status: 'wip' },
+            { id: 'git-03', title: 'Resolving Upstream Conflicts', status: 'wip' },
             { id: 'git-04', title: 'Cherry-picking Strategies', status: 'wip' },
             { id: 'git-05', title: 'Bisect for Debugging', status: 'planned' },
             { id: 'git-06', title: 'Git Hooks Automation', status: 'planned' }
@@ -8453,142 +8682,12 @@
           title: 'Redis',
           description: 'In-memory data structures, caching patterns, and pub/sub messaging.',
           topics: [
-            { id: 'redis-01', title: 'Caching Design Patterns', status: 'complete' },
-            { id: 'redis-02', title: 'Pub/Sub Implementation', status: 'complete' },
-            { id: 'redis-03', title: 'Persistence Strategies', status: 'complete' },
-            { id: 'redis-04', title: 'Redis Cluster Setup', status: 'complete' },
+            { id: 'redis-01', title: 'Caching Design Patterns', status: 'wip' },
+            { id: 'redis-02', title: 'Pub/Sub Implementation', status: 'wip' },
+            { id: 'redis-03', title: 'Persistence Strategies', status: 'wip' },
+            { id: 'redis-04', title: 'Redis Cluster Setup', status: 'wip' },
             { id: 'redis-05', title: 'Lua Scripting', status: 'wip' },
             { id: 'redis-06', title: 'Redis Streams', status: 'planned' }
-          ]
-        },
-        {
-          id: 'docker',
-          number: '04',
-          title: 'Docker',
-          description: 'Containerization, multi-stage builds, and orchestration fundamentals.',
-          topics: [
-            { id: 'docker-01', title: 'Multi-Stage Builds', status: 'complete' },
-            { id: 'docker-02', title: 'Container Networking', status: 'complete' },
-            { id: 'docker-03', title: 'Layer Optimization', status: 'complete' },
-            { id: 'docker-04', title: 'Docker Compose Pro Tips', status: 'complete' },
-            { id: 'docker-05', title: 'Volumes & Persistence', status: 'complete' },
-            { id: 'docker-06', title: 'Docker Swarm Basics', status: 'wip' },
-            { id: 'docker-07', title: 'Custom Images', status: 'complete' },
-            { id: 'docker-08', title: 'Security Best Practices', status: 'planned' }
-          ]
-        },
-        {
-          id: 'distributed',
-          number: '05',
-          title: 'Distributed Systems',
-          description: 'Theoretical foundations of distributed computing and consensus algorithms.',
-          topics: [
-            { id: 'ds-01', title: 'CAP Theorem Foundations', status: 'complete' },
-            { id: 'ds-02', title: 'Paxos Consensus Algorithm', status: 'complete' },
-            { id: 'ds-03', title: 'The Raft Protocol', status: 'complete' },
-            { id: 'ds-04', title: 'Byzantine Fault Tolerance', status: 'complete' },
-            { id: 'ds-05', title: 'Vector Clocks & Causality', status: 'complete' },
-            { id: 'ds-06', title: 'Consistent Hashing Layers', status: 'complete' },
-            { id: 'ds-07', title: 'Gossip Protocols in Mesh', status: 'complete' },
-            { id: 'ds-08', title: 'Quorum Consistency Models', status: 'complete' },
-            { id: 'ds-09', title: 'Two-Phase Commit Issues', status: 'complete' },
-            { id: 'ds-10', title: 'Distributed Locking ZooKeeper', status: 'wip' },
-            { id: 'ds-11', title: 'Log-Structured Storage', status: 'wip' },
-            { id: 'ds-12', title: 'LSM Trees Performance', status: 'wip' },
-            { id: 'ds-13', title: 'Bloom Filters Optimization', status: 'planned' },
-            { id: 'ds-14', title: 'Write-Ahead Logging (WAL)', status: 'planned' },
-            { id: 'ds-15', title: 'Anti-Entropy Mechanisms', status: 'planned' },
-            { id: 'ds-16', title: 'Sharding & Partitioning', status: 'planned' },
-            { id: 'ds-17', title: 'Availability vs Latency', status: 'planned' },
-            { id: 'ds-18', title: 'CRDT Architecture', status: 'planned' },
-            { id: 'ds-19', title: 'Leaderless Replication', status: 'planned' },
-            { id: 'ds-20', title: 'Eventual Consistency Flow', status: 'planned' }
-          ]
-        },
-        {
-          id: 'k8s',
-          number: '06',
-          title: 'Kubernetes',
-          description: 'Container orchestration, deployment strategies, and cluster management.',
-          topics: [
-            { id: 'k8s-01', title: 'kubectl Debug Plugins', status: 'complete' },
-            { id: 'k8s-02', title: 'Kustomize Overlays', status: 'complete' },
-            { id: 'k8s-03', title: 'Helm Charts v3', status: 'complete' },
-            { id: 'k8s-04', title: 'Resource Limits & Requests', status: 'wip' },
-            { id: 'k8s-05', title: 'Ingress Controllers', status: 'planned' },
-            { id: 'k8s-06', title: 'StatefulSets Deep Dive', status: 'planned' }
-          ]
-        },
-        {
-          id: 'aws',
-          number: '07',
-          title: 'AWS Serverless',
-          description: 'Serverless architecture, event-driven systems, and cloud-native patterns.',
-          topics: [
-            { id: 'aws-01', title: 'AWS Lambda Layers', status: 'complete' },
-            { id: 'aws-02', title: 'EventBridge Bus Flow', status: 'complete' },
-            { id: 'aws-03', title: 'SQS Dead Letter Queues', status: 'complete' },
-            { id: 'aws-04', title: 'API Gateway Patterns', status: 'wip' },
-            { id: 'aws-05', title: 'Step Functions Workflows', status: 'planned' },
-            { id: 'aws-06', title: 'Cognito Integration', status: 'planned' }
-          ]
-        },
-        {
-          id: 'llmops',
-          number: '08',
-          title: 'LLM Ops',
-          description: 'Large Language Model operations, deployment, and optimization.',
-          topics: [
-            { id: 'llmops-01', title: 'Vector Embedding Flow', status: 'complete' },
-            { id: 'llmops-02', title: 'Semantic Search', status: 'complete' },
-            { id: 'llmops-03', title: 'Prompt Versioning', status: 'complete' },
-            { id: 'llmops-04', title: 'RAG Implementation', status: 'wip' },
-            { id: 'llmops-05', title: 'Fine-tuning Strategies', status: 'planned' },
-            { id: 'llmops-06', title: 'Model Serving & Scaling', status: 'planned' }
-          ]
-        },
-        {
-          id: 'linux',
-          number: '09',
-          title: 'Linux Internals',
-          description: 'Linux operating system internals, kernel concepts, and system administration.',
-          topics: [
-            { id: 'linux-01', title: 'BASH Scripting Habits', status: 'complete' },
-            { id: 'linux-02', title: 'Systemd Service Units', status: 'complete' },
-            { id: 'linux-03', title: 'Process Management', status: 'wip' },
-            { id: 'linux-04', title: 'File System Hierarchy', status: 'planned' },
-            { id: 'linux-05', title: 'Network Configuration', status: 'planned' },
-            { id: 'linux-06', title: 'System Monitoring', status: 'planned' }
-          ]
-        },
-        {
-          id: 'python',
-          number: '10',
-          title: 'Python',
-          description: 'Python programming, frameworks, and advanced language features.',
-          topics: [
-            { id: 'python-01', title: 'FastAPI Performance', status: 'complete' },
-            { id: 'python-02', title: 'Generators & Iterators', status: 'complete' },
-            { id: 'python-03', title: 'Async/Await Patterns', status: 'wip' },
-            { id: 'python-04', title: 'Type Hints Best Practices', status: 'planned' },
-            { id: 'python-05', title: 'Decorators Deep Dive', status: 'planned' },
-            { id: 'python-06', title: 'Context Managers', status: 'planned' }
-          ]
-        },
-        {
-          id: 'rust',
-          number: '11',
-          title: 'Rust',
-          description: 'Systems programming with Rust, ownership, and memory safety.',
-          topics: [
-            { id: 'rust-01', title: 'Borrow Checker Internals', status: 'complete' },
-            { id: 'rust-02', title: 'Ownership & Scoping', status: 'complete' },
-            { id: 'rust-03', title: 'Safe Parallelism', status: 'complete' },
-            { id: 'rust-04', title: 'Lifetimes in Depth', status: 'wip' },
-            { id: 'rust-05', title: 'Traits & Generics', status: 'planned' },
-            { id: 'rust-06', title: 'Error Handling Patterns', status: 'planned' },
-            { id: 'rust-07', title: 'Unsafe Rust', status: 'planned' },
-            { id: 'rust-08', title: 'Async Rust with Tokio', status: 'planned' }
           ]
         }
       ]
