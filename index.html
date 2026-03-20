@@ -5405,7 +5405,8 @@
       }
 
       .markov-split-final {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column-reverse;
         gap: 24px;
       }
 
@@ -5732,6 +5733,8 @@
       }
 
       .markov-split-final {
+        display: flex;
+        flex-direction: column-reverse;
         gap: 20px;
       }
 
@@ -6055,6 +6058,8 @@
       }
 
       .markov-split-final {
+        display: flex;
+        flex-direction: column-reverse;
         gap: 24px;
       }
 
@@ -6333,15 +6338,15 @@
               </g>
 
               <!-- UST GLOBAL BRANCH -->
-              <path d="M330 320 C380 320 420 180 480 150 C520 130 560 130 600 130 L950 130" class="git-path"
+              <path d="M330 320 C380 320 400 180 450 150 C480 130 520 130 550 130 L950 130" class="git-path"
                 stroke="var(--accent-bright)" />
 
               <!-- UST Global Node -->
               <g class="git-commit" id="node-1" onclick="showExpInfo(1)">
-                <circle cx="600" cy="130" r="6" class="git-node" stroke="var(--accent-bright)" />
+                <circle cx="550" cy="130" r="6" class="git-node" stroke="var(--accent-bright)" />
               </g>
-              <text x="600" y="110" class="git-label">UST GLOBAL</text>
-              <text x="600" y="95" class="git-sub">Jul 2024</text>
+              <text x="550" y="110" class="git-label">UST GLOBAL</text>
+              <text x="550" y="95" class="git-sub">Jul 2024</text>
 
               <!-- BRANCH POINTS on UST Line -->
               <!-- 1. InfraOps (Up High) -->
@@ -7425,33 +7430,40 @@
           // So "Thejus" must be words[0], but it is NOT added to the display container
           seedWord = "Thejus";
           allWords = [
-            { text: "Thejus", class: "seed-word" }, // Index 0: Input for first step
-            { text: "**Product", class: "marker" }, // Index 1: Output of first step
-            { text: "Engineer", class: "gen-word-body" },
-            { text: "&", class: "gen-word-body" },
-            { text: "Gen", class: "gen-word-body" },
+            { text: "Thejus", class: "seed-word" },
+            { text: "**AI", class: "marker" },
+            { text: "Product", class: "gen-word-body" },
+            { text: "Systems", class: "gen-word-body" },
+            { text: "Engineer**", class: "marker", lineBreak: true },
+            { text: "Product", class: "gen-word-body" },
+            { text: "engineer", class: "gen-word-body" },
+            { text: "focused", class: "gen-word-body" },
+            { text: "on", class: "gen-word-body" },
+            { text: "building", class: "gen-word-body" },
+            { text: "intelligent", class: "gen-word-body" },
+            { text: "workflows,", class: "gen-word-body" },
+            { text: "automation", class: "gen-word-body" },
+            { text: "pipelines,", class: "gen-word-body" },
+            { text: "and", class: "gen-word-body" },
+            { text: "scalable", class: "gen-word-body" },
             { text: "AI", class: "gen-word-body" },
-            { text: "Specialist.**", class: "marker", lineBreak: true },
-            { text: "I", class: "gen-word-body" },
-            { text: "build", class: "gen-word-body" },
-            { text: "the", class: "gen-word-body" },
-            { text: "infrastructure", class: "gen-word-body" },
-            { text: "behind", class: "gen-word-body" },
-            { text: "the", class: "gen-word-body" },
-            { text: "intelligence.", class: "gen-word-body" },
-            { text: "Merging", class: "gen-word-body" },
-            { text: "full-stack", class: "gen-word-body" },
-            { text: "web", class: "gen-word-body" },
-            { text: "architecture", class: "gen-word-body" },
-            { text: "with", class: "gen-word-body" },
-            { text: "Large", class: "gen-word-body" },
-            { text: "Language", class: "gen-word-body" },
-            { text: "Models", class: "gen-word-body" },
+            { text: "tools", class: "gen-word-body" },
+            { text: "from", class: "gen-word-body" },
+            { text: "concept", class: "gen-word-body" },
             { text: "to", class: "gen-word-body" },
-            { text: "create", class: "gen-word-body" },
-            { text: "autonomous,", class: "gen-word-body" },
-            { text: "production-ready", class: "gen-word-body" },
-            { text: "systems.", class: "gen-word-body" }
+            { text: "production.", class: "gen-word-body",lineBreak: true },
+            { text: "Always", class: "gen-word-body" },
+            { text: "exploring", class: "gen-word-body" },
+            { text: "better", class: "gen-word-body" },
+            { text: "ways", class: "gen-word-body" },
+            { text: "to", class: "gen-word-body" },
+            { text: "turn", class: "gen-word-body" },
+            { text: "complex", class: "gen-word-body" },
+            { text: "ideas", class: "gen-word-body" },
+            { text: "into", class: "gen-word-body" },
+            { text: "practical,", class: "gen-word-body" },
+            { text: "impactful", class: "gen-word-body" },
+            { text: "solutions.", class: "gen-word-body" }
           ];
         } else {
           // Dynamic generation for modal - NO hardcoded header, pure generation from seed
@@ -8525,10 +8537,10 @@
 
         runAnim(ustAnim, UST_START);
 
-        // Reveal UST Node (Node 1) at end of curve (approx x=600)
-        // UST Path: M330... -> x=600. Dist ~ 270 + curve
+        // Reveal UST Node (Node 1) at end of curve (approx x=550)
+        // UST Path: M330... -> x=550. Dist ~ 220 + curve
         // Let's assume curve adds ~10%
-        const timeToUSTNode = (300 / speed);
+        const timeToUSTNode = (250 / speed);
         setTimeout(() => {
           const n = document.getElementById('node-1');
           revealNode(n);
@@ -8536,25 +8548,25 @@
 
         // 4. Sub Branches - only start when UST Tron reaches their intersection
         subs.forEach(sub => {
-          // UST line starts at x=330 and goes to x=600 (node), then continues to x=950
+          // UST line starts at x=330 and goes to x=550 (node), then continues to x=950
           // Sub branches are at x=660, 720, 780, 840 along the UST horizontal line
           // We need to calculate when the UST Tron reaches each of these points
 
           // Distance from UST start (x=330) to this sub-branch intersection
           const distFromUSTStart = sub.startX - 330;
 
-          // But first, UST Tron needs to travel the curve from x=330 to x=600
-          // The curve is about 270px horizontal + some vertical = ~350px actual path length
-          // Then from x=600 to sub.startX is straight horizontal
+          // But first, UST Tron needs to travel the curve from x=330 to x=550
+          // The curve is about 220px horizontal + some vertical = ~300px actual path length
+          // Then from x=550 to sub.startX is straight horizontal
 
-          // Approximate: UST curve takes time to reach x=600, then straight line to intersection
-          const curveLength = 350; // Approximate curve length
-          const timeToCurveEnd = curveLength / speed; // Time to reach x=600
+          // Approximate: UST curve takes time to reach x=550, then straight line to intersection
+          const curveLength = 300; // Approximate curve length
+          const timeToCurveEnd = curveLength / speed; // Time to reach x=550
 
-          // After curve, calculate straight distance from x=600 to intersection
+          // After curve, calculate straight distance from x=550 to intersection
           let distAfterCurve = 0;
-          if (sub.startX > 600) {
-            distAfterCurve = sub.startX - 600;
+          if (sub.startX > 550) {
+            distAfterCurve = sub.startX - 550;
           }
 
           const timeToIntersection = timeToCurveEnd + (distAfterCurve / speed);
