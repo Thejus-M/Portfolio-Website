@@ -8980,7 +8980,7 @@
       const data = getBlogsData();
       const featured = data[0]; // First item is newest
       if (!featured) return;
-
+      const BitbyBit_link = "bitbybit.thejus-m.is-a.dev"
       container.innerHTML = `
         <div class="featured-blog-image" style="opacity: 1; background-color: var(--bg-card-elevated); position: relative; overflow: hidden;">
           ${featured.image ? `
@@ -9016,7 +9016,7 @@
               <span>${featured.readTime}</span>
             </div>
           </div>
-          <a href="${featured.link}" class="read-link">
+          <a href="https://${BitbyBit_link}/${featured.link}" class="read-link">
             <span>Read Article</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
