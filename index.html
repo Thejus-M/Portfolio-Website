@@ -1502,6 +1502,20 @@
       opacity: 1;
     }
 
+    /* Fake Cursor for Animation */
+    .fake-cursor {
+      position: fixed;
+      pointer-events: none;
+      z-index: 10000;
+      opacity: 0;
+      transition: none;
+      transform-origin: top left;
+    }
+
+    .fake-cursor.visible {
+      opacity: 1;
+    }
+
     /* TOOLTIP */
     #nn-tooltip {
       position: absolute;
@@ -6113,6 +6127,19 @@
       <!-- Floating Word Element (for animations from header to model) -->
       <div class="floating-word" id="floatingWord"></div>
 
+      <!-- Simulated Fake Cursor Element -->
+      <div class="fake-cursor" id="fakeCursor">
+        <svg id="fcArrow" viewBox="0 0 24 24" width="28" height="28" style="position: absolute; left: 0; top: 0; filter: drop-shadow(0 0 3px #00d8ff) drop-shadow(0 0 6px #00d8ff); transform-origin: top left; transform: rotate(10deg);">
+          <!-- Dart-style arrow pointing top-left -->
+          <path fill="#000000" stroke="#00d8ff" stroke-width="1.5" stroke-linejoin="round" d="M2 2 L9 22 L13 13 L22 9 Z"/>
+        </svg>
+        <svg id="fcHand" viewBox="0 0 24 24" width="28" height="28" style="display: none; position: absolute; left: -10px; top: -10px; filter: drop-shadow(0 0 3px #00d8ff) drop-shadow(0 0 6px #00d8ff);">
+          <!-- Grabbing hand -->
+          <path fill="#000000" stroke="#00d8ff" stroke-width="1.5" stroke-linejoin="round" d="M19 10H18V7A2 2 0 0014 7V6A2 2 0 0010 6V5A2 2 0 006 5V13L4.3 11.3A2 2 0 001.5 14L8 20.5A6 6 0 0012 22H16A6 6 0 0022 16V13A3 3 0 0019 10Z"/>
+        </svg>
+      </div>
+
+
       <!-- MARKOV CHAIN TEXT GENERATION - HORIZONTAL SPLIT -->
       <div id="markovHero" class="markov-hero-final">
 
@@ -7272,22 +7299,101 @@
 
       function animateFloatingWord(word, fromEl, toEl, callback) {
         if (!floatingWord) return callback?.();
+        
+        const fakeCursor = document.getElementById('fakeCursor');
+        const fcArrow = document.getElementById('fcArrow');
+        const fcHand = document.getElementById('fcHand');
+
         const fromRect = fromEl.getBoundingClientRect();
+        const toRect = toEl.getBoundingClientRect();
+        
+        // Target coordinates for word
+        const startX = fromRect.left + fromRect.width / 2;
+        const startY = fromRect.top + fromRect.height / 2;
+        
+        // Target coordinates for drop (explicitly on top of the input field)
+        const endX = toRect.left + toRect.width / 2;
+        const endY = toRect.top + toRect.height / 2;
+        
+        // Snap to origin instantly
+        floatingWord.style.transition = 'none';
         floatingWord.textContent = word;
-        floatingWord.style.left = (fromRect.left + fromRect.width / 2) + 'px';
-        floatingWord.style.top = (fromRect.top + fromRect.height / 2) + 'px';
-        floatingWord.classList.add('visible');
-
+        floatingWord.style.left = startX + 'px';
+        floatingWord.style.top = startY + 'px';
+        
+        if (fakeCursor) {
+          fakeCursor.style.transition = 'none';
+          // Start cursor a bit offset
+          fakeCursor.style.left = (startX + 40) + 'px';
+          fakeCursor.style.top = (startY + 40) + 'px';
+          fakeCursor.style.transform = 'scale(1)';
+          fcArrow.style.display = 'block';
+          fcHand.style.display = 'none';
+          fakeCursor.classList.add('visible');
+        }
+        
+        // Force reflow
+        void floatingWord.offsetWidth;
+        if (fakeCursor) void fakeCursor.offsetWidth;
+        
+        // 1. Move cursor to word
+        const moveCursorDuration = 400 / speedMultiplier;
+        if (fakeCursor) {
+          fakeCursor.style.transition = `all ${moveCursorDuration}ms ease-out`;
+          fakeCursor.style.left = startX + 'px';
+          fakeCursor.style.top = startY + 'px'; // exactly on top of the word
+        }
+        
         setTimeout(() => {
-          const toRect = toEl.getBoundingClientRect();
-          floatingWord.style.left = (toRect.left + toRect.width / 2) + 'px';
-          floatingWord.style.top = (toRect.top + toRect.height / 2) + 'px';
-        }, 50 / speedMultiplier);
+          // 2. Pause on top of the word as an arrow for a moment
+          setTimeout(() => {
+            // 3. Click (select / change to hand)
+            if (fakeCursor) {
+              fcArrow.style.display = 'none';
+              fcHand.style.display = 'block';
+              fakeCursor.style.transform = 'scale(0.9)'; // small squeeze
+              setTimeout(() => { if (fakeCursor) fakeCursor.style.transform = 'scale(1)'; }, 100);
+            }
+            
+            floatingWord.classList.add('visible');
+            
+            // 4. Drag to destination
+            setTimeout(() => {
+              // Slower duration for normal mode
+              const dragDuration = 1200 / speedMultiplier;
+              floatingWord.style.transition = `all ${dragDuration}ms cubic-bezier(0.34, 1.56, 0.64, 1)`;
+              floatingWord.style.left = endX + 'px';
+              floatingWord.style.top = endY + 'px';
+              
+              if (fakeCursor) {
+                fakeCursor.style.transition = `all ${dragDuration}ms cubic-bezier(0.34, 1.56, 0.64, 1)`;
+                fakeCursor.style.left = endX + 'px';
+                fakeCursor.style.top = (endY + 5) + 'px';
+              }
+              
+              // 5. Drop into machine
+              setTimeout(() => {
+                if (fakeCursor) {
+                  // Change back to arrow
+                  fcHand.style.display = 'none';
+                  fcArrow.style.display = 'block';
+                  fakeCursor.style.transform = 'scale(1.1)'; // small let-go visual
+                  setTimeout(() => { if (fakeCursor) fakeCursor.style.transform = 'scale(1)'; }, 100);
+                  
+                  // Hide cursor and word
+                  setTimeout(() => {
+                    if (fakeCursor) fakeCursor.classList.remove('visible');
+                  }, 200 / speedMultiplier);
+                }
 
-        setTimeout(() => {
-          floatingWord.classList.remove('visible');
-          callback?.();
-        }, 600 / speedMultiplier);
+                floatingWord.classList.remove('visible');
+                callback?.();
+              }, dragDuration + 100);
+              
+            }, 200 / speedMultiplier); // Delay before pulling away
+            
+          }, 300 / speedMultiplier); // Pause 'on top' before selecting
+        }, moveCursorDuration + 50);
       }
 
       function animateStep(state) {
@@ -7360,8 +7466,8 @@
             // Speed up the gap between words
             setTimeout(() => {
               feedbackIndicator.classList.add('feedback-active');
-              const spans = targetContainer.querySelectorAll('span');
-              const lastEl = spans[spans.length - 1] || targetContainer;
+              const wordSpans = targetContainer.querySelectorAll('span[data-word-index]');
+              const lastEl = wordSpans[wordSpans.length - 1] || targetContainer;
 
               animateFloatingWord(nextWord.text, lastEl, targets.inputDisplay, () => {
                 feedbackIndicator.classList.remove('feedback-active');
@@ -7434,9 +7540,9 @@
           // Static content for hero section
           // "Thejus" is the SEED (Input) that generates "**Product"
           // So "Thejus" must be words[0], but it is NOT added to the display container
-          seedWord = "Thejus";
+          seedWord = "Thejus.";
           allWords = [
-            { text: "Thejus", class: "seed-word" },
+            { text: "Thejus.", class: "seed-word" },
             { text: "**AI", class: "marker" },
             { text: "Product", class: "gen-word-body" },
             { text: "Systems", class: "gen-word-body" },
