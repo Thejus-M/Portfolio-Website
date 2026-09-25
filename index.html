@@ -5877,6 +5877,17 @@
         padding: 20px 12px;
       }
 
+      /* .blog-card-image carries an inline "margin: -24px -16px 20px" sized
+         to bleed exactly to the 24px/16px .blog-card padding used at wider
+         mobile widths. At this tier .blog-card padding shrinks to 20px/12px,
+         so that inline -16px horizontal margin overshoots the card's own
+         edge by 4px a side; .blog-card's overflow:hidden then clips 4px off
+         each side of the thumbnail instead of bleeding cleanly to the edge.
+         Rescale the bleed to match the padding actually in effect here. */
+      .blog-card-image {
+        margin: -20px -12px 20px !important;
+      }
+
       .article-meta {
         font-size: 9px;
       }
