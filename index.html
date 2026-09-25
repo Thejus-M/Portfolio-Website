@@ -145,7 +145,10 @@
       text-transform: uppercase;
       font-weight: 400;
       line-height: 1;
-      text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+      /* Was a hardcoded cyan glow that stayed dark-mode cyan even under
+         the light theme's muted blue accent. --accent-glow already
+         carries the correct tint per theme; use it instead. */
+      text-shadow: 0 0 20px var(--accent-glow);
     }
 
     .header-status {
@@ -214,7 +217,10 @@
     .divider {
       width: 44px;
       height: 1px;
-      background: #1a1a1a;
+      /* Was a hardcoded #1a1a1a: nearly invisible against the near-black
+         dark-mode body background. Use the theme border token so it
+         actually reads in both themes. */
+      background: var(--border);
       margin: 40px auto;
     }
 
@@ -596,7 +602,12 @@
       position: absolute;
       bottom: 110%;
       right: 0;
-      background: var(--bg-main);
+      /* Was var(--bg-main), a token that is never defined anywhere in
+         :root: the property fell back to invalid/transparent, so the
+         tooltip rendered with no backing surface. Also carried a stray
+         green glow (rgba(0,255,170,...)) that didn't match this site's
+         blue/cyan accent language. */
+      background: var(--bg-card-elevated);
       border: 1px solid var(--accent);
       padding: 6px 10px;
       font-family: var(--font-mono-sys);
@@ -607,7 +618,7 @@
       opacity: 0;
       transition: opacity 0.2s;
       z-index: 100;
-      box-shadow: 0 0 15px rgba(0, 255, 170, 0.2);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px var(--accent-glow);
     }
 
     .info-icon:hover+.latent-tooltip,
@@ -1721,7 +1732,10 @@
         -------------------- */
     .experience-section {
       background-color: var(--bg-body);
-      padding: 40px 0;
+      /* Unified section rhythm: 64px top/bottom across every major
+         full-bleed section (was 40px here, 80px on Other Experience,
+         producing inconsistent 40-120px gaps between sections). */
+      padding: 64px 0;
       /* Borderless Flow */
       margin: 0;
       border: none;
@@ -2020,7 +2034,7 @@
     .dev-logs-index-section {
       width: 100%;
       background-color: var(--bg-body);
-      padding: 40px 0;
+      padding: 64px 0;
       position: relative;
       /* Borderless Flow */
       border: none;
@@ -2422,7 +2436,7 @@
     .blogs-section {
       width: 100%;
       background-color: var(--bg-body);
-      padding: 40px 0;
+      padding: 64px 0;
       position: relative;
       /* Borderless Flow */
       border: none;
@@ -3257,7 +3271,9 @@
     .footer-link:hover {
       color: var(--accent);
       opacity: 1;
-      text-shadow: 0 0 12px rgba(0, 212, 255, 0.5);
+      /* Theme-aware glow instead of a hardcoded cyan that ignored the
+         light theme's muted accent. */
+      text-shadow: 0 0 12px var(--accent-glow);
     }
 
     .footer-link:hover svg {
@@ -3274,7 +3290,9 @@
       font-family: var(--font-mono-sys);
       font-size: 10px;
       color: var(--text-sub);
-      opacity: 0.4;
+      /* Was 0.4: stacked on an already-muted --text-sub this dropped well
+         below readable contrast against the near-black body background. */
+      opacity: 0.6;
       letter-spacing: 1px;
       text-transform: uppercase;
     }
@@ -3284,7 +3302,7 @@
     }
 
     .footer-info:hover span {
-      opacity: 0.8;
+      opacity: 1;
     }
 
 
@@ -4133,7 +4151,7 @@
     .dsa-portal-section {
       width: 100%;
       background-color: var(--bg-body);
-      padding: 40px 0;
+      padding: 64px 0;
       position: relative;
       /* Borderless Flow */
       border: none;
@@ -4403,37 +4421,18 @@
       text-align: center;
     }
 
-    .dsa-btn-primary {
-      display: inline-block;
-      padding: 16px 40px;
-      background: #2551a3;
-      color: white;
-      font-size: 13px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.3s;
-      border: none;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-
-    [data-theme="light"] .dsa-btn-primary {
-      background: #2551a3;
-    }
-
-    .dsa-btn-primary:hover {
-      background: var(--accent);
-      color: var(--bg-body);
-      transform: translateY(-2px);
-      box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3);
-    }
+    /* .dsa-btn-primary was redefined three times in this file (here, in the
+       hero-frame block below, and again near the TOC); since all three
+       share the same specificity, only the last definition ever actually
+       rendered. Consolidated into the single definition further down to
+       stop carrying ~40 lines of dead, contradicting CSS. */
 
 
     /* ===================== OTHER EXPERIENCE GRID ===================== */
     .other-exp-section {
       width: 100%;
       background-color: var(--bg-body);
-      padding: 0 0 80px;
+      padding: 64px 0;
       position: relative;
     }
 
@@ -4655,29 +4654,6 @@
       color: var(--accent);
       letter-spacing: 2px;
       margin-bottom: 30px;
-    }
-
-    .dsa-btn-primary {
-      display: inline-block;
-      padding: 16px 40px;
-      background: #2551a3;
-      color: white;
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.3s;
-      border: none;
-    }
-
-    [data-theme="light"] .dsa-btn-primary {
-      background: #2551a3;
-    }
-
-    .dsa-btn-primary:hover {
-      background: var(--accent);
-      color: var(--bg-body);
-      transform: translateY(-2px);
     }
 
     /* Blogs-Inspired Grid for Modules */
@@ -4902,8 +4878,11 @@
     .dsa-btn-primary {
       display: inline-block;
       padding: 16px 40px;
+      /* Deliberately a fixed navy rather than var(--accent): the bright
+         dark-mode accent (#4d9fff) is too light to hold AA contrast under
+         solid white button text, so this button keeps its own darker,
+         theme-independent shade instead of inheriting --accent. */
       background: #2551a3;
-      /* From reference */
       color: white;
       font-size: 12px;
       letter-spacing: 2px;
@@ -4911,10 +4890,7 @@
       text-decoration: none;
       transition: all 0.3s;
       border: none;
-    }
-
-    [data-theme="light"] .dsa-btn-primary {
-      background: #2551a3;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     }
 
     .dsa-btn-primary:hover {
