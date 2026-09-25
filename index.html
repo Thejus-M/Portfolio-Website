@@ -632,17 +632,28 @@
       position: fixed;
       inset: 0;
       top: 0;
-      display: none;
+      display: flex;
       align-items: center;
       justify-content: center;
       z-index: 400;
       /* Below header (500) */
       padding: 20px;
       box-sizing: border-box;
+      /* Fade + scale instead of an instant display cut. visibility keeps
+         it out of the tab order / off the a11y tree while closed, same
+         as display:none did, but lets the opacity transition play on
+         the way out. */
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s ease, visibility 0s linear 0.3s;
     }
 
     .model-modal.active {
-      display: flex;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity 0.3s ease, visibility 0s linear 0s;
     }
 
     /* blueprint backdrop */
@@ -677,6 +688,14 @@
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
       overflow: hidden;
       /* Parent doesn't scroll, children do */
+      opacity: 0;
+      transform: scale(0.96) translateY(12px);
+      transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .model-modal.active .spec-sheet {
+      opacity: 1;
+      transform: scale(1) translateY(0);
     }
 
     /* Medium laptops (1200-1599px) */
@@ -6121,6 +6140,85 @@
         padding-bottom: 40px;
       }
     }
+
+    /* ================================================================
+       MOTION PASS (animation/motion upgrade)
+       Micro-interactions and scroll-reveal support for sections that
+       previously had zero entrance/hover motion. Uses transform/opacity
+       only (compositor-friendly). Paired with the prefers-reduced-motion
+       block below, which is the master off-switch for all of it plus
+       every pre-existing transition/animation in this file.
+       ================================================================ */
+
+    /* Theme toggle: icon swap gets a pop-in instead of an instant cut.
+       display:none -> display:block naturally restarts a CSS animation,
+       so no JS changes are required to trigger this on every toggle. */
+    #iconSun,
+    #iconMoon {
+      animation: theme-icon-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes theme-icon-pop {
+      from {
+        opacity: 0;
+        transform: rotate(-90deg) scale(0.4);
+      }
+
+      to {
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      }
+    }
+
+    #themeToggle {
+      transition: transform 0.15s ease;
+    }
+
+    #themeToggle:hover {
+      transform: scale(1.08);
+    }
+
+    #themeToggle:active {
+      transform: scale(0.9);
+    }
+
+    /* Other Experience cards: give the plain terminal-card a hover lift
+       to match the physics already present on category/blog cards. */
+    .other-exp-grid .terminal-card {
+      transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .other-exp-grid .terminal-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 30px rgba(0, 212, 255, 0.08);
+    }
+
+    /* DSA preview panel: quick crossfade when switching modules via the
+       sidebar, instead of the content snapping in place. Toggled by JS. */
+    .dsa-main-preview {
+      transition: opacity 0.15s ease;
+    }
+
+    .dsa-main-preview.dsa-swapping {
+      opacity: 0;
+    }
+
+    /* Respect the OS-level reduced-motion preference: this is the
+       primary accessibility switch for every animation/transition in
+       the file, not just the ones added in this pass. Scroll-reveal
+       JS also short-circuits separately (see initSectionReveals). */
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
   </style>
 </head>
 
@@ -8425,6 +8523,14 @@
         const svg = document.getElementById('gitSvg');
         if (!svg) return;
 
+        // Respect prefers-reduced-motion: skip the ~28s flythrough/camera-pan
+        // sequence entirely and leave the finished graph in its default
+        // visible state (no hidden classes ever get added, no zoom/pan).
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          svg.querySelectorAll('.git-anim-hidden').forEach(el => el.classList.remove('git-anim-hidden'));
+          return;
+        }
+
         // --- 1. SET INITIAL HIDDEN STATE ---
         const elementsToHide = svg.querySelectorAll('.git-path, .git-node, .git-label, .git-sub, .git-axis-label, .git-commit, .git-commit circle');
         elementsToHide.forEach(el => el.classList.add('git-anim-hidden'));
@@ -8946,16 +9052,31 @@
         el.classList.add('active');
       }
 
-      // Update Content
-      document.getElementById('dsaProbTitle').textContent = data.title;
-      document.getElementById('dsaProbDesc').textContent = data.desc;
-      document.getElementById('dsaCodeMock').innerHTML = data.code;
+      const applyContent = () => {
+        // Update Content
+        document.getElementById('dsaProbTitle').textContent = data.title;
+        document.getElementById('dsaProbDesc').textContent = data.desc;
+        document.getElementById('dsaCodeMock').innerHTML = data.code;
 
-      // Update Meta Badges
-      const metaContainer = document.getElementById('dsaProbMeta');
-      metaContainer.innerHTML = data.badges.map(b =>
-        b.class ? `<span class="${b.class}">${b.text}</span>` : `<span>${b.text}</span>`
-      ).join('');
+        // Update Meta Badges
+        const metaContainer = document.getElementById('dsaProbMeta');
+        metaContainer.innerHTML = data.badges.map(b =>
+          b.class ? `<span class="${b.class}">${b.text}</span>` : `<span>${b.text}</span>`
+        ).join('');
+      };
+
+      // Quick crossfade instead of the content snapping in place.
+      const preview = document.querySelector('.dsa-main-preview');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (preview && !reduceMotion) {
+        preview.classList.add('dsa-swapping');
+        setTimeout(() => {
+          applyContent();
+          preview.classList.remove('dsa-swapping');
+        }, 150);
+      } else {
+        applyContent();
+      }
     }
 
 
@@ -9056,6 +9177,9 @@
           renderFeaturedBlog();
           renderBlogsGrid();
           if (window.refreshThemeImages) window.refreshThemeImages();
+          // Stagger-reveal the blog cards now that they actually exist in
+          // the DOM (this fetch resolves after the initial load handler).
+          revealCardGroup('#blogsGrid', '.blog-card', 70);
         }
       } catch (e) {
         console.error('Blog sync failed:', e);
@@ -9171,6 +9295,75 @@
       `).join('');
     }
 
+    // ==========================================
+    // SCROLL-TRIGGERED REVEAL ANIMATIONS (motion pass)
+    // Fades/lifts sections and card grids into view as they approach the
+    // viewport, for sections that previously had no entrance motion at all
+    // (Other Experience, DSA Portal, Dev Logs index, Blogs, footer).
+    // Mirrors the existing initExpAnimations/initMountainAnimations pattern
+    // (inline styles + IntersectionObserver) instead of a new dependency.
+    // ==========================================
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function revealSection(selector, distance = 28) {
+      if (prefersReducedMotion) return;
+      const el = document.querySelector(selector);
+      if (!el || el.dataset.revealBound) return;
+      el.dataset.revealBound = '1';
+      el.style.opacity = '0';
+      el.style.transform = `translateY(${distance}px)`;
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            el.style.transition = 'opacity 0.7s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1)';
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+            observer.unobserve(el);
+          }
+        });
+      }, { threshold: 0.12 });
+      observer.observe(el);
+    }
+
+    function revealCardGroup(containerSelector, itemSelector, staggerMs = 80) {
+      if (prefersReducedMotion) return;
+      const container = document.querySelector(containerSelector);
+      if (!container || container.dataset.revealBound) return;
+      const items = container.querySelectorAll(itemSelector);
+      if (!items.length) return;
+      container.dataset.revealBound = '1';
+      items.forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(20px)';
+      });
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            items.forEach((item, i) => {
+              setTimeout(() => {
+                item.style.transition = 'opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)';
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+              }, i * staggerMs);
+            });
+            observer.unobserve(container);
+          }
+        });
+      }, { threshold: 0.15 });
+      observer.observe(container);
+    }
+
+    function initSectionReveals() {
+      if (prefersReducedMotion) return;
+      revealSection('#otherExperience');
+      revealCardGroup('.other-exp-grid', '.terminal-card', 90);
+      revealSection('#dsaPortal');
+      revealSection('#devLogsIndex');
+      revealCardGroup('#categoriesGrid', '.category-index-card', 70);
+      revealSection('#blogs');
+      revealSection('.footer-info', 16);
+    }
+
     // Blog Filter Click Handler
     function initBlogFilters() {
       const filters = document.getElementById('blogFilters');
@@ -9196,6 +9389,10 @@
       renderDevLogsIndex();
       syncBlogs();
       initBlogFilters();
+
+      // Motion pass: scroll-triggered reveals for sections that had no
+      // entrance animation (categoriesGrid is already rendered by this point).
+      initSectionReveals();
     });
   </script>
 
